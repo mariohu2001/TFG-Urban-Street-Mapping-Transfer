@@ -327,3 +327,7 @@ TSWLatexianTemp*
 
 virtualenv
 neo4j_config.ini
+cache/
+.vscode
+.idea
+__pycache__/
