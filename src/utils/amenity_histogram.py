@@ -14,7 +14,7 @@ def city_amenity_histogram(city: str, lim_sup: int = None):
     amenity_tags = (val[0] for val in node_stats.get_amenity_tags(city))
     count_dict = dict()
     for tag in amenity_tags:
-        result = node_stats.get_number_of_nodes_amenity(tag)
+        result = node_stats.get_amenity_numbers_city(tag,city)
         count_dict[tag] = result
 
     count_dict = dict(
@@ -50,7 +50,7 @@ def city_amenity_histogram(city: str, lim_sup: int = None):
     else:
         plot_name = f"{plot_path}/BarAmenity-{city}"+str(lim_sup)+".png"
         
-    plt.savefig(plot_name, bbox_inches='tight', dpi=1200)
+    plt.savefig(plot_name, bbox_inches='tight', dpi=500)
     plt.figure()
     # plt.rcParams['figure.dpi'] = 500
     # plt.rcParams['savefig.dpi'] = 500

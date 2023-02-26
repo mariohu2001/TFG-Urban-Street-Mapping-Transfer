@@ -26,6 +26,13 @@ def get_number_of_nodes_amenity(amenity: str):
         var = result.value("COUNT(*)")[0]
     return var
 
+def get_amenity_numbers_city(amenity: str, city: str):
+    with driver.session() as session:
+
+        result: Result = session.run(
+        "MATCH (n {amenity:$amenity}) where n.area = $city return COUNT(*)", amenity=amenity, city=city)
+        return result.value("COUNT(*)")[0]
+
 
 def get_n_of_nodes_by_appareance(min_appareance: int):
     with driver.session() as session:
