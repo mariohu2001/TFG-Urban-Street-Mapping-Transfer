@@ -76,19 +76,25 @@ def rename_nodes_to_amenity(tx: Session, node_label_to_rename: str):
 
     for am in node_amenities:
         amenity: str = am["amenity"]
-        if not re.match("(\w|\ )+$", amenity):
-            print(f"{amenity} does not match regex")
-            continue
 
-        # print(f"Renombrado de {amenity}")
-        rename_update = f"""\
-        MATCH (n:{node_label_to_rename})
-        where n.amenity = "{amenity}"
-        SET n:{amenity.capitalize().replace(" ", "")}
-        REMOVE n:{node_label_to_rename}
-        """
-        tx.run(rename_update)
+        for sub_amenity in re.split(";|:",amenity):
+                
+            format_amenity: str = sub_amenity.capitalize().replace(" ", "").replace("-","_")
+            if not re.match("(\w|\ )+$", format_amenity):
+                logging.warning(f"{format_amenity} does not match regex")
+                continue
 
+            # print(f"Renombrado de {amenity}")
+            rename_update = f"""\
+            MATCH (n:{node_label_to_rename})
+            where n.amenity = "{amenity}"
+            SET n:`{format_amenity}`
+            """
+            # REMOVE n:{node_label_to_rename}
+            tx.run(rename_update)
+
+        
+        tx.run(f"MATCH (n:{node_label_to_rename}) where n.amenity = '{amenity}' REMOVE n:{node_label_to_rename}  ")
 
 
 def load_city_nodes(city: str, common_node_label="Nodo"):

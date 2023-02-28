@@ -1,7 +1,7 @@
 
 from node_data.neo4j_data.load_nodes import load_city_nodes
 from utils import *
-ciudades = ["Madrid", "Paris"]
+ciudades = ["Madrid", "París"]
 # ciudades = ["Comunidad de Madrid"]
 
 
