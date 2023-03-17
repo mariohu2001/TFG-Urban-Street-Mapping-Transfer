@@ -33,13 +33,11 @@ def get_amenity_numbers_city(amenity: str, city: str):
         return result.value("COUNT(*)")[0]
 
 
-def get_n_of_nodes_by_appareance(min_appareance: int):
+def get_n_of_nodes_by_appareance():
     with driver.session() as session:
-        result: Result = session.run(f"""MATCH (n)
-        WITH n.amenity AS amenity, COUNT(*) AS count_of_nodes
-        WHERE count_of_nodes <= {min_appareance}
-        RETURN amenity, count_of_nodes
+        result: Result = session.run(f"""MATCH (n:Place) WITH
+        [i IN RANGE(0,size(labels(n) ) - 2 )| labels(n)[i] ] as tag, n
+        UNWIND tag as amenity
+        RETURN amenity, count(n) as count_of_nodes
         ORDER BY count_of_nodes desc""")
-        var = result.values("amenity", "count_of_nodes")
-
-    return var
+        return result.values("amenity", "count_of_nodes")

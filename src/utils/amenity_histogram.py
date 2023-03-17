@@ -9,16 +9,16 @@ plot_path = "../plots"
 
 
 def city_amenity_histogram(city: str, lim_sup: int = None):
-    min_app = 150
 
     amenity_tags = (val[0] for val in node_stats.get_amenity_tags(city))
     count_dict = dict()
     for tag in amenity_tags:
         result = node_stats.get_amenity_numbers_city(tag,city)
         count_dict[tag] = result
-
-    count_dict = dict(
+    count_dict : dict = dict(
         sorted(count_dict.items(), key=lambda x: x[1], reverse=True))
+    if count_dict.keys().__contains__("Place"):
+        del count_dict["Place"]
     # less_results = session.execute_read(get_n_of_nodes_by_appareance,min_app)
     fig = plt.figure(figsize=(16, 9), dpi=1200)
     # fig.tight_layout()
@@ -51,7 +51,7 @@ def city_amenity_histogram(city: str, lim_sup: int = None):
         plot_name = f"{plot_path}/BarAmenity-{city}"+str(lim_sup)+".png"
         
     plt.savefig(plot_name, bbox_inches='tight', dpi=500)
-    plt.figure()
+    # plt.figure()
     # plt.rcParams['figure.dpi'] = 500
     # plt.rcParams['savefig.dpi'] = 500
     # plt.rcParams["figure.figsize"] = [17.00, 13.50]

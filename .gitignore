@@ -331,3 +331,6 @@ cache/
 .vscode
 .idea
 __pycache__/
+*.csv
+*.png
+*.png

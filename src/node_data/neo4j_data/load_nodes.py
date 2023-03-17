@@ -8,8 +8,8 @@ from OSMPythonTools.nominatim import Nominatim
 import concurrent.futures
 import urllib.parse
 import sys
+import time
 from node_data.osm_data.osm_exception import InvalidCityNameException
-
 
 
 _config: ConfigParser = ConfigParser()
@@ -20,51 +20,54 @@ _uri, _neo4j_password = _config["neo4j"].values()
 driver: Driver = GraphDatabase.driver(_uri, auth=("neo4j", _neo4j_password))
 
 
-# def load_nodes(tx: Session, node_name: str, overpass_result: OverpassResult):
-
-#     for i, element in enumerate(overpass_result.elements()):
-#         print(f"{i}//{len(overpass_result.elements())}")
-#         create_stmt: str = f"""MERGE (n:{node_name} {{ id : $id, lat : $lat,  lon : $lon """
-#         node_tags: dict = _rename_dict_items(element.tags(), [":", "-"], "_")
-#         # print(node_tags)
-#         for tag in node_tags.keys():
-#             create_stmt += f', {tag}:${tag}'
-#         create_stmt += "}) "
-
-#         tx.run(create_stmt, id=element.id(),
-#                lat=element.lat(), lon=element.lon(), **node_tags)
-
-
-# def load_node(tx: Session, node_name: str, overpass_element: Element):
-#     create_stmt: str = f"""MERGE (n:{node_name} {{ id : $id, lat : $lat,  lon : $lon """
-#     node_tags: dict = _rename_dict_items(
-#         overpass_element.tags(), [":", "-"], "_")
-#     # print(node_tags)
-#     for tag in node_tags.keys():
-#         create_stmt += f', {tag}:${tag}'
-#     create_stmt += "}) "
-
-#     tx.run(create_stmt, id=overpass_element.id(),
-#            lat=overpass_element.lat(), lon=overpass_element.lon(), **node_tags)
-
-
 def load_node_apoc(tx: Session, city: str, common_node_label: str):
     nominatim_api = Nominatim()
     areaId = nominatim_api.query(city).areaId()
+
     if areaId == "":
         raise InvalidCityNameException(
             f"La ciudad con nombre {city} no existe o no tiene un area Id")
-    query = "https://overpass-api.de/api/interpreter?data=[out:json];" + urllib.parse.quote(overpassQueryBuilder(
+
+    query = "https://overpass-api.de/api/interpreter?data=[out:json][timeout:1000];" + urllib.parse.quote(overpassQueryBuilder(
         area=areaId, elementType="node", selector="amenity"))
+
     apoc_stmt = f"""
     CALL apoc.load.json(\"{query}\") 
     YIELD value
     UNWIND value.elements AS row
-    CREATE (n:{common_node_label})
-    SET n.type = row.type, n.id = row.id, n.lat = row.lat, n.lon = row.lon, n.area = "{city}"
-    SET n += row.tags
+    CREATE (n:{common_node_label} {{id:row.id}})
+    SET n += row.tags, n.type = row.type, n.lat = row.lat, n.lon = row.lon, n.area = '{city}'
+    WITH n, point({{latitude:n.lat,longitude:n.lon}}) as p
+    SET n.coords = p
     """
+    # MERGE (n:{common_node_label} {{id:row.id}})
+    # ON CREATE SET n += row.tags, n.type = row.type, n.lat = row.lat, n.lon = row.lon, n.area = "{city}"
+
     tx.run(apoc_stmt)
+
+
+def update_city_nodes(tx: Session, city: str, common_node_label: str):
+    nominatim_api = Nominatim()
+    areaId = nominatim_api.query(city).areaId()
+
+    if areaId == "":
+        raise InvalidCityNameException(
+            f"La ciudad con nombre {city} no existe o no tiene un area Id")
+
+    query = "https://overpass-api.de/api/interpreter?data=[out:json][timeout:1000];" + urllib.parse.quote(overpassQueryBuilder(
+        area=areaId, elementType="node", selector="amenity"))
+
+    apoc_stmt = f"""
+    CALL apoc.load.json(\"{query}\") 
+    YIELD value
+    UNWIND value.elements AS row
+    MERGE (n:{common_node_label} {{id:row.id, area:"{city}"}})
+    ON CREATE 
+    SET n += row.tags, n.type = row.type, n.lat = row.lat, n.lon = row.lon, n.area = '{city}'
+    """
+
+    tx.run(apoc_stmt)
+    rename_nodes_to_amenity(tx, common_node_label)
 
 
 def rename_nodes_to_amenity(tx: Session, node_label_to_rename: str):
@@ -77,9 +80,10 @@ def rename_nodes_to_amenity(tx: Session, node_label_to_rename: str):
     for am in node_amenities:
         amenity: str = am["amenity"]
 
-        for sub_amenity in re.split(";|:",amenity):
-                
-            format_amenity: str = sub_amenity.capitalize().replace(" ", "").replace("-","_")
+        for sub_amenity in re.split(";|:", amenity):
+
+            format_amenity: str = sub_amenity.replace(
+                " ", "_").replace("-", "_").capitalize()
             if not re.match("(\w|\ )+$", format_amenity):
                 logging.warning(f"{format_amenity} does not match regex")
                 continue
@@ -93,11 +97,13 @@ def rename_nodes_to_amenity(tx: Session, node_label_to_rename: str):
             # REMOVE n:{node_label_to_rename}
             tx.run(rename_update)
 
-        
-        tx.run(f"MATCH (n:{node_label_to_rename}) where n.amenity = '{amenity}' REMOVE n:{node_label_to_rename}  ")
+            category_create = f"""MERGE (n:Category {{name:$amenity}}) """
+
+            tx.run(category_create, amenity=format_amenity)
+        # tx.run(f"MATCH (n:{node_label_to_rename}) where n.amenity = '{amenity}' REMOVE n:{node_label_to_rename}  ")
 
 
-def load_city_nodes(city: str, common_node_label="Nodo"):
+def load_city_nodes(city: str, common_node_label="Place"):
     logging.basicConfig(level=logging.INFO)
     with driver.session() as session:
         logging.info(f">>>Cargando datos de la ciudad {city}")
@@ -107,3 +113,23 @@ def load_city_nodes(city: str, common_node_label="Nodo"):
         # logging.info(">>>Enlazando nodos")
 
     logging.info(">>>Finalizado!!!")
+
+
+def link_nodes(city: str, link_distance: int, common_node_label: str = "Place"):
+
+    with driver.session() as session:
+        city_nodes = session.run(f"""MATCH(n:{common_node_label}  {{ area:$city }}) 
+        return id(n) as id""", city=city).values()
+
+    with driver.session() as session:
+        for i, id in enumerate(city_nodes):
+            time_ini = time.time()
+            session.run(f"""MATCH(n:{common_node_label})
+            MATCH (m:{common_node_label}{{area:$city}}) 
+            WHERE NOT (n)--(m) AND n<>m and id(n) = $id
+            with n,m, point.distance(n.coords, m.coords) as distance
+            WHERE distance <= $distance
+            CREATE (n)-[r:IS_NEAR {{distance: distance}}]->(m)
+            """, city=city, distance=link_distance, id=id[0])
+            time_fin = time.time()
+            print(f">>>{i}/{len(city_nodes)}|id{id}:{city}>T:{time_fin-time_ini}", flush=True)
