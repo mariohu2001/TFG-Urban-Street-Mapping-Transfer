@@ -334,3 +334,5 @@ __pycache__/
 *.csv
 *.png
 *.png
+Sim_Results/
+*.ini

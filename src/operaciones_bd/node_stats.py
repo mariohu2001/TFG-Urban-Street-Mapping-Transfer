@@ -1,13 +1,8 @@
-from configparser import ConfigParser
 from neo4j import Neo4jDriver, Session, Driver, GraphDatabase, Result
+from utils.neo4j_driver import neo4j_driver
 
 
-_config: ConfigParser = ConfigParser()
-_config.read("../config/neo4j_config.ini")
-_uri, _neo4j_password = _config["neo4j"].values()
-
-
-driver: Driver = GraphDatabase.driver(_uri, auth=("neo4j", _neo4j_password))
+driver: Driver = neo4j_driver
 
 
 def get_amenity_tags(city: str):
