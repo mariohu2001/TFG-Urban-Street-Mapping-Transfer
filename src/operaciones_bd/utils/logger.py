@@ -11,7 +11,7 @@ def create_logger(logger_name: str, log_file: str, log_level=lg.INFO):
     logger.setLevel(log_level)
 
     format: lg.Formatter = lg.Formatter(
-        "%(levelname)s | [%(asctime)s]: %(message)s")
+        "%(levelname)s >>> [%(asctime)s]: %(message)s")
     file_handler: lg.FileHandler = lg.FileHandler(
         filename=f"{LOG_FOLDER}\\{log_file}.log", mode="w", encoding="UTF-8")
     file_handler.setFormatter(format)

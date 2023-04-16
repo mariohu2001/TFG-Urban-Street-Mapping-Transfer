@@ -1,6 +1,7 @@
 from neo4j import Neo4jDriver, Session, Driver, GraphDatabase, Result
 from utils.neo4j_driver import neo4j_driver
-
+import common_queries
+import numpy as np
 
 driver: Driver = neo4j_driver
 
@@ -20,11 +21,12 @@ def get_number_of_nodes_amenity(amenity: str):
             f"MATCH (n:{amenity}) return COUNT(n) as c")
         return result.value("c")[0]
 
+
 def get_amenity_numbers_city(amenity: str, city: str):
     with driver.session() as session:
 
         result: Result = session.run(
-        f"MATCH (n:{amenity}) where n.area = $city return COUNT(*)", city=city)
+            f"MATCH (n:{amenity}) where n.area = $city return COUNT(*)", city=city)
         return result.value("COUNT(*)")[0]
 
 
@@ -36,3 +38,82 @@ def get_n_of_nodes_by_appareance():
         RETURN amenity, count(n) as count_of_nodes
         ORDER BY count_of_nodes desc""")
         return result.values("amenity", "count_of_nodes")
+
+
+def calculate_percentile(city: str):
+
+    with driver.session() as session:
+        result: Result = session.run(f"""
+        MATCH (n:Amenity)-[r]->(m:Amenity)
+        WHERE n.city = $city and m.city = $city
+        return n.name as o, m.name as t, r.perm_sim_value as sims
+        """, city=city)
+
+        for i in result.values():
+
+            o_node, t_node, sims = i
+
+            perc_25 = np.percentile(sims, 2.5)
+            perc_975 = np.percentile(sims, 97.5)
+            std_dev = np.std(sims)
+            mean = np.mean(sims)
+
+            session.run(f"""
+            MATCH (n:Amenity)-[r]->(m:Amenity)
+            where n.name = $o_name and m.name = $t_name
+            and n.city = $city and m.city = $city
+            SET r.perc_25 = $perc_25
+            SET r.perc_975 = $perc_975
+            SET r.mean = $mean
+            SET r.std_dev = $std_dev
+            """, city=city, o_name=o_node, t_name=t_node, perc_25=perc_25, perc_975=perc_975, mean=mean, std_dev=std_dev)
+
+
+def significant_relationships(city: str):
+
+    with driver.session() as session:
+        session.run(f"""
+        MATCH (n:Place),(m:Place)
+        WHERE n.area = $city and m.area = $city and n.amenity <= m.amenity
+        OPTIONAL MATCH (n)-[r:IS_NEAR]-(m)
+        with  n.amenity as n, m.amenity as m, count(DISTINCT(r)) as count
+        match (p:Amenity)-[z:Rel]-(q:Amenity)
+        where p.city = $city and q.city=$city
+        and p.name = n and q.name = m  
+        set z.relevant = (count > z.perc_975 or count < z.perc_25)
+        set z.real_value = count
+        """, city=city)
+
+
+def calculate_z_score(city: str):
+
+    with driver.session() as session:
+        result: Result = session.run(f"""
+            MATCH (n:Amenity)-[r]->(m:Amenity)
+            WHERE n.city = $city and m.city = $city
+            return n.name as o, m.name as t, r.mean as media, r.std_dev as dev, r.real_value as real
+            """, city=city)
+
+        for r in result.values():
+            origin, target, mean, dev, real = r
+
+            z_score: float = (real - mean)/dev if dev != 0 else 0
+
+            session.run("""
+            MATCH (n:Amenity)-[r]->(m:Amenity)
+            where n.name = $o_name and m.name = $t_name
+            and n.city = $city and m.city = $city
+            SET r.z_score = $z_score
+            """, o_name=origin, t_name=target, city=city, z_score=z_score)
+
+
+if __name__ == "__main__":
+    ciudades = common_queries.obtain_cities()
+
+    for c in ciudades:
+        print(c)
+        calculate_percentile(c)
+    for c in ciudades:
+        print(c)
+        significant_relationships(c)
+        calculate_z_score(c)
