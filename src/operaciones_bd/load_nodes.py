@@ -14,7 +14,8 @@ OSM_URL = "https://overpass-api.de/api/interpreter?data=[out:json][timeout:1000]
 
 driver: Driver = neo4j_driver
 
-def load_node_apoc(tx: Transaction, city: str, common_node_label: str):
+
+def load_node_apoc(tx: Transaction, city: str, common_node_label: str, selector: str = "amenity"):
     nominatim_api = Nominatim()
     areaId = nominatim_api.query(city).areaId()
 
@@ -23,14 +24,18 @@ def load_node_apoc(tx: Transaction, city: str, common_node_label: str):
             f"La ciudad con nombre {city} no existe o no tiene un area Id")
 
     query = OSM_URL + urllib.parse.quote(overpassQueryBuilder(
-        area=areaId, elementType="node", selector="amenity"))
+        area=areaId, elementType="node", selector=selector))
 
     apoc_stmt = f"""
     CALL apoc.load.json(\"{query}\") 
     YIELD value
     UNWIND value.elements AS row
-    CREATE (n:{common_node_label} {{id:row.id}})
-    SET n += row.tags, n.area = '{city}'
+    MERGE (n:{common_node_label} {{id:row.id}})
+    ON CREATE SET
+     n += row.tags, n.area = '{city}',
+     n.category = row.tags.{selector},
+     n.type = "{selector}"
+    REMOVE n.{selector}
     WITH n, point({{latitude:row.lat,longitude:row.lon}}) as p
     SET n.coords = p
     """
@@ -38,7 +43,7 @@ def load_node_apoc(tx: Transaction, city: str, common_node_label: str):
     tx.run(apoc_stmt)
 
 
-def update_city_nodes(tx: Transaction, city: str, common_node_label: str):
+def update_city_nodes(tx: Transaction, city: str, common_node_label: str, selector="amenity"):
     nominatim_api = Nominatim()
     areaId = nominatim_api.query(city).areaId()
 
@@ -47,7 +52,7 @@ def update_city_nodes(tx: Transaction, city: str, common_node_label: str):
             f"La ciudad con nombre {city} no existe o no tiene un area Id")
 
     query = OSM_URL + urllib.parse.quote(overpassQueryBuilder(
-        area=areaId, elementType="node", selector="amenity"))
+        area=areaId, elementType="node", selector=selector))
 
     apoc_stmt = f"""
     CALL apoc.load.json(\"{query}\") 
@@ -56,82 +61,71 @@ def update_city_nodes(tx: Transaction, city: str, common_node_label: str):
     MERGE (n:{common_node_label} {{id:row.id, area:"{city}"}})
     ON CREATE 
     SET n += row.tags, n.type = row.type, n.lat = row.lat, n.lon = row.lon, n.area = '{city}'
+    SET n.category = row.tags.{selector}
+    REMOVE n.{selector}
     """
 
     tx.run(apoc_stmt)
-    rename_nodes_to_amenity(tx, common_node_label)
+    rename_nodes_to_category(tx, common_node_label)
 
 
-def rename_nodes_to_amenity(tx: Transaction, node_label_to_rename: str):
-    amenity_query = f"""MATCH (n:{node_label_to_rename})
-    where n.amenity is not null
-    return distinct(n.amenity) as amenity"""
+def rename_nodes_to_category(tx: Transaction, node_label_to_rename: str = "Place"):
+    category_query = f"""MATCH (n:{node_label_to_rename})
+    where n.category is not null
+    return distinct(n.category) as category"""
 
-    node_amenities: Result = tx.run(amenity_query)
+    node_categories: Result = tx.run(category_query)
 
-    for am in node_amenities:
-        amenity: str = am["amenity"]
+    for nc in node_categories:
+        category: str = nc["category"]
 
-        for sub_amenity in re.split(";|:", amenity):
+        for sub_category in re.split(";|:|,", category):
 
-            format_amenity: str = sub_amenity.replace(
+            format_category: str = sub_category.replace(
                 " ", "_").replace("-", "_").capitalize()
-            if not re.match("(\w|\ )+$", format_amenity):
-                logging.warning(f"{format_amenity} does not match regex")
+            if not re.match("(\w|\ )+$", format_category):
+                logging.warning(f"{format_category} does not match regex")
                 continue
 
             # print(f"Renombrado de {amenity}")
             rename_update = f"""\
             MATCH (n:{node_label_to_rename})
-            where n.amenity = "{amenity}"
-            SET n:`{format_amenity}`
+            where n.category = "{category}"
+            SET n:`{format_category}`
             """
             # REMOVE n:{node_label_to_rename}
             tx.run(rename_update)
 
         # tx.run(f"MATCH (n:{node_label_to_rename}) where n.amenity = '{amenity}' REMOVE n:{node_label_to_rename}  ")
     tx.run("""MATCH (n:Place)
-           SET n.amenity = toUpper(substring(n.amenity, 0, 1)) + substring(n.amenity, 1)""")
+           SET n.category = toUpper(substring(n.category, 0, 1)) + substring(n.category, 1)""")
 
 
-
-def load_city_nodes(city: str, common_node_label="Place"):
+def load_city_nodes(city: str, common_node_label="Place", selectors: list = ["amenity"]):
     logging.basicConfig(level=logging.INFO)
-    with driver.session() as session:
-        logging.info(f">>>Cargando datos de la ciudad {city}")
-        session.execute_write(load_node_apoc, city, common_node_label)
-        logging.info(f">>>Renombrando nodos de la ciudad {city}")
-        session.execute_write(rename_nodes_to_amenity, common_node_label)
-        # logging.info(">>>Enlazando nodos")
-        input("Esperando a corregir multples amenities")
-        session.execute_write(create_amenities_net, city)
-        logging.info("Creando red de amenities")
-        
+
+    for selector in selectors:
+        with driver.session() as session:
+
+            logging.info(
+                f">>>Cargando datos de la ciudad {city} tag {selector}")
+            session.execute_write(load_node_apoc, city,
+                                    common_node_label, selector)
+            logging.info(
+                f">>>Renombrando nodos de la ciudad {city} tag {selector}")
+            session.execute_write(rename_nodes_to_category, common_node_label)
+            input("Esperando a corregir multiples categorias")
+
+    with driver.session() as session:    
+        session.execute_write(create_categories_net, city)
+        logging.info("Creando red de categorias")
+
     logging.info(">>>Finalizado!!!")
 
 
+
+
 def link_nodes(city: str, link_distance: int, common_node_label: str = "Place"):
-
-    with driver.session() as session:
-        city_nodes = session.run(f"""MATCH(n:{common_node_label}  {{ area:$city }}) 
-        return id(n) as id""", city=city).values()
-
-    with driver.session() as session:
-        for i, id in enumerate(city_nodes):
-            time_ini = time.time()
-            session.run(f"""MATCH(n:{common_node_label})
-            MATCH (m:{common_node_label}{{area:$city}}) 
-            WHERE NOT (n)--(m) AND n<>m and id(n) = $id
-            with n,m, point.distance(n.coords, m.coords) as distance
-            WHERE distance <= $distance
-            CREATE (n)-[r:IS_NEAR {{distance: distance}}]->(m)
-            """, city=city, distance=link_distance, id=id[0])
-            time_fin = time.time()
-            print(
-                f">>>{i}/{len(city_nodes)}|id{id}:{city}>T:{time_fin-time_ini}", flush=True)
-
-
-def link_nodes_alternative(city: str, link_distance: int, common_node_label: str = "Place"):
 
     with driver.session() as session:
         session.run(f"""
@@ -142,28 +136,31 @@ def link_nodes_alternative(city: str, link_distance: int, common_node_label: str
         CREATE (n)-[r:IS_NEAR {{distance: distance}}]->(m)
         """, city=city, distance=link_distance)
 
-def create_amenities_net(tx: Transaction, city : str, method: str  = "permutation"):
+
+def create_categories_net(tx: Transaction, city: str, method: str = "permutation"):
     query = f"""match (n:Place)
     where n.area = $city
-    with collect(distinct(n.amenity)) as tags
+    with collect(distinct(n.category)) as tags
     unwind tags as tag
-    create (m:Amenity {{name: tag, city: $city}})
+    create (m:Category {{name: tag, city: $city}})
     """
     tx.run(query, city=city)
 
     tx.run(f"""
-    match (n:Amenity),(m:Amenity)
+    match (n:Category),(m:Category)
     where id(n) <= id(m) and n.city = $city and m.city = $city
     create (n)-[r:Rel {{sim_value : [], method:$method}}]->(m)
-    """,city=city, method=method)
+    """, city=city, method=method)
 
 
 if __name__ == "__main__":
-    ciudades = ["Sevilla", "Zaragoza", "Valencia"]
-    for c in ciudades:
-        load_city_nodes(c)
-        
+    # ciudades = ["Sevilla", "Zaragoza", "Valencia"]
+    ciudades = ["León", "Salamanca","Valladolid", "Burgos", "Palencia", "Zamora"]
+    tags = ["shop", "amenity"]
 
+    for c in ciudades:
+        load_city_nodes(c, "Place", tags)
+    input("Espera")
     with concurrent.futures.ProcessPoolExecutor() as executor:
-        futures = [executor.submit(link_nodes_alternative, city, 100) for city in ciudades]
+        futures = [executor.submit(link_nodes, city, 100) for city in ciudades]
         concurrent.futures.wait(futures)

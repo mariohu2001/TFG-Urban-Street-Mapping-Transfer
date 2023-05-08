@@ -15,9 +15,9 @@ def permutate_amenities(tx: Transaction, city: str, logger: logging.Logger):
     match (n:Place)
     where n.area = $city
     // Obtengo las listas de amenities e ids de cada nodo
-    WITH collect(n.amenity) AS amenities, collect(id(n)) as ids
+    WITH collect(n.category) AS categories, collect(id(n)) as ids
     // Permuto la lista de ids de nodos
-    with amenities, apoc.coll.shuffle(ids) as ids
+    with categories, apoc.coll.shuffle(ids) as ids
     // Creo un contador para acceder a todos los elementos de las listas anteriores
     // unwind funciona como un bucle
     unwind range(0,size(ids)-1) as counter
@@ -25,17 +25,17 @@ def permutate_amenities(tx: Transaction, city: str, logger: logging.Logger):
     match (m)
     where id(m) = ids[counter]
     // Cambio el atributo "sim_amenity" del nodo con el id indexado por counter
-    set m.sim_amenity = amenities[counter]
+    set m.sim_category = categories[counter]
 
     """
 
     count_query = f"""
     match (n:Place),(m:Place)
     where n.area = $city and m.area = $city
-    and n.sim_amenity <=  m.sim_amenity
+    and n.sim_category <=  m.sim_category
     optional match (n)-[r]-(m)
-    with n.sim_amenity as n_am, m.sim_amenity as m_am, count(DISTINCT(r)) as n_rels
-    match (q:Amenity)-[z]-(p:Amenity)
+    with n.sim_category as n_am, m.sim_category as m_am, count(DISTINCT(r)) as n_rels
+    match (q:Category)-[z]-(p:Category)
     where q.name = n_am and p.name = m_am and q.city = $city and p.city = $city
     set z.sim_value = z.sim_value +  n_rels
     """
