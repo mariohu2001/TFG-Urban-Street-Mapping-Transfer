@@ -63,10 +63,29 @@ def permutate_city(city: str, times: int):
         f"Finalizadas las Ejecuciones! Tiempo total: {time.time() - t_ini_total}")
 
 
+def create_categories_net(tx: Transaction, city: str, method: str = "permutation"):
+    query = f"""match (n:Place)
+    where n.area = $city
+    with collect(distinct(n.category)) as tags
+    unwind tags as tag
+    create (m:Category {{name: tag, city: $city}})
+    """
+    tx.run(query, city=city)
+
+    tx.run(f"""
+    match (n:Category),(m:Category)
+    where id(n) <= id(m) and n.city = $city and m.city = $city
+    create (n)-[r:Rel {{sim_value : [], method:$method}}]->(m)
+    """, city=city, method=method)
+
 if __name__ == "__main__":
     n_sims = 1000
 
     cities = obtain_cities()
+
+    for c in cities:
+        with driver.session() as session:
+            session.execute_write(create_categories_net, c)
 
     with concurrent.futures.ProcessPoolExecutor() as pool:
         futures = [pool.submit(permutate_city, c, n_sims) for c in cities]

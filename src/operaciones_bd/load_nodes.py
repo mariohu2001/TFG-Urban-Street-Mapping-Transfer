@@ -72,22 +72,23 @@ def update_city_nodes(tx: Transaction, city: str, common_node_label: str, select
 def rename_nodes_to_category(tx: Transaction, node_label_to_rename: str = "Place"):
     category_query = f"""MATCH (n:{node_label_to_rename})
     where n.category is not null
-    return distinct(n.category) as category"""
+    return distinct(n.category) as category, n.type as type"""
 
     node_categories: Result = tx.run(category_query)
 
     for nc in node_categories:
         category: str = nc["category"]
+        type: str = nc["type"]
 
         for sub_category in re.split(";|:|,", category):
 
             format_category: str = sub_category.replace(
                 " ", "_").replace("-", "_").capitalize()
+
             if not re.match("(\w|\ )+$", format_category):
                 logging.warning(f"{format_category} does not match regex")
                 continue
 
-            # print(f"Renombrado de {amenity}")
             rename_update = f"""\
             MATCH (n:{node_label_to_rename})
             where n.category = "{category}"
@@ -110,19 +111,14 @@ def load_city_nodes(city: str, common_node_label="Place", selectors: list = ["am
             logging.info(
                 f">>>Cargando datos de la ciudad {city} tag {selector}")
             session.execute_write(load_node_apoc, city,
-                                    common_node_label, selector)
+                                  common_node_label, selector)
             logging.info(
                 f">>>Renombrando nodos de la ciudad {city} tag {selector}")
             session.execute_write(rename_nodes_to_category, common_node_label)
             input("Esperando a corregir multiples categorias")
 
-    with driver.session() as session:    
-        session.execute_write(create_categories_net, city)
-        logging.info("Creando red de categorias")
 
     logging.info(">>>Finalizado!!!")
-
-
 
 
 def link_nodes(city: str, link_distance: int, common_node_label: str = "Place"):
@@ -137,25 +133,12 @@ def link_nodes(city: str, link_distance: int, common_node_label: str = "Place"):
         """, city=city, distance=link_distance)
 
 
-def create_categories_net(tx: Transaction, city: str, method: str = "permutation"):
-    query = f"""match (n:Place)
-    where n.area = $city
-    with collect(distinct(n.category)) as tags
-    unwind tags as tag
-    create (m:Category {{name: tag, city: $city}})
-    """
-    tx.run(query, city=city)
-
-    tx.run(f"""
-    match (n:Category),(m:Category)
-    where id(n) <= id(m) and n.city = $city and m.city = $city
-    create (n)-[r:Rel {{sim_value : [], method:$method}}]->(m)
-    """, city=city, method=method)
 
 
 if __name__ == "__main__":
     # ciudades = ["Sevilla", "Zaragoza", "Valencia"]
-    ciudades = ["León", "Salamanca","Valladolid", "Burgos", "Palencia", "Zamora"]
+    ciudades = ["León", "Salamanca", "Valladolid",
+                "Burgos", "Palencia", "Zamora"]
     tags = ["shop", "amenity"]
 
     for c in ciudades:
