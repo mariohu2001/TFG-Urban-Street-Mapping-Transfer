@@ -1,43 +1,29 @@
-{% extends "base.html" %} {% block title %}Map{% endblock%} 
+{% extends "base.html" %} {% block title %}Map{% endblock%}
+{% from "macros/basics.html" import dropdown_list %}
+
 
 {% block content%}
-<div class="container-fluid">
-  <div class="row">
-    <div id="map" class="col-md-6 col-sm-12 mt-5" style="height: 100%; flex: 1;">
-      <!-- Div que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
-    </div>
-    <div class="col-md-6 col-sm-12">
-        afdsadfasdfasdfasdfasdfasd
-      <!-- Tabla que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
-    </div>
-  </div>
+
+<div class="row my-2 mx-2 d-flex">
+	<div id="map" class="col-lg-6 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
+
+	</div>
+	<!-- Div que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
+	<div class="col-lg-6 col-md-12">
+		{{ dropdown_list("city", cities, "ciudad") }}
+		{{ dropdown_list("category", categories, "categoría") }}
+
+		<button type="button" id="search_btn" class="btn btn-success col m-1">Buscar</button>
+	</div>
 </div>
+
+<!-- Tabla que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
+</div>
+</div>
+
+
 {% endblock %}
+
 {% block scripts%}
-<script>
-
-	const map = L.map('map').setView([51.505, -0.09], 13);
-
-	const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		maxZoom: 19,
-		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	}).addTo(map);
-
-	const marker = L.marker([51.5, -0.09]).addTo(map);
-
-	const circle = L.circle([51.508, -0.11], {
-		color: 'red',
-		fillColor: '#f03',
-		fillOpacity: 0.5,
-		radius: 500
-	}).addTo(map);
-
-	const polygon = L.polygon([
-		[51.509, -0.08],
-		[51.503, -0.06],
-		[51.51, -0.047]
-	]).addTo(map);
-
-
-</script>
+<script type="text/javascript" src="/js/index.js"></script>
 {% endblock %}

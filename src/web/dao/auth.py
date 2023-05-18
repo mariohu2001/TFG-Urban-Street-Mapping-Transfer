@@ -43,7 +43,7 @@ class AuthDAO:
 
             payload = {
                 "userId": user["userId"],
-                "username": user["user_name"],
+                "user": user["user_name"],
                 "admin": user["admin"]
             }
             token = create_access_token(identity=payload)

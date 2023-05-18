@@ -1,26 +1,28 @@
-{% extends "base.html" %} {% block title %}Login{% endblock%} {% block content%}
+{% from "macros/basics.html" import flash_message %}
+{% extends "base.html" %} {% block title %}Login{% endblock%}
+
+{% block flashes %}
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+      {% for category, message in messages %}
+          {{ flash_message(message, category) }}
+      {% endfor %}
+
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
+{% block content %}
 <div class="d-flex justify-content-center">
 <form method="POST" action="/login">
-  <div class="col">
-    <label for="validationCustomUsername" class="form-label">Username</label>
-    <div class="input-group has-validation">
-      <span class="input-group-text">@</span>
-      <input
-        type="text"
-        class="form-control"
-        id="validationCustomUsername"
-        name="username"
-        aria-describedby="inputGroupPrepend"
-        required
-      />
-      <div class="invalid-feedback">Please choose a username.</div>
-    </div>
-  </div>
-  <div class="col">
-    <label class="form-label">Password</label>
-    <input name="password" type="password" class="form-control" required />
-    <div class="invalid-feedback">Please provide the password</div>
-  </div>
+  {{ form.csrf_token }}
+  {{ form.username.label }}
+  {{ form.username }}
+  {{ form.password.label }}
+  {{ form.password }}
+
 
   <!-- 2 column grid layout for inline styling -->
   <br />

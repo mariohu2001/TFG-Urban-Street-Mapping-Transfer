@@ -1,10 +1,12 @@
 import os
+
+
 from flask import Flask, render_template, url_for, redirect, session
 from configparser import ConfigParser
 from flask_jwt_extended import JWTManager, jwt_required
 from .driver_neo4j import init_neo4j
 
-
+from .dao.place import PlaceDAO
 from .routes.accounts import accounts_routes
 from .routes.places import places_routes
 # from .routes.users import users
@@ -65,7 +67,13 @@ def create_app():
 
     @app.route('/map')
     def map():
-        return render_template("map.html")
+
+        placesDAO = PlaceDAO(app.driver)
+
+        ciudades = placesDAO.get_cities()
+        categorias = placesDAO.get_categories()
+
+        return render_template("map.html", cities=ciudades, categories=categorias)
 
     @app.route("/protected")
     @jwt_required()

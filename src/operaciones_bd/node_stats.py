@@ -6,7 +6,7 @@ import numpy as np
 driver: Driver = neo4j_driver
 
 
-def get_amenity_tags(city: str):
+def get_category_tags(city: str):
     with driver.session() as session:
         result: Result = session.run(
             # f"MATCH (n) where n.area = '{city}' RETURN DISTINCT(n.amenity)")
@@ -14,19 +14,19 @@ def get_amenity_tags(city: str):
         return result.values()
 
 
-def get_number_of_nodes_amenity(amenity: str):
+def get_number_of_nodes_category(category: str):
     with driver.session() as session:
 
         result: Result = session.run(
-            f"MATCH (n:{amenity}) return COUNT(n) as c")
+            f"MATCH (n:{category}) return COUNT(n) as c")
         return result.value("c")[0]
 
 
-def get_amenity_numbers_city(amenity: str, city: str):
+def get_category_numbers_city(category: str, city: str):
     with driver.session() as session:
 
         result: Result = session.run(
-            f"MATCH (n:{amenity}) where n.area = $city return COUNT(*)", city=city)
+            f"MATCH (n:{category}) where n.area = $city return COUNT(*)", city=city)
         return result.value("COUNT(*)")[0]
 
 
@@ -44,9 +44,9 @@ def calculate_percentile(city: str):
 
     with driver.session() as session:
         result: Result = session.run(f"""
-        MATCH (n:Amenity)-[r]->(m:Amenity)
+        MATCH (n:Category)-[r]->(m:Category)
         WHERE n.city = $city and m.city = $city
-        return n.name as o, m.name as t, r.perm_sim_value as sims
+        return n.name as o, m.name as t, r.sim_value as sims
         """, city=city)
 
         for i in result.values():
@@ -59,7 +59,7 @@ def calculate_percentile(city: str):
             mean = np.mean(sims)
 
             session.run(f"""
-            MATCH (n:Amenity)-[r]->(m:Amenity)
+            MATCH (n:Category)-[r]->(m:Category)
             where n.name = $o_name and m.name = $t_name
             and n.city = $city and m.city = $city
             SET r.perc_25 = $perc_25
@@ -74,10 +74,10 @@ def significant_relationships(city: str):
     with driver.session() as session:
         session.run(f"""
         MATCH (n:Place),(m:Place)
-        WHERE n.area = $city and m.area = $city and n.amenity <= m.amenity
+        WHERE n.area = $city and m.area = $city and n.category <= m.category
         OPTIONAL MATCH (n)-[r:IS_NEAR]-(m)
-        with  n.amenity as n, m.amenity as m, count(DISTINCT(r)) as count
-        match (p:Amenity)-[z:Rel]-(q:Amenity)
+        with  n.category as n, m.category as m, count(DISTINCT(r)) as count
+        match (p:Category)-[z:Rel]-(q:Category)
         where p.city = $city and q.city=$city
         and p.name = n and q.name = m  
         set z.relevant = (count > z.perc_975 or count < z.perc_25)
@@ -89,7 +89,7 @@ def calculate_z_score(city: str):
 
     with driver.session() as session:
         result: Result = session.run(f"""
-            MATCH (n:Amenity)-[r]->(m:Amenity)
+            MATCH (n:Category)-[r]->(m:Category)
             WHERE n.city = $city and m.city = $city
             return n.name as o, m.name as t, r.mean as media, r.std_dev as dev, r.real_value as real
             """, city=city)
@@ -100,7 +100,7 @@ def calculate_z_score(city: str):
             z_score: float = (real - mean)/dev if dev != 0 else 0
 
             session.run("""
-            MATCH (n:Amenity)-[r]->(m:Amenity)
+            MATCH (n:Category)-[r]->(m:Category)
             where n.name = $o_name and m.name = $t_name
             and n.city = $city and m.city = $city
             SET r.z_score = $z_score
@@ -113,6 +113,7 @@ if __name__ == "__main__":
     for c in ciudades:
         print(c)
         calculate_percentile(c)
+    print("Acabados Percentiles")
     for c in ciudades:
         print(c)
         significant_relationships(c)

@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import set_access_cookies, unset_access_cookies
 from ..dao.place import PlaceDAO
+from .. import utils
 
 places_routes = Blueprint("places", __name__, url_prefix='/')
 
@@ -35,3 +36,7 @@ def get_place_by_id(id: str):
     place = dao.get_by_id(id)
 
     return jsonify(place)
+
+@places_routes.route("/coords/<city>", methods=["GET"])
+def get_city_coords(city: str):
+    return utils.get_city_coords(city)
