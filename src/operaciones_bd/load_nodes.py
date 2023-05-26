@@ -4,6 +4,7 @@ from neo4j import GraphDatabase, Driver, Result, Transaction
 from OSMPythonTools.overpass import overpassQueryBuilder
 import concurrent.futures
 from OSMPythonTools.nominatim import Nominatim
+from OSMPythonTools.overpass import Overpass
 import urllib.parse
 import time
 from osm_exception import InvalidCityNameException
@@ -15,16 +16,21 @@ OSM_URL = "https://overpass-api.de/api/interpreter?data=[out:json][timeout:1000]
 driver: Driver = neo4j_driver
 
 
-def load_node_apoc(tx: Transaction, city: str, common_node_label: str, selector: str = "amenity"):
-    nominatim_api = Nominatim()
-    areaId = nominatim_api.query(city).areaId()
+def load_node_apoc(tx: Transaction,city: str, ine_municipio: int,  common_node_label: str, selector: str = "amenity"):
 
-    if areaId == "":
+    overpass_api = Overpass()
+    
+    
+    print(f'area[name={city}]["ine:municipio"={ine_municipio}]; out body;')
+    city_id = overpass_api.query(f'area[name="{city}"]["ine:municipio"={ine_municipio}]; out body;').elements()[0].id()
+
+    if city_id == "":
         raise InvalidCityNameException(
-            f"La ciudad con nombre {city} no existe o no tiene un area Id")
+            f"País con nombre {city} no existe o no tiene un area Id")
+
 
     query = OSM_URL + urllib.parse.quote(overpassQueryBuilder(
-        area=areaId, elementType="node", selector=selector))
+        area=city_id, elementType="node", selector=selector))
 
     apoc_stmt = f"""
     CALL apoc.load.json(\"{query}\") 
@@ -42,31 +48,6 @@ def load_node_apoc(tx: Transaction, city: str, common_node_label: str, selector:
 
     tx.run(apoc_stmt)
 
-
-def update_city_nodes(tx: Transaction, city: str, common_node_label: str, selector="amenity"):
-    nominatim_api = Nominatim()
-    areaId = nominatim_api.query(city).areaId()
-
-    if areaId == "":
-        raise InvalidCityNameException(
-            f"La ciudad con nombre {city} no existe o no tiene un area Id")
-
-    query = OSM_URL + urllib.parse.quote(overpassQueryBuilder(
-        area=areaId, elementType="node", selector=selector))
-
-    apoc_stmt = f"""
-    CALL apoc.load.json(\"{query}\") 
-    YIELD value
-    UNWIND value.elements AS row
-    MERGE (n:{common_node_label} {{id:row.id, area:"{city}"}})
-    ON CREATE 
-    SET n += row.tags, n.type = row.type, n.lat = row.lat, n.lon = row.lon, n.area = '{city}'
-    SET n.category = row.tags.{selector}
-    REMOVE n.{selector}
-    """
-
-    tx.run(apoc_stmt)
-    rename_nodes_to_category(tx, common_node_label)
 
 
 def rename_nodes_to_category(tx: Transaction, node_label_to_rename: str = "Place"):
@@ -102,7 +83,7 @@ def rename_nodes_to_category(tx: Transaction, node_label_to_rename: str = "Place
            SET n.category = toUpper(substring(n.category, 0, 1)) + substring(n.category, 1)""")
 
 
-def load_city_nodes(city: str, common_node_label="Place", selectors: list = ["amenity"]):
+def load_city_nodes(city: str, ine_code:int, common_node_label="Place", selectors: list = ["amenity"]):
     logging.basicConfig(level=logging.INFO)
 
     for selector in selectors:
@@ -110,7 +91,7 @@ def load_city_nodes(city: str, common_node_label="Place", selectors: list = ["am
 
             logging.info(
                 f">>>Cargando datos de la ciudad {city} tag {selector}")
-            session.execute_write(load_node_apoc, city,
+            session.execute_write(load_node_apoc,city, ine_code,
                                   common_node_label, selector)
             logging.info(
                 f">>>Renombrando nodos de la ciudad {city} tag {selector}")
@@ -137,13 +118,17 @@ def link_nodes(city: str, link_distance: int, common_node_label: str = "Place"):
 
 if __name__ == "__main__":
     # ciudades = ["Sevilla", "Zaragoza", "Valencia"]
-    ciudades = ["León", "Salamanca", "Valladolid",
-                "Burgos", "Palencia", "Zamora"]
+    ciudades = {"Palencia": "34120", "León": "24089", "Salamanca": "37274", "Valladolid": "47186",
+                "Burgos": "09059"}
     tags = ["shop", "amenity"]
 
-    for c in ciudades:
-        load_city_nodes(c, "Place", tags)
-    input("Espera")
-    with concurrent.futures.ProcessPoolExecutor() as executor:
-        futures = [executor.submit(link_nodes, city, 100) for city in ciudades]
-        concurrent.futures.wait(futures)
+    # for city, code in ciudades.items():
+    #     load_city_nodes(city, code, "Place", tags)
+    # input("Espera")
+    # with concurrent.futures.ProcessPoolExecutor() as executor:
+    #     futures = [executor.submit(link_nodes, city, 100) for city in ciudades]
+    #     concurrent.futures.wait(futures)
+
+    for city in ciudades.keys():
+        print(city)
+        link_nodes(city, 100)
