@@ -5,12 +5,12 @@ import bcrypt
 from flask import current_app
 from flask_jwt_extended import create_access_token
 from neo4j import Driver, Record, Result, Session, Transaction
+from .base import baseDAO
 
-
-class AuthDAO:
+class AuthDAO(baseDAO):
 
     def __init__(self, driver: Driver, jwt_secret: str) -> None:
-        self.driver = driver
+        super(driver)
         self.jwt_secret = jwt_secret
 
     def login(self, username: str, password: str):

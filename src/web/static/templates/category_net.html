@@ -1,0 +1,32 @@
+{% extends "./base.html" %}
+
+{% block head%}
+
+<script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<script>
+    var nodes = {{ nodes| tojson}}
+    var edges = {{ edges| tojson}}
+</script>
+{% endblock %}
+
+{% block content%}
+<div class="container-fluid">
+
+
+    <div id="network_visualization" style="background-color: lightslategrey; width: 100vw; height: 90vh;">
+        <div id="loading_spinner" class="spinner-border spinner-border-sm text-success"
+            style=" width: 10rem ;height: 10rem ;" role="status">
+
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+
+<script type="text/javascript" src="/js/network_visualization.js"></script>
+{% endblock %}

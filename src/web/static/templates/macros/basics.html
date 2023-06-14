@@ -20,12 +20,12 @@
 {% macro dropdown_list (name,options, default) %}
 <div class="form-floating">
   <select class="form-select" id="{{name}}">
-    <option selected value="{{default}}">{{ default }}</option>
+    <option selected value="">{{ default }}</option>
     {% for option in options %}
       <option value="{{option}}">{{option}}</option>
     {% endfor %}
   </select>
-  <label for="{{name}}">Works with selects</label>
+  <label for="{{name}}">{{name}}</label>
 </div>
 
 {% endmacro %}

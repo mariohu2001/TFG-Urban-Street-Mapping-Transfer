@@ -12,17 +12,19 @@ const search_btn = document.getElementById("search_btn")
 
 const city_dropdown = document.getElementById("city")
 const category_dropdown = document.getElementById("category")
+const network_button =document.getElementById("network_button")
 
 search_btn.addEventListener("click", refreshMap)
-
+city_dropdown.addEventListener("change", get_categories_by_city)
 
 
 
 function refreshMap() {
     console.log("Cargando nodos en el mapa")
 
-    selected_city = city_dropdown.value
-    console.log(selected_city)
+    var selected_city = city_dropdown.value
+    var selected_category = category_dropdown.value
+
     fetch("/coords/" + selected_city)
         .then(response => {
             if (!response.ok) {
@@ -32,10 +34,9 @@ function refreshMap() {
         })
         .then(data => changeMapCoords(data.lat, data.lon))
 
-        console.log("mitad")
 
 
-    fetch("/places/"+ selected_city)
+    fetch("/places/"+ selected_city + "/" +selected_category)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Error en la respuesta de la petición.");
@@ -68,8 +69,30 @@ function renderMarkers(data) {
     };
 }
 
+function get_categories_by_city()
+{
+    var city = city_dropdown.value
+
+    network_button.href = "/category_net/"+city
+
+    fetch("/categories/"+city).then(response => {
+        if (!response.ok) {
+            throw new Error("Error en la respuesta de la petición.");
+        }
+        return response.json();}).then(data => change_categories_dropdown(data))
+
+
+}
 
 
 
-
-
+function change_categories_dropdown(categories)
+{
+    while (category_dropdown.options.length > 1)
+    {
+        category_dropdown.options.remove(1);
+    }
+    categories.forEach(element => {
+        category_dropdown.innerHTML += "<option value="+ element[0] +">"+element[1]+"</option>"
+    });
+}

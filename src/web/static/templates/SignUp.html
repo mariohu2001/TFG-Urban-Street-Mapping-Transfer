@@ -1,7 +1,44 @@
-{% extends "base.html" %} {% block title %}Sign Up{% endblock%} 
+{% extends "base.html" %} 
+{% from "macros/basics.html" import flash_message %}
+{% block title %}Sign Up{% endblock%}
+
+{% block flashes %}
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+      {% for category, message in messages %}
+          {{ flash_message(message, category) }}
+      {% endfor %}
+
+    {% endif %}
+  {% endwith %}
+{% endblock %}
+
 {% block content%}
 <form method="POST" action="/signup">
 
+    {{ form.csrf_token }}
+
+    {% for field in form._fields %}
+      
+      {% if field != 'csrf_token' %}
+
+        {{ form[field].label }}
+        {{ form[field] }}
+        <ul class="errors">
+        {% for e in form[field].errors %}
+          <li>{{ error }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endfor %}
+
+
+
+    <div>
+        <button type="submit" class="btn btn-dark btn-block mb-4">Aceptar</button>
+    </div>
 
 </form>
 

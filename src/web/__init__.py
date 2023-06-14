@@ -9,6 +9,7 @@ from .driver_neo4j import init_neo4j
 from .dao.place import PlaceDAO
 from .routes.accounts import accounts_routes
 from .routes.places import places_routes
+from .routes.category import categories_routes
 # from .routes.users import users
 # from .routes.common import common
 # from driver_neo4j import init_neo4j
@@ -51,6 +52,8 @@ def create_app():
 
     app.register_blueprint(accounts_routes)
     app.register_blueprint(places_routes)
+    app.register_blueprint(categories_routes)
+
 
     @app.route('/')
     def index():
@@ -58,7 +61,7 @@ def create_app():
 
     @app.route('/home')
     def home():
-        print(session.get("is_logged"),session.get("current_user"))
+        print(session.get("current_user"))
         return render_template("home.html", usuario=session.get("current_user"), logged=session.get("is_logged"))
 
     @app.route('/test')
@@ -71,9 +74,9 @@ def create_app():
         placesDAO = PlaceDAO(app.driver)
 
         ciudades = placesDAO.get_cities()
-        categorias = placesDAO.get_categories()
 
-        return render_template("map.html", cities=ciudades, categories=categorias)
+
+        return render_template("map.html", cities=ciudades, categories=[])
 
     @app.route("/protected")
     @jwt_required()

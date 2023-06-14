@@ -1,10 +1,7 @@
 from neo4j import Driver
+from .base import baseDAO
 
-
-class PlaceDAO():
-
-    def __init__(self, driver: Driver) -> None:
-        self.driver = driver
+class PlaceDAO(baseDAO):
 
     def all(self):
 
@@ -54,7 +51,8 @@ class PlaceDAO():
             """
         else:
             cypher_query += """
-            RETURN n.id as id, n.category as category, n.coords as coords
+            RETURN n.id as id, replace(n.category, "_", " ") as category, n.coords as coords
+
             """
 
         with self.driver.session() as session:

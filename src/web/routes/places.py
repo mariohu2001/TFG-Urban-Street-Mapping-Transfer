@@ -1,7 +1,10 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import set_access_cookies, unset_access_cookies
+import pyvis.network as netvis
 from ..dao.place import PlaceDAO
+from ..dao.category import CategoryDAO
 from .. import utils
+import json
 
 places_routes = Blueprint("places", __name__, url_prefix='/')
 
@@ -37,6 +40,12 @@ def get_place_by_id(id: str):
 
     return jsonify(place)
 
+
 @places_routes.route("/coords/<city>", methods=["GET"])
 def get_city_coords(city: str):
     return utils.get_city_coords(city)
+
+
+
+
+

@@ -337,3 +337,4 @@ __pycache__/
 Sim_Results/
 *.ini
 *.csv
+data/
