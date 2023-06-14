@@ -63,7 +63,7 @@ def permutate_city(city: str, times: int):
         f"Finalizadas las Ejecuciones! Tiempo total: {time.time() - t_ini_total}")
 
 
-def create_categories_net(tx: Transaction, city: str, method: str = "permutation"):
+def create_categories_net(tx: Transaction, city: str):
     query = f"""match (n:Place)
     where n.area = $city
     with collect(distinct(n.category)) as tags
@@ -75,8 +75,8 @@ def create_categories_net(tx: Transaction, city: str, method: str = "permutation
     tx.run(f"""
     match (n:Category),(m:Category)
     where id(n) <= id(m) and n.city = $city and m.city = $city
-    create (n)-[r:Rel {{sim_value : [], method:$method}}]->(m)
-    """, city=city, method=method)
+    create (n)-[r:Rel {{sim_value : []}}]->(m)
+    """, city=city,)
 
 if __name__ == "__main__":
     n_sims = 1000
