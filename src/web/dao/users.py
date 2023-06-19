@@ -55,7 +55,7 @@ class UserDAO(baseDAO):
             password: $password,
             name: $first_name,
             surname: $surname,
-            admin: False,
+            role: "user",
             mail: $email
             }
             )

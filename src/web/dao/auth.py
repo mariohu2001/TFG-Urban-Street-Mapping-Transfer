@@ -7,10 +7,11 @@ from flask_jwt_extended import create_access_token
 from neo4j import Driver, Record, Result, Session, Transaction
 from .base import baseDAO
 
+
 class AuthDAO(baseDAO):
 
     def __init__(self, driver: Driver, jwt_secret: str) -> None:
-        super(driver)
+        super().__init__(driver)
         self.jwt_secret = jwt_secret
 
     def login(self, username: str, password: str):
@@ -44,9 +45,8 @@ class AuthDAO(baseDAO):
             payload = {
                 "userId": user["userId"],
                 "user": user["user_name"],
-                "admin": user["admin"]
+                "role": user["role"]
             }
             token = create_access_token(identity=payload)
-       
 
             return token
