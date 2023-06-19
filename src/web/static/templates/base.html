@@ -12,6 +12,12 @@
   <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
     integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
   <link href="../styles/style.css" rel="stylesheet">
+
+  <script defer src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+    integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+    crossorigin="anonymous"></script>
+
+
   {% block head %}{% endblock %}
 </head>
 
@@ -43,12 +49,12 @@
               Usuarios
             </a>
             <ul class="dropdown-menu">
-              {% if usuario is not none %}
-              <li><a class="dropdown-item" onclick="logout()">Cerrar Sesión</a></li>
-              <li><a class="dropdown-item" href="#">Perfil</a></li>
-              {% else %}
+              {% if usuario is none  or usuario is not defined %}
               <li><a class="dropdown-item" href="/login">Iniciar Sesión</a></li>
               <li><a class="dropdown-item" href="/signup">Registrarse</a></li>
+              {% else %}
+              <li><a class="dropdown-item" onclick="logout()">Cerrar Sesión</a></li>
+              <li><a class="dropdown-item" href="#">Perfil</a></li>
               {% endif %}
 
             </ul>
@@ -84,13 +90,13 @@
       <div class="container" style="color: white; text-align: center;">
         Universidad de Burgos
       </div>
- 
-  </footer>
-</div>
 
-{% block scripts %}
+    </footer>
+  </div>
 
-{% endblock %}
+  {% block scripts %}
+
+  {% endblock %}
   <!-- Scripts-->
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"
     integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>

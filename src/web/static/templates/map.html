@@ -1,15 +1,19 @@
-{% extends "base.html" %} {% block title %}Map{% endblock%}
 {% from "macros/basics.html" import dropdown_list %}
-
-
+{% extends "base.html" %} {% block title %}Map{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
+<script src="/js/leaflet.extra-markers.min.js"></script>
+{% endblock %}
 {% block content%}
 
 <div class="row my-2 mx-2 d-flex">
 	<div id="map" class="col-lg-6 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
 
 	</div>
-	<!-- Div que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
+
+
 	<div class="col-lg-6 col-md-12">
+		{% block mapInfo %}
 		{{ dropdown_list("city", cities, "ciudad") }}
 		{{ dropdown_list("category", categories, "categoría") }}
 
@@ -17,10 +21,13 @@
 		<a href="#" id="network_button">
 			<button type="button" class= "btn btn-primary col m-1">Ver Red</button>
 		</a>
+		<button type="button" id="analysis_button" class= "btn btn-primary col m-1">Recomendaciones</button>
+		{% endblock %}
 	</div>
+
 </div>
 
-<!-- Tabla que ocupa la mitad de la pantalla en dispositivos de escritorio y la pantalla completa en dispositivos móviles -->
+
 </div>
 </div>
 
