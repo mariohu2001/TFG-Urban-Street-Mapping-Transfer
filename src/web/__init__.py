@@ -1,15 +1,16 @@
 import os
 
 
-from flask import Flask, render_template, url_for, redirect, session
+from flask import Flask, jsonify, render_template, request, url_for, redirect, session
 from configparser import ConfigParser
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt, get_jwt_identity
 from .driver_neo4j import init_neo4j
 
 from .dao.place import PlaceDAO
 from .routes.accounts import accounts_routes
 from .routes.places import places_routes
 from .routes.category import categories_routes
+from .routes.authentication import role_required
 # from .routes.users import users
 # from .routes.common import common
 # from driver_neo4j import init_neo4j
@@ -54,7 +55,6 @@ def create_app():
     app.register_blueprint(places_routes)
     app.register_blueprint(categories_routes)
 
-
     @app.route('/')
     def index():
         return redirect(url_for('home'))
@@ -62,11 +62,24 @@ def create_app():
     @app.route('/home')
     def home():
         print(session.get("current_user"))
-        return render_template("home.html", usuario=session.get("current_user"), logged=session.get("is_logged"))
+        return render_template("home.html", usuario=session.get("current_user"))
 
     @app.route('/test')
     def test():
-        return render_template("test.html")
+
+        dao = PlaceDAO(app.driver)
+        return jsonify(dao.get_quality_index_permutation([2, 3], "Bar", "Ciudad"), usuario=session.get("current_user"))
+
+    @app.route('/recomendation', methods=["GET", "POST"])
+    def recomendation():
+        places: list = [int(place) for place in request.args.getlist('place')]
+
+        dao = PlaceDAO(app.driver)
+
+        res = [dao.get_quality_index_permutation(
+            id, "Bar", "Burgos") for id in places]
+
+        return jsonify(res)
 
     @app.route('/map')
     def map():
@@ -75,13 +88,12 @@ def create_app():
 
         ciudades = placesDAO.get_cities()
 
-
-        return render_template("map.html", cities=ciudades, categories=[])
+        return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
 
     @app.route("/protected")
-    @jwt_required()
+    @role_required(["admin"])
     def protected():
 
-        return "protegido"
+        return get_jwt_identity()
 
     return app
