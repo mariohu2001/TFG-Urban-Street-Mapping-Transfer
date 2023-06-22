@@ -11,6 +11,10 @@ from .routes.accounts import accounts_routes
 from .routes.places import places_routes
 from .routes.category import categories_routes
 from .routes.authentication import role_required
+
+
+from .utils import get_city_coords
+
 # from .routes.users import users
 # from .routes.common import common
 # from driver_neo4j import init_neo4j
@@ -73,13 +77,21 @@ def create_app():
     @app.route('/recomendation', methods=["GET", "POST"])
     def recomendation():
         places: list = [int(place) for place in request.args.getlist('place')]
+        city : str = request.args.get("city")
 
         dao = PlaceDAO(app.driver)
+        cities = dao.get_cities()
+        nodos = []
 
-        res = [dao.get_quality_index_permutation(
-            id, "Bar", "Burgos") for id in places]
+        for p in places:
+            nodos.append(dao.get_by_id(p))
 
-        return jsonify(res)
+        coords = get_city_coords(city)
+
+
+        return render_template("/recomendations.html",usuario=session.get("current_user"),
+                                nodos=nodos, city=city, coords=list(coords.values()),
+                                  metrics=["permutation", "jensen"], cities=cities)
 
     @app.route('/map')
     def map():

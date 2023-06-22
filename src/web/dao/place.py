@@ -88,11 +88,12 @@ class PlaceDAO(baseDAO):
         cypher_query = """
         MATCH (n:Place)
         WHERE n.id = $id
-        RETURN n
+        RETURN properties(n) as props
         """
         with self.driver.session() as session:
-            result = session.run(cypher_query, id=id)
-            return result.single().get("n")
+            result: Result = session.run(cypher_query, id=id)
+
+            return result.single().get(key="props")
 
 
     def get_quality_index_permutation(self, id: int, category: str, city : str):
@@ -116,7 +117,7 @@ class PlaceDAO(baseDAO):
         with n,p,(aij* (nei-mean)) as not_raw, (aij * nei) as raw
         with n,p, sum(not_raw) as sum_not_raw, sum(raw) as sum_raw
         with n, sum_not_raw as Qperm, sum_raw as Qperm_raw
-        return n.id as id ,Qperm, Qperm_raw
+        return n.id as id, n.category as category ,Qperm as Q, Qperm_raw as Q_raw
         """
 
         with self.driver.session() as session:

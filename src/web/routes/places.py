@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import set_access_cookies, unset_access_cookies
-import pyvis.network as netvis
 from ..dao.place import PlaceDAO
 from ..dao.category import CategoryDAO
 from .. import utils

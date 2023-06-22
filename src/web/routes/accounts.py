@@ -67,11 +67,5 @@ def sign_up():
                 for warning in error:
                     flash(warning, category="error")
 
-    print(sign_up_form._fields)
-    print(sign_up_form.hidden_tag)
-    for i in sign_up_form:
-        print(type(i))
-        print(i.type)
-        print(i.label)
 
     return render_template("SignUp.html", form=sign_up_form)

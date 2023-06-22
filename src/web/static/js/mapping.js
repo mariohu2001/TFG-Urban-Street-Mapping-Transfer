@@ -21,9 +21,11 @@ const defaultMarkerSize = [32, 44]
 const minMarkerSize = [16, 22]
 const zoomBreakPoint = 12
 
+var MarkerSize = defaultMarkerSize
+
+var selectedMarkers = []
 
 analysis_button.addEventListener('click', function() {
-    // Define los parámetros de la solicitud
     let parametros = selectedMarkers
 
 
@@ -31,13 +33,10 @@ analysis_button.addEventListener('click', function() {
         return 'place='+ encodeURIComponent(id)
     }).join('&')
 
-    window.location.href = "/recomendation?"+queryString
+    window.location.href = "/recomendation?"+queryString+"&city="+city_dropdown.value
     
   });
 
-var MarkerSize = defaultMarkerSize
-
-var selectedMarkers = []
 
 
 var selectedIcon = L.ExtraMarkers.icon({

@@ -3,38 +3,44 @@
 
 {% block flashes %}
 
-  {% with messages = get_flashed_messages(with_categories=true) %}
+{% with messages = get_flashed_messages(with_categories=true) %}
 
-    {% if messages %}
-      {% for category, message in messages %}
-          {{ flash_message(message, category) }}
-      {% endfor %}
+{% if messages %}
+{% for category, message in messages %}
+  {{ flash_message(message, category) }}
+{% endfor %}
 
-    {% endif %}
-  {% endwith %}
+{% endif %}
+{% endwith %}
 {% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
-<form method="POST" action="/login">
-  {{ form.csrf_token }}
-  {{ form.username.label }}
-  {{ form.username }}
-  {{ form.password.label }}
-  {{ form.password }}
+<div class="row">
+
+  <div class="col container-fluid d-flex flex-column align-items-center justify-content-center">
+    <form method="POST" action="/login">
+      {{ form.csrf_token }}
+      <div class="mb-3">
+        <p>{{ form.username.label }}</p>
+        {{ form.username }}
+      </div>
+      <div class="mb-3">
+        <p>{{ form.password.label }}</p>
+        {{ form.password }}
+      </div>
+      <!-- 2 column grid layout for inline styling -->
+      <br />
+      <!-- Submit button -->
+      <div>
+        <button type="submit" id="login-button"class="btn btn-dark btn-block mb-4">Aceptar</button>
+        <p>¿No tienes cuenta?
+
+          <a href="/register">Registrarse aquí</a>
+        </p>
 
 
-  <!-- 2 column grid layout for inline styling -->
-  <br />
-  <!-- Submit button -->
-  <div>
-    <button type="submit" class="btn btn-dark btn-block mb-4">Aceptar</button>
-    <p>¿No tienes cuenta?</p>
-    <button type="button" class="btn btn-dark btn-block mb-4">
-      <a href="/register"></a>
-      Registrarse
-    </button>
+      </div>
+    </form>
   </div>
-</form>
 </div>
 {% endblock %}

@@ -2,9 +2,9 @@
 
 {% if category == "error" %}
 
-<div class="alert alert-danger alter-dismissable fade show" role="alert">
+<div class="alert alert-danger alter-dismissable fade show d-flex" style="justify-content: space-between;" role="alert">
   {{ msg }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="margin-right: end;"></button>
 </div>
 
 {% else %}
@@ -19,13 +19,13 @@
 
 {% macro dropdown_list (name,options, default) %}
 <div class="form-floating">
-  <select class="form-select" id="{{name}}">
-    <option selected value="">{{ default }}</option>
+  <select class="form-select" id="{{name}}" title="{{default}}">
+    <option value="" disabled selected>{{ default }}</option>
     {% for option in options %}
       <option value="{{option}}">{{option}}</option>
     {% endfor %}
   </select>
-  <label for="{{name}}">{{name}}</label>
+  <label for="{{name}}" style="z-index: 0;">{{name}}</label>
 </div>
 
 {% endmacro %}
