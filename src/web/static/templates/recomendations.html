@@ -14,31 +14,26 @@
 {% endblock %}
 
 {% block content %}
-<div class="row my-2 mx-2 d-flex">
-    <div id="map" class="col-lg-6 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
+<div class="container-fluid align-items-center justify-content-center" style="margin-top: 30px;">
+    <div class="row my-2 mx-2 d-flex">
+        <div id="map" class="col-lg-9 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
 
-    </div>
-
-
-    <div class="col-lg-6 col-md-12">
-        {% block mapInfo %}
-        {{ dropdown_list("city", cities, "ciudad") }}
-        {{ dropdown_list("category", categories, "categoría") }}
-        {{ dropdown_list("metric", metrics, "métrica") }}
-
-        <button type="button" id="metrics_button" class="btn btn-primary col m-1">Métricas</button>
-        {% endblock %}
-        <div id="loading" class="spinner-border text-secondary" style="display: none;" role="status">
-            <span class="visually-hidden">Loading...</span>
         </div>
-    </div>
 
 
+        <div class="col-lg-3 col-md-12">
+            {% block mapInfo %}
+            {{ dropdown_list("city", cities, "ciudad") }}
+            {{ dropdown_list("category", categories, "categoría") }}
+            {{ dropdown_list("metric", metrics, "métrica") }}
 
-</div>
-<div class="row my-2 mx-2 d-flex">
+            <button type="button" id="metrics_button" class="btn btn-dark col m-1">Métricas</button>
+            {% endblock %}
+            <div id="loading" class="spinner-border text-secondary" style="display: none;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
 
-    <table class="table table-bordered my-5" id="metrics_table">
+                <table class="table table-bordered my-5" id="metrics_table">
         <thead style="background-color: whitesmoke;">
             <th scope="col">Id</th>
             <th scope="col">Categoría</th>
@@ -51,7 +46,16 @@
 
     </table>
 
+        </div>
+
+    </div>
+
 </div>
+<!-- <div class="row my-2 mx-2 d-flex"> -->
+
+
+
+<!-- </div> -->
 
 
 {% endblock %}

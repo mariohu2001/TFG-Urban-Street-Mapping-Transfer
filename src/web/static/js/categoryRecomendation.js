@@ -181,9 +181,9 @@ function update_indices_table() {
         cell = row.insertCell()
         cell.innerHTML = Quality.category.replace("_", " ")
         cell = row.insertCell()
-        cell.innerHTML = Quality.Q
+        cell.innerHTML = Quality.Q.toFixed(3)
         cell = row.insertCell()
-        cell.innerHTML = Quality.Q_raw
+        cell.innerHTML = Quality.Q_raw.toFixed(3)
     })
     
     document.getElementById("loading").style.display = "none"

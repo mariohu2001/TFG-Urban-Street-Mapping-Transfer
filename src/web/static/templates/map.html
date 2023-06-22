@@ -5,28 +5,34 @@
 <script src="/js/leaflet.extra-markers.min.js"></script>
 {% endblock %}
 {% block content%}
+<div class="container-fluid align-items-center justify-content-center" style="margin-top: 30px;">
+	<div class="row my-2 mx-2 d-flex">
+		<div id="map" class="col-lg-9 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
 
-<div class="row my-2 mx-2 d-flex">
-	<div id="map" class="col-lg-9 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
-
-	</div>
-
-
-	<div class="col-lg-3 col-md-12" id="map-selection">
-		{% block mapInfo %}
-		{{ dropdown_list("city", cities, "ciudad") }}
-		{{ dropdown_list("category", categories, "categoría") }}
-
-		<div class="container-fluid mt-2 mb-5">
-			<button type="button" id="search_btn" class="btn btn-success col m-1">Buscar</button>
-			<a href="#" id="network_button"><button type="button" class="btn btn-primary col m-1">Ver Red</button></a>
-			{% if usuario is not none and usuario is defined %}
-			<button type="button" id="analysis_button" class="btn btn-primary col m-1">Recomendaciones</button>
 		</div>
-		{% endif %}
-		{% endblock %}
-	</div>
 
+
+		<div class="col-lg-3 col-md-12" id="map-selection">
+			{% block mapInfo %}
+			{{ dropdown_list("city", cities, "ciudad") }}
+			{{ dropdown_list("category", categories, "categoría") }}
+
+			<div class="container-fluid mt-2 mb-5">
+				<button type="button" id="search_btn" class="btn btn-success col m-1">Buscar</button>
+				<a href="#" id="network_button"><button type="button" class="btn btn-primary col m-1">Ver
+						Red</button></a>
+				{% if usuario is not none and usuario is defined %}
+				<button type="button" id="analysis_button" class="btn btn-primary col m-1">Recomendaciones</button>
+				{% else %}
+				<button type="button" id="analysis_button" class="btn btn-primary col m-1"
+					style="display: none;">Recomendaciones</button>
+
+				{% endif %}
+			</div>
+			{% endblock %}
+		</div>
+
+	</div>
 </div>
 
 
