@@ -14,14 +14,18 @@ function draw() {
 
     var options = {
         nodes: {
-            shape: "circle",
+            shape: "dot",
             shapeProperties: {
                 interpolation: false
             },
-            size: 20
+            font:{
+                size: 25,
+                color: "#ffffff",
+            }
         },
         layout: { improvedLayout: false },
         edges: { smooth: false },
+
 
         physics: {
             barnesHut: {

@@ -55,9 +55,10 @@ class CategoryDAO(baseDAO):
 
     def get_visjs_nodes(self, city: str):
         cypher_query = """
-        MATCH (n:Category)
+        MATCH (n:Category)-[r]-()
         where n.city = $city
-        return id(n) as id, n.name as label
+        return id(n) as id, n.name as label, sum(r.real_value) as value, toString(n.n_nodes) + " nodes" as title,
+        n.type as group
         """
 
         with self.driver.session() as session:
@@ -73,7 +74,7 @@ class CategoryDAO(baseDAO):
         MATCH (n:Category)-[r]->(m:Category)
         where n.city = $city and m.city = $city
         and r.real_value > 0 and n <> m   
-        return id(n) as from, r.real_value as value, id(m) as to, toString(r.real_value) as title
+        return id(n) as from, r.real_value as value, id(m) as to,replace(n.name, "_", " ")+" - "+replace(m.name, "_", " ")+": "+ toString(r.real_value) as title
         """
 
         with self.driver.session() as session:
