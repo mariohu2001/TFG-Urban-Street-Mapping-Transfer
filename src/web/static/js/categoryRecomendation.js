@@ -3,19 +3,19 @@
 
 const colors = [
 
-"#00AA00",
-"#00AAAA",
-"#AA0000",
-"#AA00AA",
-"#FFAA00",
-"#AAAAAA",
-"#5555FF",
-"#55FF55",
-"#55FFFF",
-"#FF5555",
-"#FF55FF",
-"#FFFF55",
-"#FFFFFF"
+    "#00AA00",
+    "#00AAAA",
+    "#AA0000",
+    "#AA00AA",
+    "#FFAA00",
+    "#AAAAAA",
+    "#5555FF",
+    "#55FF55",
+    "#55FFFF",
+    "#FF5555",
+    "#FF55FF",
+    "#FFFF55",
+    "#FFFFFF"
     // "#1abc9c",
     // "#a3e4d7",
     // "#85c1e9",
@@ -84,9 +84,16 @@ for (var i = 0; i < nodes.length; i++) {
 
     var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor() }).addTo(marker_layer)
 
-    marker.bindPopup(
-        "<i>" + element.id + "</i>" + "</br>" +
-        "<b>" + element.category.replace("_", " ") + "</b>");
+    let popUpContent = "<i>" + element.id + "</i>" + "</br>" +
+        "<b>" + element.category + "</b>"
+
+    if(element.name !== null && "name" in element){
+        popUpContent+= "<br><i>"+element.name+"</i>"
+    }
+
+    popUpContent += `<br> lat: ${element.coords[1]} lon: ${element.coords[0]}`
+
+    marker.bindPopup(popUpContent);
     marker.on('mouseover', function (e) {
         this.openPopup();
     });
@@ -148,14 +155,14 @@ function obtain_quality_indices(nodo) {
         if (!response.ok) {
             throw new Error("Error en la respuesta de la petición.");
         }
- 
+
 
         return response.json();
     }
-    ).catch(function(error) {
+    ).catch(function (error) {
         console.error(error);
         throw new Error("Error en la respuesta de la petición.");
-      });
+    });
 }
 
 
@@ -166,31 +173,31 @@ function update_indices_table() {
     let indices = nodes.map(function (nodo) { return obtain_quality_indices(nodo) });
 
     Promise.all(indices)
-  .then(function(indice) {
-    while (tabla.rows.length > 1) {
-        tabla.deleteRow(1);
-      }
+        .then(function (indice) {
+            while (tabla.rows.length > 1) {
+                tabla.deleteRow(1);
+            }
 
-    indice.forEach(function(ind){
-        let Quality = ind[0]
+            indice.forEach(function (ind) {
+                let Quality = ind[0]
 
-        var row = tabla.insertRow()
-        let cell = row.insertCell()
-        cell.innerHTML = Quality.id
-        cell.style.backgroundColor = nodeColors[Quality.id];
-        cell = row.insertCell()
-        cell.innerHTML = Quality.category.replace("_", " ")
-        cell = row.insertCell()
-        cell.innerHTML = Quality.Q.toFixed(3)
-        cell = row.insertCell()
-        cell.innerHTML = Quality.Q_raw.toFixed(3)
-    })
-    
-    document.getElementById("loading").style.display = "none"
-  })
-  .catch(function(error) {
-    console.error(error);
-    throw new Error("Error en la respuesta de la petición.");
-  });
+                var row = tabla.insertRow()
+                let cell = row.insertCell()
+                cell.innerHTML = Quality.id
+                cell.style.backgroundColor = nodeColors[Quality.id];
+                cell = row.insertCell()
+                cell.innerHTML = Quality.category.replace("_", " ")
+                cell = row.insertCell()
+                cell.innerHTML = Quality.Q.toFixed(3)
+                cell = row.insertCell()
+                cell.innerHTML = Quality.Q_raw.toFixed(3)
+            })
+
+            document.getElementById("loading").style.display = "none"
+        })
+        .catch(function (error) {
+            console.error(error);
+            throw new Error("Error en la respuesta de la petición.");
+        });
 }
 

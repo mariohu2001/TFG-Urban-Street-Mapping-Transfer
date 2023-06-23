@@ -20,7 +20,7 @@ class CategoryDAO(baseDAO):
         cypher_query = """
         MATCH (n:Category)
         WHERE n.city = $city
-        return distinct(n.name) as value, replace(n.name, "_", " ") as name
+        return distinct(n.name) as value, replace(n.name, "_", " ") as name order by name
         """
 
         with self.driver.session() as session:
@@ -32,7 +32,7 @@ class CategoryDAO(baseDAO):
         cypher_query = """
         MATCH (n:Category)
         WHERE n.city = $city
-        return distinct(n.name) as name
+        return distinct(n.name) as name order by name
         """
 
         with self.driver.session() as session:

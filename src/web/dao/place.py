@@ -28,7 +28,7 @@ class PlaceDAO(baseDAO):
             """
         else:
             cypher_query += """
-            RETURN n.id as id, n.category as category, n.coords as coords
+            RETURN n.id as id, replace(n.category, "_", " ") as category, n.coords as coords, n.name as name
             """
 
         with self.driver.session() as session:
@@ -51,7 +51,7 @@ class PlaceDAO(baseDAO):
             """
         else:
             cypher_query += """
-            RETURN n.id as id, replace(n.category, "_", " ") as category, n.coords as coords
+            RETURN n.id as id, replace(n.category, "_", " ") as category, n.coords as coords, n.name as name
 
             """
 
@@ -67,7 +67,7 @@ class PlaceDAO(baseDAO):
     def get_cities(self):
         cypher_query = """
         MATCH (n:Place)
-        RETURN DISTINCT(n.area) as ciudades
+        RETURN DISTINCT(n.area) as ciudades order by ciudades
         """
         with self.driver.session() as session:
             result = session.run(cypher_query)

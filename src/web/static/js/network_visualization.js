@@ -21,10 +21,11 @@ function draw() {
             font:{
                 size: 25,
                 color: "#ffffff",
+                bold: "true"
             }
         },
         layout: { improvedLayout: false },
-        edges: { smooth: false },
+        edges: { smooth: false, physics: true},
 
 
         physics: {

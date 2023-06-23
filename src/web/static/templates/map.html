@@ -19,12 +19,12 @@
 
 			<div class="container-fluid mt-2 mb-5">
 				<button type="button" id="search_btn" class="btn btn-success col m-1">Buscar</button>
-				<a href="#" id="network_button"><button type="button" class="btn btn-primary col m-1">Ver
+				<a href="#" id="network_button"><button type="button" class="btn btn-dark col m-1">Ver
 						Red</button></a>
 				{% if usuario is not none and usuario is defined %}
-				<button type="button" id="analysis_button" class="btn btn-primary col m-1">Recomendaciones</button>
+				<button type="button" id="analysis_button" class="btn btn-dark col m-1">Recomendaciones</button>
 				{% else %}
-				<button type="button" id="analysis_button" class="btn btn-primary col m-1"
+				<button type="button" id="analysis_button" class="btn btn-dark col m-1"
 					style="display: none;">Recomendaciones</button>
 
 				{% endif %}

@@ -59,7 +59,6 @@ search_btn.addEventListener("click", refreshMap)
 city_dropdown.addEventListener("change", get_categories_by_city)
 
 map.on("zoom", function () {
-    console.log(map.getZoom())
     if (map.getZoom() < 12) {
         MarkerSize = minMarkerSize
     }
@@ -111,15 +110,12 @@ function selectMarker(event) {
     if (selectedMarkers.includes(markerId)) {
         var index = selectedMarkers.indexOf(markerId);
         selectedMarkers.splice(index, 1);
-        // marker.setOpacity(markerDefaultOpacity)
         marker.setIcon(defaultIcon)
     } else {
         console.log(marker.options)
         selectedMarkers.push(markerId);
         marker.setIcon(selectedIcon)
         console.log(marker.options)
-
-        // marker.setStyle({ fillColor: 'blue' });
     }
     console.log(selectedMarkers)
 }
@@ -135,7 +131,14 @@ function renderMarkers(data) {
         let lat = element.coords[1];
         var marker = L.marker([lat, lon], { id: element.id, icon: defaultIcon }).addTo(marker_layer)
 
-        marker.bindPopup("<b>" + element.category + "</b>");
+
+        let popUpContent = "<b>" + element.category + "</b>"
+
+        if(element.name !== null){
+            popUpContent+= "<br><i>"+element.name+"</i>"
+        }
+
+        marker.bindPopup(popUpContent);
         marker.on("click", selectMarker)
         marker.on('mouseover', function (e) {
             this.openPopup();
