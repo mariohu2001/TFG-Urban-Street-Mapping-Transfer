@@ -35,7 +35,7 @@ def permutate_amenities(tx: Transaction, city: str, logger: logging.Logger):
     and n.sim_category <=  m.sim_category
     optional match (n)-[r]-(m)
     with n.sim_category as n_am, m.sim_category as m_am, count(DISTINCT(r)) as n_rels
-    match (q:Category)-[z]-(p:Category)
+    match (q:Category)-[z:Rel]-(p:Category)
     where q.name = n_am and p.name = m_am and q.city = $city and p.city = $city
     set z.sim_value = z.sim_value +  n_rels
     """

@@ -105,7 +105,7 @@ class PlaceDAO(baseDAO):
         call
         {
             with n,p
-            match (m:Place),(p)-[z]-(q:Category)
+            match (m:Place),(p)-[z:Rel]-(q:Category)
             optional match (n)-[r]-(m:Place)
             where m.category = q.name and m <> n
             and m.area = n.area and p.city = q.city

@@ -59,7 +59,7 @@ def calculate_percentile(city: str):
             mean = np.mean(sims)
 
             session.run(f"""
-            MATCH (n:Category)-[r]->(m:Category)
+            MATCH (n:Category)-[r:Rel]->(m:Category)
             where n.name = $o_name and m.name = $t_name
             and n.city = $city and m.city = $city
             SET r.perc_25 = $perc_25
@@ -89,7 +89,7 @@ def calculate_z_score(city: str):
 
     with driver.session() as session:
         result: Result = session.run(f"""
-            MATCH (n:Category)-[r]->(m:Category)
+            MATCH (n:Category)-[r:Rel]->(m:Category)
             WHERE n.city = $city and m.city = $city
             return n.name as o, m.name as t, r.mean as media, r.std_dev as dev, r.real_value as real
             """, city=city)
@@ -100,7 +100,7 @@ def calculate_z_score(city: str):
             z_score: float = (real - mean)/dev if dev != 0 else 0
 
             session.run("""
-            MATCH (n:Category)-[r]->(m:Category)
+            MATCH (n:Category)-[r:Rel]->(m:Category)
             where n.name = $o_name and m.name = $t_name
             and n.city = $city and m.city = $city
             SET r.z_score = $z_score

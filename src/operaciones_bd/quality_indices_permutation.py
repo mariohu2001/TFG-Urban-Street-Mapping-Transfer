@@ -17,7 +17,7 @@ def quality_indices(tx: Transaction, city: str):
     // a_ij
     call{
         with u
-        match(u:Category)-[r]-(v:Category)
+        match(u:Category)-[r:Rel]-(v:Category)
         return r.z_score as a_ij, v.name as categories
     }
     // nei
@@ -32,7 +32,7 @@ def quality_indices(tx: Transaction, city: str):
     //nei_avg
     call{
         with n,categories
-        match (p:Category)-[r]-(q:Category)
+        match (p:Category)-[r:Rel]-(q:Category)
         where p.name = n.category and q.name = categories
         and n.area = p.city and p.city = q.city
         return toFloat(r.real_value)/toFloat(p.n_nodes) as nei_avg
