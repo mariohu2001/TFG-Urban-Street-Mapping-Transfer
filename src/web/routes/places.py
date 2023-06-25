@@ -48,6 +48,17 @@ def get_quality_indices_permutation(id: int, city: str, category: str):
 
     return jsonify(quality_indices)
 
+
+@places_routes.route("/quality_indices/jensen/<string:city>/<string:category>/<int:id>")
+def get_quality_indices_jensen(id: int, city: str, category: str):
+
+    dao = PlaceDAO(current_app.driver)
+
+    quality_indices = dao.get_quality_index_jensen(id, category, city)
+
+    return jsonify(quality_indices)
+
+
 @places_routes.route("/coords/<city>", methods=["GET"])
 def get_city_coords(city: str):
     return utils.get_city_coords(city)
