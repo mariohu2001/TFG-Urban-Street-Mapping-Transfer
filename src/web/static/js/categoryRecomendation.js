@@ -15,38 +15,40 @@ const colors = [
     "#FF5555",
     "#FF55FF",
     "#FFFF55",
-    "#FFFFFF"
-    // "#1abc9c",
-    // "#a3e4d7",
-    // "#85c1e9",
-    // "#2980b9",
-    // "#af7ac5",
-    // "#ec7063",
-    // "#2ecc71",
-    // "#f4d03f",
-    // "#f5b041",
-    // "#dc7633",
-    // "#abb2b9",
-    // "red",
-    // "orange",
-    // "blue",
-    // "green",
-    // "purple",
-    // "pink",
-    // "brown",
-    // "yellow",
-    // "cyan",
-    // "magenta",
-    // "violet",
-    // "coral",
-    // "gold",
-    // "lime",
-    // "indigo",
-    // "teal",
-    // "orchid",
-    // "salmon",
-    // "steelblue",
-    // "tomato"
+    "#FFFFFF",
+
+
+    "#1abc9c",
+    "#a3e4d7",
+    "#85c1e9",
+    "#2980b9",
+    "#af7ac5",
+    "#ec7063",
+    "#2ecc71",
+    "#f4d03f",
+    "#f5b041",
+    "#dc7633",
+    "#abb2b9",
+    "red",
+    "orange",
+    "blue",
+    "green",
+    "purple",
+    "pink",
+    "brown",
+    "yellow",
+    "cyan",
+    "magenta",
+    "violet",
+    "coral",
+    "gold",
+    "lime",
+    "indigo",
+    "teal",
+    "orchid",
+    "salmon",
+    "steelblue",
+    "tomato"
 ];
 
 // ['red', 'orange-dark', 'orange', 'yellow', 'blue-dark', 'cyan', 'purple', 'violet', 'pink', 'green-dark', 'green', 'green-light', 'white']
@@ -55,8 +57,21 @@ const nColors = colors.length
 const city_dropdown = document.getElementById("city")
 const category_dropdown = document.getElementById("category")
 const method_dropdown = document.getElementById("metric")
-const tabla = document.getElementById("metrics_table")
+const tabla_metricas = document.getElementById("metrics-table")
 const metrics_button = document.getElementById("metrics_button")
+
+var dataTableMetrics = null
+
+$(document).ready(function () {
+    dataTableMetrics = $('#metrics-table').DataTable({
+        "paging": true, // Desactivar paginado
+        "searching": false, // Desactivar búsqueda
+        "ordering": true, // Activar ordenación
+        "info": false, // Desactivar información de la tabla,
+        "pageLength": 10,
+        "lengthChange": false
+    });
+});
 
 const map = L.map('map').setView(defaultCoords, 15);
 
@@ -72,27 +87,29 @@ const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var colorIndex = Math.floor(Math.random() * nColors)
 var nodeColors = {}
-
+var numToId = {}
 
 city_dropdown.addEventListener("change", change_categories_dropdown)
 
+
+
 for (var i = 0; i < nodes.length; i++) {
     let element = nodes[i]
-
+    numToId[element.id] = i
     let lon = element.coords[0];
     let lat = element.coords[1];
 
     var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor() }).addTo(marker_layer)
 
-    let popUpContent = "<i>" + element.id + "</i>" + "</br>" +
+    let popUpContent = "Nº " + i  + "</br>" +
         "<b>" + element.category + "</b>"
 
-    if(element.name !== null && "name" in element){
-        popUpContent+= "<br><i>"+element.name+"</i>"
+    if (element.name !== null && "name" in element) {
+        popUpContent += "<br><i>" + element.name + "</i>"
     }
 
     popUpContent += `<br> lat: ${element.coords[1]} lon: ${element.coords[0]}`
-
+    popUpContent += `<br> <b>ID: <i>${element.id}</i></b>` 
     marker.bindPopup(popUpContent);
     marker.on('mouseover', function (e) {
         this.openPopup();
@@ -166,6 +183,7 @@ function obtain_quality_indices(nodo) {
 }
 
 
+
 function update_indices_table() {
 
     document.getElementById("loading").style.display = "block"
@@ -174,23 +192,15 @@ function update_indices_table() {
 
     Promise.all(indices)
         .then(function (indice) {
-            while (tabla.rows.length > 1) {
-                tabla.deleteRow(1);
-            }
+            dataTableMetrics.rows().remove().draw(false)
 
             indice.forEach(function (ind) {
                 let Quality = ind[0]
 
-                var row = tabla.insertRow()
-                let cell = row.insertCell()
-                cell.innerHTML = Quality.id
-                cell.style.backgroundColor = nodeColors[Quality.id];
-                cell = row.insertCell()
-                cell.innerHTML = Quality.category.replace("_", " ")
-                cell = row.insertCell()
-                cell.innerHTML = Quality.Q.toFixed(3)
-                cell = row.insertCell()
-                cell.innerHTML = Quality.Q_raw.toFixed(3)
+                let row = [`<span><i class="bi bi-circle-fill" style="color: ${nodeColors[Quality.id]}; "></i> ` + numToId[Quality.id] + '</span>',
+                 Quality.category, Quality.Q.toFixed(3), Quality.Q_raw.toFixed(3)]
+                dataTableMetrics.row.add(row).draw(false)
+
             })
 
             document.getElementById("loading").style.display = "none"

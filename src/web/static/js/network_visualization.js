@@ -20,13 +20,15 @@ function draw() {
             },
             font:{
                 size: 25,
-                color: "#ffffff",
-                bold: "true"
+                color: "#000000",
+                bold: "true",
+                strokeWidth: 5, 
+                strokeColor: "#ffffff"
             }
         },
         layout: { improvedLayout: false },
         edges: { smooth: false, physics: true},
-
+       
 
         physics: {
             barnesHut: {

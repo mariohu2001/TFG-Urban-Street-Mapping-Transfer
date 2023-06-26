@@ -2,7 +2,7 @@
 {% extends "base.html" %} {% block title %}Map{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
-<script src="/js/leaflet.extra-markers.min.js"></script>
+
 {% endblock %}
 {% block content%}
 <div class="container-fluid align-items-center justify-content-center" style="margin-top: 30px;">
@@ -39,7 +39,7 @@
 
 
 {% endblock %}
-
 {% block scripts%}
-<script type="text/javascript" src="/js/mapping.js"></script>
+<script src="/js/leaflet.extra-markers.min.js" defer></script>
+<script type="text/javascript" src="/js/mapping.js" defer></script>
 {% endblock %}

@@ -9,8 +9,6 @@
 
 </script>
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
-<script src="/js/leaflet.extra-markers.min.js"></script>
-
 {% endblock %}
 
 {% block content %}
@@ -33,18 +31,18 @@
                 <span class="visually-hidden">Loading...</span>
             </div>
 
-                <table class="table table-bordered my-5" id="metrics_table">
-        <thead style="background-color: whitesmoke;">
-            <th scope="col">Id</th>
-            <th scope="col">Categoría</th>
-            <th scope="col">Q</th>
-            <th scope="col">Q raw</th>
-        </thead>
-        <tbody>
+            <table class="table table-dark table-hover table-responsive my-5" id="metrics-table">
+                <thead>
+                    <th>#</th>
+                    <th>Categoría</th>
+                    <th>Q</th>
+                    <th>Q raw</th>
+                </thead>
+                <tbody id="metrics-table-body" class="table-group-divider">
 
-        </tbody>
+                </tbody>
 
-    </table>
+            </table>
 
         </div>
 
@@ -61,5 +59,7 @@
 {% endblock %}
 
 {% block scripts%}
-<script type="text/javascript" src="/js/categoryRecomendation.js"></script>
+<script src="/js/leaflet.extra-markers.min.js" defer></script>
+<script type="text/javascript" src="/js/categoryRecomendation.js" defer></script>
+
 {% endblock %}
