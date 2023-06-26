@@ -2,6 +2,18 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
 }
 
+/* .vis-config-item{
+    width: 100% !important;
+}
+
+.vis-configuration{
+    width: 100% !important;
+} */
+
+/* .vis-config-label{
+    width: 100% !important;
+} */
+
 @media screen and (max-width: 950px) {
     #map-selection{
         margin-top: 20px !important; 

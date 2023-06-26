@@ -101,7 +101,7 @@ for (var i = 0; i < nodes.length; i++) {
 
     var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor() }).addTo(marker_layer)
 
-    let popUpContent = "Nº " + i  + "</br>" +
+    let popUpContent = "#" + i  + "</br>" +
         "<b>" + element.category + "</b>"
 
     if (element.name !== null && "name" in element) {

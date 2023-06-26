@@ -7,30 +7,72 @@ Category Net
 {% block head%}
 
 <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
-<script>
-    var nodes = {{ nodes| tojson}}
-    var edges = {{ edges| tojson}}
-</script>
+
 {% endblock %}
 
 {% block content%}
 
 
+<div class="container-fluid" style="background-color: #222222;">
 
-    <div class="container-fluid" id="network_visualization" style="background-color: #222222; width: 100vw; height: 90vh;">
+    <div class="row no-gutters" id="network_visualization" style="height: 90vh;">
         <div id="loading_spinner" class="spinner-border spinner-border-sm text-success"
             style=" width: 10rem ;height: 10rem ;" role="status">
-
-
         </div>
-
     </div>
+    <div class="row no-gutters" style="background-color: #2b3035">
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                        Filtro por Grado
+                    </button>
+                </h2>
+                <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">
+                        <label for="degree-range" class="form-label">Grado</label>
+                        <input type="range" class="form-range" min="0" max="5" step="1" id="degree-range">
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#flush-collapseTwo" aria-expanded="false" aria-controls="flush-collapseTwo">
+                        Físicas
+                    </button>
+                </h2>
+                <div id="flush-collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body" id="physics-config">
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree" aria-expanded="false" aria-controls="flush-collapseThree">
+                      Accordion Item #3
+                    </button>
+                  </h2>
+                  <div id="flush-collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                    <div class="accordion-body">Placeholder content for this accordion, which is intended to demonstrate the <code>.accordion-flush</code> class. This is the third item's accordion body. Nothing more exciting happening here in terms of content, but just filling up the space to make it look, at least at first glance, a bit more representative of how this would look in a real-world application.</div>
+                  </div>
+                </div> -->
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock %}
 
 {% block scripts %}
-
+<script>
+    var nodes = new vis.DataSet({{ nodes| tojson}})
+    var edges = new vis.DataSet({{ edges| tojson}})
+</script>
 
 <script type="text/javascript" src="/js/network_visualization.js"></script>
 {% endblock %}
