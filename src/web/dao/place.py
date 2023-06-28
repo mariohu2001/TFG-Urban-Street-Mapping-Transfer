@@ -1,6 +1,7 @@
 from neo4j import Driver, Result
 from .base import baseDAO
 
+
 class PlaceDAO(baseDAO):
 
     def all(self):
@@ -60,9 +61,7 @@ class PlaceDAO(baseDAO):
             if details:
                 return [r.get("n") for r in result]
 
-
             return result.data()
-        
 
     def get_cities(self):
         cypher_query = """
@@ -72,7 +71,7 @@ class PlaceDAO(baseDAO):
         with self.driver.session() as session:
             result = session.run(cypher_query)
             return result.value("ciudades")
-        
+
     def get_categories(self):
         cypher_query = """
         MATCH (n:Place)
@@ -81,7 +80,6 @@ class PlaceDAO(baseDAO):
         with self.driver.session() as session:
             result = session.run(cypher_query)
             return result.value("category")
-
 
     def get_by_id(self, id: str):
 
@@ -95,8 +93,7 @@ class PlaceDAO(baseDAO):
 
             return result.single().get(key="props")
 
-
-    def get_quality_index_permutation(self, id: int, category: str, city : str):
+    def get_quality_index_permutation(self, id: int, category: str, city: str):
 
         cypher_query = """
         match (n:Place), (p:Category)
@@ -121,12 +118,37 @@ class PlaceDAO(baseDAO):
         """
 
         with self.driver.session() as session:
-            result: Result = session.run(cypher_query, id=id, category=category, city=city)
+            result: Result = session.run(
+                cypher_query, id=id, category=category, city=city)
 
             return result.data()
         
 
-    def get_quality_index_jensen(self, id: int, category: str, city : str):
+    def get_quality_index_permutation_coords(self, latitude: float, longitude: float, category: str, city: str):
+        cypher_query = """
+        with point({longitude: $longitude, latitude: $latitude}) AS point, $category as category, $city as city
+        match (p:Category)
+        where p.city = city and p.name = category
+        call
+        {
+            with p, point
+            match (p)-[z:Rel]-(q:Category)
+            optional match (n:Place)
+            where q.name = n.category and point.distance(point, n.coords) <= 100  
+        return count(n) as nei,z.z_score as aij,toFloat(z.real_value)/toFloat(p.n_nodes) as mean ,q
+        }
+        with aij * (nei-mean) as not_raw, aij * nei as raw
+        return sum(not_raw) as Q, sum(raw) as Qraw
+        """
+
+        with self.driver.session() as session:
+            result: Result = session.run(
+                cypher_query, latitude=latitude, longitude=longitude, category=category, city=city)
+
+            return result.data()
+
+
+    def get_quality_index_jensen(self, id: int, category: str, city: str):
 
         cypher_query = """
         match (n:Place), (p:Category)
@@ -151,8 +173,32 @@ class PlaceDAO(baseDAO):
         """
 
         with self.driver.session() as session:
-            result: Result = session.run(cypher_query, id=id, category=category, city=city)
+            result: Result = session.run(
+                cypher_query, id=id, category=category, city=city)
 
             return result.data()
-    
 
+    def get_quality_index_jensen_coords(self, latitude: float, longitude: float, category: str, city: str):
+        cypher_query = """
+        with point({longitude: $longitude, latitude: $latitude}) AS point, $category as category, $city as city
+        match (p:Category)
+        where p.city = city and p.name = category
+        call
+        {
+            with p, point
+            match (p)-[z:Jensen]->(q:Category), (p)-[r:Rel]-(q)
+            optional match (n:Place)
+            where q.name = n.category and point.distance(point, n.coords) <= 100  
+                    return toFloat(log(z.coeff)) as aij, count(n) as nei, toFloat(r.real_value)/toFloat(p.n_nodes) as mean, q
+
+        }
+
+        with aij * (nei-mean) as not_raw, aij * nei as raw
+        return sum(not_raw) as Q, sum(raw) as Qraw
+        """
+
+        with self.driver.session() as session:
+            result: Result = session.run(
+                cypher_query, latitude=latitude, longitude=longitude, category=category, city=city)
+
+            return result.data()
