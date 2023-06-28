@@ -153,8 +153,6 @@ class PlaceDAO(baseDAO):
         with self.driver.session() as session:
             result: Result = session.run(cypher_query, id=id, category=category, city=city)
 
-            a = result.data()
-            print(a)
-            return a
+            return result.data()
     
 

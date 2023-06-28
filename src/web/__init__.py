@@ -79,6 +79,7 @@ def create_app():
         places: list = [int(place) for place in request.args.getlist('place')]
         city : str = request.args.get("city")
 
+        coords: list = [ tuple(coord.split(":")) for coord in request.args.getlist('coords') ]
         dao = PlaceDAO(app.driver)
         cities = dao.get_cities()
         nodos = []
@@ -86,11 +87,19 @@ def create_app():
         for p in places:
             nodos.append(dao.get_by_id(p))
 
-        coords = get_city_coords(city)
+        coords_markers = []
+        for c in coords:
+            coords_markers.append({
+             "lat": float(c[0]),
+             "lon": float(c[1]),
+             "category": "point"
+            })
+
+        city_coords = get_city_coords(city)
 
 
         return render_template("/recomendations.html",usuario=session.get("current_user"),
-                                nodos=nodos, city=city, coords=list(coords.values()),
+                                nodos=nodos, city=city, coords=list(city_coords.values()),
                                   metrics=["permutation", "jensen"], cities=cities)
 
     @app.route('/map')

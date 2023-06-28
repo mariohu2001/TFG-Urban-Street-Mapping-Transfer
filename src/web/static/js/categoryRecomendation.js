@@ -68,7 +68,7 @@ $(document).ready(function () {
         "searching": false, // Desactivar búsqueda
         "ordering": true, // Activar ordenación
         "info": false, // Desactivar información de la tabla,
-        "pageLength": 10,
+        "pageLength": 5,
         "lengthChange": false
     });
 });

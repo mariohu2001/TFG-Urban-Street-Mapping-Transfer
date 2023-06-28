@@ -23,21 +23,11 @@ const zoomBreakPoint = 12
 
 var MarkerSize = defaultMarkerSize
 
-var selectedMarkers = []
 
-analysis_button.addEventListener('click', function() {
-    let parametros = selectedMarkers
-
-
-    let queryString = parametros.map(function(id){
-        return 'place='+ encodeURIComponent(id)
-    }).join('&')
-
-    window.location.href = "/recomendation?"+queryString+"&city="+city_dropdown.value
-    
-  });
-
-
+var currentCity = ""
+var mapMarkers = []
+var selectedPlaces = []
+var selectedCoords = []
 
 var selectedIcon = L.ExtraMarkers.icon({
     icon: 'fa-circle',
@@ -47,6 +37,15 @@ var selectedIcon = L.ExtraMarkers.icon({
     prefix: 'fas'
 })
 
+var coordsIcon = L.ExtraMarkers.icon({
+    icon: 'fa-circle',
+    markerColor: 'ForestGreen',
+    iconColor: 'white',
+    svg: true,
+    prefix: 'fas'
+})
+
+
 var defaultIcon = L.ExtraMarkers.icon({
     icon: 'fa-circle',
     markerColor: 'cyan',
@@ -54,6 +53,52 @@ var defaultIcon = L.ExtraMarkers.icon({
     svg: true,
     prefix: 'fas'
 })
+
+
+
+analysis_button.addEventListener('click', function () {
+
+
+    let queryStringPlaces = selectedPlaces.map(function (marker) {
+        return 'place=' + encodeURIComponent(marker.options.id)
+    }).join('&')
+
+    let queryStringCoords = selectedCoords.map(function (marker) {
+        return 'coords=' + encodeURIComponent(marker.getLatLng().lat) + ":" + encodeURIComponent(marker.getLatLng().lng)
+    }).join('&')
+
+
+    window.location.href = "/recomendation?" + queryStringPlaces + "&" +queryStringCoords + "&city=" + city_dropdown.value
+
+});
+
+map.on('click', addCoordsMarker)
+
+
+function addCoordsMarker(e) {
+    newMarker = L.marker(e.latlng, { icon: coordsIcon })
+
+
+    popUpContent = `<i>lat: ${e.latlng.lat.toFixed(7)} lon: ${e.latlng.lng.toFixed(7)}</i>`
+    newMarker.bindPopup(popUpContent);
+    newMarker.on('click', function (e) {
+        let index = selectedPlaces.indexOf(this);
+        selectedCoords.splice(index, 1);
+        marker_layer.removeLayer(this)
+    })
+    newMarker.on('mouseover', function (e) {
+        this.openPopup();
+    });
+    newMarker.on('mouseout', function (e) {
+        this.closePopup();
+    });
+
+    selectedCoords.push(newMarker)
+
+    newMarker.addTo(marker_layer)
+}
+
+
 
 search_btn.addEventListener("click", refreshMap)
 city_dropdown.addEventListener("change", get_categories_by_city)
@@ -69,7 +114,7 @@ map.on("zoom", function () {
 
 function refreshMap() {
 
-    selectedMarkers = []
+    // selectedPlaces = []
     var selected_city = city_dropdown.value
     var selected_category = category_dropdown.value
 
@@ -98,6 +143,7 @@ function refreshMap() {
 
 
 function changeMapCoords(latitude, longitude) {
+
     map.flyTo([latitude, longitude], 15)
 }
 
@@ -105,37 +151,56 @@ function changeMapCoords(latitude, longitude) {
 
 function selectMarker(event) {
     var marker = event.target;
-    var markerId = marker.options.id;
 
-    if (selectedMarkers.includes(markerId)) {
-        var index = selectedMarkers.indexOf(markerId);
-        selectedMarkers.splice(index, 1);
+
+    if (selectedPlaces.includes(marker)) {
+        var index = selectedPlaces.indexOf(marker);
+        selectedPlaces.splice(index, 1);
         marker.setIcon(defaultIcon)
     } else {
-        console.log(marker.options)
-        selectedMarkers.push(markerId);
+
+        selectedPlaces.push(marker);
         marker.setIcon(selectedIcon)
-        console.log(marker.options)
+
     }
-    console.log(selectedMarkers)
+
 }
 
 
 
+function cleanUnselectedMarkers() {
+    mapMarkers.forEach(marker => {
+        if (!selectedPlaces.includes(marker) && !selectedCoords.includes(marker)) {
+            marker_layer.removeLayer(marker)
+        }
+    })
+}
+
+
 function renderMarkers(data) {
-    marker_layer.clearLayers();
+    // marker_layer.clearLayers();
+
+    if (currentCity != city_dropdown.value) {
+        selectedPlaces = []
+        marker_layer.clearLayers();
+    }
+    currentCity = city_dropdown.value
+    cleanUnselectedMarkers()
     for (let key in data) {
         let element = data[key]
 
         let lon = element.coords[0];
         let lat = element.coords[1];
-        var marker = L.marker([lat, lon], { id: element.id, icon: defaultIcon }).addTo(marker_layer)
+        var marker = L.marker([lat, lon], { id: element.id, icon: defaultIcon })
 
+        mapMarkers.push(marker)
+
+        marker.addTo(marker_layer)
 
         let popUpContent = "<b>" + element.category + "</b>"
 
-        if(element.name !== null){
-            popUpContent+= "<br><i>"+element.name+"</i>"
+        if (element.name !== null) {
+            popUpContent += "<br><i>" + element.name + "</i>"
         }
 
         marker.bindPopup(popUpContent);
@@ -150,6 +215,8 @@ function renderMarkers(data) {
 }
 
 function get_categories_by_city() {
+
+
     var city = city_dropdown.value
 
     network_button.href = "/category_net/" + city
