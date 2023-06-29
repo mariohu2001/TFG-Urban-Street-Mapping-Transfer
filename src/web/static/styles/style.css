@@ -26,3 +26,8 @@
     margin-top: 26.6vh;
 }
 
+input, label{
+    justify-content: center;
+    text-align: center; 
+}
+

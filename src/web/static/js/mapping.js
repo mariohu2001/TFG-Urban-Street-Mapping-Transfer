@@ -12,7 +12,6 @@ const search_btn = document.getElementById("search_btn")
 
 const city_dropdown = document.getElementById("city")
 const category_dropdown = document.getElementById("category")
-const network_button = document.getElementById("network_button")
 const analysis_button = document.getElementById("analysis_button")
 
 const markerDefaultOpacity = 0.5;
@@ -218,8 +217,6 @@ function get_categories_by_city() {
 
 
     var city = city_dropdown.value
-
-    network_button.href = "/category_net/" + city
 
     fetch("/categories/" + city).then(response => {
         if (!response.ok) {
