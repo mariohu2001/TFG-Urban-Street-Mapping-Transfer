@@ -138,7 +138,7 @@ class PlaceDAO(baseDAO):
         return count(n) as nei,z.z_score as aij,toFloat(z.real_value)/toFloat(p.n_nodes) as mean ,q
         }
         with aij * (nei-mean) as not_raw, aij * nei as raw
-        return sum(not_raw) as Q, sum(raw) as Qraw
+        return sum(not_raw) as Q, sum(raw) as Q_raw
         """
 
         with self.driver.session() as session:
@@ -194,7 +194,7 @@ class PlaceDAO(baseDAO):
         }
 
         with aij * (nei-mean) as not_raw, aij * nei as raw
-        return sum(not_raw) as Q, sum(raw) as Qraw
+        return sum(not_raw) as Q, sum(raw) as Q_raw
         """
 
         with self.driver.session() as session:

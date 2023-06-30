@@ -59,6 +59,29 @@ def get_quality_indices_jensen(id: int, city: str, category: str):
     return jsonify(quality_indices)
 
 
+@places_routes.route("/quality_indices/jensen/<string:city>/<string:category>/<string:coords>")
+def get_quality_indices_jensen_coords(coords: str, city: str, category: str):
+
+    dao = PlaceDAO(current_app.driver)
+
+    lat, lon = coords.split(":")
+
+    quality_indices = dao.get_quality_index_jensen_coords(float(lat), float(lon), category, city)
+
+    return jsonify(quality_indices)
+
+
+@places_routes.route("/quality_indices/permutation/<string:city>/<string:category>/<string:coords>")
+def get_quality_indices_permutation_coords(coords: str, city: str, category: str):
+
+    dao = PlaceDAO(current_app.driver)
+
+    lat, lon = coords.split(":")
+
+    quality_indices = dao.get_quality_index_permutation_coords(float(lat), float(lon), category, city)
+
+    return jsonify(quality_indices)
+
 @places_routes.route("/coords/<city>", methods=["GET"])
 def get_city_coords(city: str):
     return utils.get_city_coords(city)

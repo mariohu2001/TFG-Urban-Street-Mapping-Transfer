@@ -54,4 +54,4 @@ def get_city_category_net():
 
     cities = dao.get_cities()
 
-    return render_template("category_net.html", cities=cities)
+    return render_template("category_net.html", cities=cities, usuario=session.get("current_user"))

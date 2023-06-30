@@ -38,11 +38,11 @@ var options = {
     physics: {
         barnesHut: {
             avoidOverlap: 0,
-            centralGravity: 0.3,
+            centralGravity: 1,
             damping: 0.09,
             gravitationalConstant: -80000,
             springConstant: 0.001,
-            springLength: 250
+            springLength: 300
         },
         enabled: true,
         stabilization: {

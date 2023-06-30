@@ -75,7 +75,10 @@ $(document).ready(function () {
 
 const map = L.map('map').setView(defaultCoords, 15);
 
-const marker_layer = L.layerGroup().addTo(map);
+const places_layer = L.layerGroup().addTo(map);
+const coords_layer = L.layerGroup().addTo(map);
+
+
 
 metrics_button.addEventListener("click", update_indices_table)
 
@@ -87,7 +90,7 @@ const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var colorIndex = Math.floor(Math.random() * nColors)
 var nodeColors = {}
-var numToId = {}
+var nodeToId = {}
 
 city_dropdown.addEventListener("change", change_categories_dropdown)
 
@@ -95,13 +98,16 @@ city_dropdown.addEventListener("change", change_categories_dropdown)
 
 for (var i = 0; i < nodes.length; i++) {
     let element = nodes[i]
-    numToId[element.id] = i
+    nodeToId[element.id] = element
     let lon = element.coords[0];
     let lat = element.coords[1];
 
-    var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor() }).addTo(marker_layer)
+    let num = i + 1
+    var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor(num), num: num, }).addTo(places_layer)
+    element.num = num
+    element.color = nodeColors[num]
 
-    let popUpContent = "#" + i  + "</br>" +
+    let popUpContent = "#" + num + "</br>" +
         "<b>" + element.category + "</b>"
 
     if (element.name !== null && "name" in element) {
@@ -109,7 +115,7 @@ for (var i = 0; i < nodes.length; i++) {
     }
 
     popUpContent += `<br> lat: ${element.coords[1]} lon: ${element.coords[0]}`
-    popUpContent += `<br> <b>ID: <i>${element.id}</i></b>` 
+    popUpContent += `<br> <b>ID: <i>${element.id}</i></b>`
     marker.bindPopup(popUpContent);
     marker.on('mouseover', function (e) {
         this.openPopup();
@@ -119,7 +125,24 @@ for (var i = 0; i < nodes.length; i++) {
     });
 }
 
-function getMarkerColor() {
+coordsNodes.forEach((nodo) => {
+    let num = i + 1
+    nodo.num = num
+    var marker = L.marker([nodo.lat, nodo.lon], { icon: getMarkerColor(num), num: num }).addTo(coords_layer)
+    nodo.color = nodeColors[num]
+    let popUpContent = `#${num}<br>lat: ${nodo.lat.toFixed(7)} lon: ${nodo.lon.toFixed(7)}`
+    marker.bindPopup(popUpContent);
+    marker.on('mouseover', function (e) {
+        this.openPopup();
+    });
+    marker.on('mouseout', function (e) {
+        this.closePopup();
+    });
+    i++
+})
+
+
+function getMarkerColor(nodeNum) {
     let marker = L.ExtraMarkers.icon({
         icon: 'fa-circle',
         markerColor: colors[colorIndex % colors.length],
@@ -127,7 +150,7 @@ function getMarkerColor() {
         svg: true,
         prefix: 'fas'
     })
-    nodeColors[nodes[i].id] = colors[colorIndex % colors.length]
+    nodeColors[nodeNum] = colors[colorIndex % colors.length]
     colorIndex++
     return marker
 }
@@ -166,48 +189,93 @@ function change_categories_dropdown() {
     })
 }
 
-function obtain_quality_indices(nodo) {
+async function obtain_quality_indices(nodo) {
     let url = "/quality_indices/" + method_dropdown.value + "/" + city_dropdown.value + "/" + category_dropdown.value + "/" + nodo.id
-    return fetch(url).then(response => {
-        if (!response.ok) {
-            throw new Error("Error en la respuesta de la petición.");
-        }
+    // return fetch(url).then(response => {
+    //     if (!response.ok) {
+    //         throw new Error("Error en la respuesta de la petición.");
+    //     }
 
 
-        return response.json();
-    }
-    ).catch(function (error) {
-        console.error(error);
-        throw new Error("Error en la respuesta de la petición.");
-    });
+    //     return response.json();
+    // }
+    // ).catch(function (error) {
+    //     console.error(error);
+    //     throw new Error("Error en la respuesta de la petición.");
+    // });
+
+    let respuesta = await fetch(url)
+    let datos = await respuesta.json()
+    datos = datos[0]
+    console.log(datos)
+    let row = [`<span><i class="bi bi-circle-fill" style="color: ${nodeColors[nodo.num]}; "></i> ` + nodo.num + '</span>',
+    nodo.category, datos.Q.toFixed(3), datos.Q_raw.toFixed(3)]
+    return row
 }
+
+async function obtain_quality_indices_coords(nodo) {
+    let url = "/quality_indices/" + method_dropdown.value + "/" + city_dropdown.value + "/" + category_dropdown.value + "/" + nodo.lat + ":" + nodo.lon
+    // return fetch(url).then(response => {
+    //     if (!response.ok) {
+    //         throw new Error("Error en la respuesta de la petición.");
+    //     }
+
+
+    //     return response.json();
+    // }
+    // ).catch(function (error) {
+    //     console.error(error);
+    //     throw new Error("Error en la respuesta de la petición.");
+    // });
+
+    let respuesta = await fetch(url)
+    let datos = await respuesta.json()
+    datos = datos[0]
+    console.log(datos)
+    let row = [`<span><i class="bi bi-circle-fill" style="color: ${nodeColors[nodo.num]}; "></i> ` + nodo.num + '</span>',
+    nodo.category, datos.Q.toFixed(3), datos.Q_raw.toFixed(3)]
+    return row
+}
+
 
 
 
 function update_indices_table() {
 
     document.getElementById("loading").style.display = "block"
+    dataTableMetrics.rows().remove().draw(false)
 
-    let indices = nodes.map(function (nodo) { return obtain_quality_indices(nodo) });
+    Promise.all(nodes.map(obtain_quality_indices)).then(
+        filas => filas.forEach((fila) =>
+            dataTableMetrics.row.add(fila).draw(false)
+        )
+    )
 
-    Promise.all(indices)
-        .then(function (indice) {
-            dataTableMetrics.rows().remove().draw(false)
+    Promise.all(coordsNodes.map(obtain_quality_indices_coords)).then(
+        filas => filas.forEach( (fila) =>
+            dataTableMetrics.row.add(fila).draw(false)
+        )
+    )
+    document.getElementById("loading").style.display = "none"
+    // Promise.all(indices)
+    //     .then(function (indice) {
+    //         dataTableMetrics.rows().remove().draw(false)
 
-            indice.forEach(function (ind) {
-                let Quality = ind[0]
+    //         indice.forEach(function (ind) {
+    //             console.log(ind)
+    //             let Quality = ind[0]
+    //             console.log(Quality)
+    //             let row = [`<span><i class="bi bi-circle-fill" style="color: ${nodeColors[Quality.id]}; "></i> ` + nodeToId[Quality.id] + '</span>',
+    //              Quality.category, Quality.Q.toFixed(3), Quality.Q_raw.toFixed(3)]
+    //             dataTableMetrics.row.add(row).draw(false)
 
-                let row = [`<span><i class="bi bi-circle-fill" style="color: ${nodeColors[Quality.id]}; "></i> ` + numToId[Quality.id] + '</span>',
-                 Quality.category, Quality.Q.toFixed(3), Quality.Q_raw.toFixed(3)]
-                dataTableMetrics.row.add(row).draw(false)
+    //         })
 
-            })
-
-            document.getElementById("loading").style.display = "none"
-        })
-        .catch(function (error) {
-            console.error(error);
-            throw new Error("Error en la respuesta de la petición.");
-        });
+    //         document.getElementById("loading").style.display = "none"
+    //     })
+    //     .catch(function (error) {
+    //         console.error(error);
+    //         throw new Error("Error en la respuesta de la petición.");
+    //     });
 }
 

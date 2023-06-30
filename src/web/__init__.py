@@ -92,14 +92,15 @@ def create_app():
             coords_markers.append({
              "lat": float(c[0]),
              "lon": float(c[1]),
-             "category": "point"
+             "category": "Coords",
+             "area": city
             })
 
         city_coords = get_city_coords(city)
 
 
         return render_template("/recomendations.html",usuario=session.get("current_user"),
-                                nodos=nodos, city=city, coords=list(city_coords.values()),
+                                nodos=nodos, nodosCoords= coords_markers, city=city, coords=list(city_coords.values()),
                                   metrics=["permutation", "jensen"], cities=cities)
 
     @app.route('/map')
