@@ -99,6 +99,11 @@ function draw() {
     };
 
     visjsNetwork = new vis.Network(network_visualization, data, options)
+    
+    visjsNetwork.on('afterDrawing', function () {
+        loading_spinner.style.display = "none;"
+    })
+
 }
 
 function redrawNetwork(data) {
@@ -120,6 +125,9 @@ function filterByGroup()
 }
 
 function cityChanged(e) {
+    network_visualization.innerHTML = `<div id="loading_spinner" class="spinner-border spinner-border-sm text-success"
+    style=" width: 10rem ;height: 10rem ;" role="status">
+  </div>`
     fetch("/network/" + cityDropDown.value).then(function (response) {
         if (response.ok) {
             return response.json()
@@ -140,7 +148,6 @@ function cityChanged(e) {
 
         shopCheck.checked = true
         amenityCheck.checked = true
-
         draw()
 
 
@@ -157,8 +164,4 @@ function cityChanged(e) {
 
 
 
-
-// network.on('afterDrawing', function () {
-//     loading_spinner.style.display = "none;"
-// })
 

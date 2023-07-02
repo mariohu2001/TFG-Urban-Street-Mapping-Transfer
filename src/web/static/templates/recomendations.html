@@ -7,6 +7,7 @@
     const nodes = {{ nodos| tojson }}
     const coordsNodes = {{ nodosCoords| tojson }}
     var defaultCoords = {{ coords }}
+    var city = "{{city}}"
 
 </script>
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
@@ -22,11 +23,11 @@
 
         <div class="col-lg-3 col-md-12">
             {% block mapInfo %}
-            {{ dropdown_list("city", cities, "ciudad") }}
             {{ dropdown_list("category", categories, "categoría") }}
             {{ dropdown_list("metric", metrics, "métrica") }}
 
             <button type="button" id="metrics_button" class="btn btn-dark col m-1">Métricas</button>
+            <button type="button" id="transfer_button" class="btn btn-dark col m-1">Transferencia</button>
             {% endblock %}
             <div id="loading" class="spinner-border text-secondary" style="display: none;" role="status">
                 <span class="visually-hidden">Loading...</span>

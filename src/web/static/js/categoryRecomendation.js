@@ -54,22 +54,32 @@ const colors = [
 // ['red', 'orange-dark', 'orange', 'yellow', 'blue-dark', 'cyan', 'purple', 'violet', 'pink', 'green-dark', 'green', 'green-light', 'white']
 const nColors = colors.length
 
-const city_dropdown = document.getElementById("city")
+
 const category_dropdown = document.getElementById("category")
 const method_dropdown = document.getElementById("metric")
 const tabla_metricas = document.getElementById("metrics-table")
 const metrics_button = document.getElementById("metrics_button")
+const transfer_button = document.getElementById("transfer_button")
+
+
 
 var dataTableMetrics = null
 
 $(document).ready(function () {
     dataTableMetrics = $('#metrics-table').DataTable({
-        "paging": true, // Desactivar paginado
-        "searching": false, // Desactivar búsqueda
-        "ordering": true, // Activar ordenación
-        "info": false, // Desactivar información de la tabla,
+        "paging": true,
+        "searching": false, 
+        "ordering": true, 
+        "info": false, 
         "pageLength": 5,
-        "lengthChange": false
+        "lengthChange": false,
+        "language": {
+            "paginate": {
+                "next": `<i class="bi bi-chevron-double-right"></i>`,
+                "previous":  `<i class="bi bi-chevron-double-left"></i>`
+            }
+        },
+        "pagingType": "simple"
     });
 });
 
@@ -78,7 +88,11 @@ const map = L.map('map').setView(defaultCoords, 15);
 const places_layer = L.layerGroup().addTo(map);
 const coords_layer = L.layerGroup().addTo(map);
 
+transfer_button.addEventListener('click', () => {
+    console.log(window.location.search )
 
+    window.location.href = "/transfer" + window.location.search
+})
 
 metrics_button.addEventListener("click", update_indices_table)
 
@@ -92,7 +106,7 @@ var colorIndex = Math.floor(Math.random() * nColors)
 var nodeColors = {}
 var nodeToId = {}
 
-city_dropdown.addEventListener("change", change_categories_dropdown)
+
 
 
 
@@ -125,6 +139,8 @@ for (var i = 0; i < nodes.length; i++) {
     });
 }
 
+
+
 coordsNodes.forEach((nodo) => {
     let num = i + 1
     nodo.num = num
@@ -139,6 +155,21 @@ coordsNodes.forEach((nodo) => {
         this.closePopup();
     });
     i++
+})
+
+
+fetch("/categories/" + city).then(response => {
+    if (!response.ok) {
+        throw new Error("Error en la respuesta de la petición.");
+    }
+    return response.json();
+}).then(categories => {
+    while (category_dropdown.options.length > 1) {
+        category_dropdown.options.remove(1);
+    }
+    categories.forEach(element => {
+        category_dropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
+    });
 })
 
 
@@ -157,40 +188,10 @@ function getMarkerColor(nodeNum) {
 
 
 
-function get_categories_by_city() {
-    var city = city_dropdown.value
 
-    network_button.href = "/category_net/" + city
-
-    fetch("/categories/" + city).then(response => {
-        if (!response.ok) {
-            throw new Error("Error en la respuesta de la petición.");
-        }
-        return response.json();
-    }).then(data => change_categories_dropdown(data))
-
-
-}
-
-function change_categories_dropdown() {
-
-    fetch("/categories/" + city_dropdown.value).then(response => {
-        if (!response.ok) {
-            throw new Error("Error en la respuesta de la petición.");
-        }
-        return response.json();
-    }).then(categories => {
-        while (category_dropdown.options.length > 1) {
-            category_dropdown.options.remove(1);
-        }
-        categories.forEach(element => {
-            category_dropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
-        });
-    })
-}
 
 async function obtain_quality_indices(nodo) {
-    let url = "/quality_indices/" + method_dropdown.value + "/" + city_dropdown.value + "/" + category_dropdown.value + "/" + nodo.id
+    let url = "/quality_indices/" + method_dropdown.value + "/" + city + "/" + category_dropdown.value + "/" + nodo.id
     // return fetch(url).then(response => {
     //     if (!response.ok) {
     //         throw new Error("Error en la respuesta de la petición.");
@@ -214,7 +215,7 @@ async function obtain_quality_indices(nodo) {
 }
 
 async function obtain_quality_indices_coords(nodo) {
-    let url = "/quality_indices/" + method_dropdown.value + "/" + city_dropdown.value + "/" + category_dropdown.value + "/" + nodo.lat + ":" + nodo.lon
+    let url = "/quality_indices/" + method_dropdown.value + "/" + city + "/" + category_dropdown.value + "/" + nodo.lat + ":" + nodo.lon
     // return fetch(url).then(response => {
     //     if (!response.ok) {
     //         throw new Error("Error en la respuesta de la petición.");

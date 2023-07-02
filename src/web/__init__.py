@@ -74,10 +74,9 @@ def create_app():
         dao = PlaceDAO(app.driver)
         return jsonify(dao.get_quality_index_permutation([2, 3], "Bar", "Ciudad"), usuario=session.get("current_user"))
 
-    @app.route('/recomendation', methods=["GET", "POST"])
-    def recomendation():
+    @app.route('/recomendation/<city>', methods=["GET", "POST"])
+    def recomendation(city: str):
         places: list = [int(place) for place in request.args.getlist('place')]
-        city : str = request.args.get("city")
 
         coords: list = [ tuple(coord.split(":")) for coord in request.args.getlist('coords') ]
         dao = PlaceDAO(app.driver)
@@ -111,6 +110,9 @@ def create_app():
         ciudades = placesDAO.get_cities()
 
         return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
+
+
+    @app.route('/transfer')
 
     @app.route("/protected")
     @role_required(["admin"])

@@ -1,5 +1,33 @@
-.logo-text{
+:root {
+    --screen-height: 100vh;
+    --content-height: calc(var(--screen-height) - 56px);
+}
+
+#content-div {
+    height: var(--content-height);
+}
+
+.logo-text {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+
+#usmt-map {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* calc(var(--content-height) * 0.9); */
+
+body {
+    background-color: #b9f678;
+}
+
+#usmt-navbar {
+    min-height: 40px;
 }
 
 /* .vis-config-item{
@@ -14,20 +42,20 @@
     width: 100% !important;
 } */
 
-@media screen and (max-width: 950px) {
-    #map-selection{
-        margin-top: 20px !important; 
+/* @media screen and (max-width: 950px) {
+    #map-selection {
+        margin-top: 20px !important;
 
     }
-    
+
 }
 
-#map-selection{
+#map-selection {
     margin-top: 26.6vh;
 }
 
-input, label{
+input,
+label {
     justify-content: center;
-    text-align: center; 
-}
-
+    text-align: center;
+} */

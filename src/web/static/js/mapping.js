@@ -1,5 +1,5 @@
 
-const map = L.map('map').setView([42.3509202, -3.6889187], 18);
+const map = L.map('usmt-map').setView([42.3509202, -3.6889187], 18);
 
 const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 30,
@@ -13,6 +13,8 @@ const search_btn = document.getElementById("search_btn")
 const city_dropdown = document.getElementById("city")
 const category_dropdown = document.getElementById("category")
 const analysis_button = document.getElementById("analysis_button")
+const clearButton = document.getElementById("clear_btn")
+const transferButton = document.getElementById("transfer_button")
 
 const markerDefaultOpacity = 0.5;
 
@@ -53,7 +55,12 @@ var defaultIcon = L.ExtraMarkers.icon({
     prefix: 'fas'
 })
 
-
+clearButton.addEventListener('click',() => {
+    mapMarkers = []
+    selectedPlaces = []
+    selectedCoords = []
+    marker_layer.clearLayers()
+})
 
 analysis_button.addEventListener('click', function () {
 
@@ -67,7 +74,24 @@ analysis_button.addEventListener('click', function () {
     }).join('&')
 
 
-    window.location.href = "/recomendation?" + queryStringPlaces + "&" +queryStringCoords + "&city=" + city_dropdown.value
+    window.location.href = `/recomendation/${city_dropdown.value}?${queryStringPlaces}&${queryStringCoords}`
+
+});
+
+
+transfer_button.addEventListener('click', function () {
+
+
+    let queryStringPlaces = selectedPlaces.map(function (marker) {
+        return 'place=' + encodeURIComponent(marker.options.id)
+    }).join('&')
+
+    let queryStringCoords = selectedCoords.map(function (marker) {
+        return 'coords=' + encodeURIComponent(marker.getLatLng().lat) + ":" + encodeURIComponent(marker.getLatLng().lng)
+    }).join('&')
+
+
+    window.location.href = "/transfer?" + queryStringPlaces + "&" +queryStringCoords + "&city=" + city_dropdown.value
 
 });
 

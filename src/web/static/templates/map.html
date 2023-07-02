@@ -2,40 +2,35 @@
 {% extends "base.html" %} {% block title %}Map{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
-
 {% endblock %}
 {% block content%}
-<div class="container-fluid align-items-center justify-content-center" style="margin-top: 30px;">
-	<div class="row my-2 mx-2 d-flex">
-		<div id="map" class="col-lg-9 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
-
+<div class="row g-0 h-100">
+	<div class="col-lg-9 col-md-12 d-flex h-100 align-items-center justify-content-around p-3" style="box-sizing: border-box;" >
+		<div id="usmt-map" class="border border-5 border-dark-subtle rounded-1" style="box-sizing: border-box;">
 		</div>
-
-
-		<div class="col-lg-3 col-md-12" id="map-selection">
-			{% block mapInfo %}
-			{{ dropdown_list("city", cities, "ciudad") }}
-			{{ dropdown_list("category", categories, "categoría") }}
-
-			<div class="container-fluid mt-2 mb-5">
-				<button type="button" id="search_btn" class="btn btn-success col m-1">Buscar</button>
-				{% if usuario is not none and usuario is defined %}
-				<button type="button" id="analysis_button" class="btn btn-dark col m-1">Recomendaciones</button>
-				{% else %}
-				<button type="button" id="analysis_button" class="btn btn-dark col m-1"
-					style="display: none;">Recomendaciones</button>
-
-				{% endif %}
-			</div>
-			{% endblock %}
+	</div>
+	<div class="col-lg-3 col-md-12 p-3" id="map-selection">
+		{% block mapInfo %}
+		{{ dropdown_list("city", cities, "ciudad") }}
+		{{ dropdown_list("category", categories, "categoría") }}
+		<div class="d-flex flex-column justify-content-around p-1">
+			<button type="button" id="search_btn" class="btn btn-success my-1"><i class="bi bi-search"></i>
+				Buscar</button>
+			<button type="button" id="clear_btn" class="btn btn-danger my-1"><i class="bi bi-x-circle"></i>
+				Borrar</button>
+			{% if usuario is not none and usuario is defined %}
+			<button type="button" id="analysis_button" class="btn btn-dark my-1"><i class="bi bi-building"></i>
+				Recomendaciones</button>
+			<button type="button" id="transfer_button" class="btn btn-dark my-1"><i class="bi bi-building-up"></i>
+				Transferencia</button>
+			{% else %}
+			<button type="button" id="analysis_button" class="btn btn-dark"
+				style="display: none;">Recomendaciones</button>
+			{% endif %}
 		</div>
-
+		{% endblock %}
 	</div>
 </div>
-
-
-
-
 {% endblock %}
 {% block scripts%}
 <script src="/js/leaflet.extra-markers.min.js" defer></script>
