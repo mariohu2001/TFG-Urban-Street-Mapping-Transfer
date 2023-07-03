@@ -6,13 +6,13 @@ const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
 
-const marker_layer = L.layerGroup().addTo(map);
+const markerLayer = L.layerGroup().addTo(map);
 
-const search_btn = document.getElementById("search_btn")
+const searchBtn = document.getElementById("search_btn")
 
-const city_dropdown = document.getElementById("city")
-const category_dropdown = document.getElementById("category")
-const analysis_button = document.getElementById("analysis_button")
+const cityDropdown = document.getElementById("city")
+const categoryDropdown = document.getElementById("category")
+const analysisButton = document.getElementById("analysis_button")
 const clearButton = document.getElementById("clear_btn")
 const transferButton = document.getElementById("transfer_button")
 
@@ -59,10 +59,10 @@ clearButton.addEventListener('click',() => {
     mapMarkers = []
     selectedPlaces = []
     selectedCoords = []
-    marker_layer.clearLayers()
+    markerLayer.clearLayers()
 })
 
-analysis_button.addEventListener('click', function () {
+analysisButton.addEventListener('click', function () {
 
 
     let queryStringPlaces = selectedPlaces.map(function (marker) {
@@ -74,12 +74,12 @@ analysis_button.addEventListener('click', function () {
     }).join('&')
 
 
-    window.location.href = `/recomendation/${city_dropdown.value}?${queryStringPlaces}&${queryStringCoords}`
+    window.location.href = `/recomendation/${cityDropdown.value}?${queryStringPlaces}&${queryStringCoords}`
 
 });
 
 
-transfer_button.addEventListener('click', function () {
+transferButton.addEventListener('click', function () {
 
 
     let queryStringPlaces = selectedPlaces.map(function (marker) {
@@ -91,11 +91,9 @@ transfer_button.addEventListener('click', function () {
     }).join('&')
 
 
-    window.location.href = "/transfer?" + queryStringPlaces + "&" +queryStringCoords + "&city=" + city_dropdown.value
+    window.location.href = "/transfer/"+ cityDropdown.value +"?"+ queryStringPlaces + "&" +queryStringCoords
 
 });
-
-map.on('click', addCoordsMarker)
 
 
 function addCoordsMarker(e) {
@@ -107,7 +105,7 @@ function addCoordsMarker(e) {
     newMarker.on('click', function (e) {
         let index = selectedPlaces.indexOf(this);
         selectedCoords.splice(index, 1);
-        marker_layer.removeLayer(this)
+        markerLayer.removeLayer(this)
     })
     newMarker.on('mouseover', function (e) {
         this.openPopup();
@@ -118,13 +116,13 @@ function addCoordsMarker(e) {
 
     selectedCoords.push(newMarker)
 
-    newMarker.addTo(marker_layer)
+    newMarker.addTo(markerLayer)
 }
 
 
 
-search_btn.addEventListener("click", refreshMap)
-city_dropdown.addEventListener("change", get_categories_by_city)
+searchBtn.addEventListener("click", refreshMap)
+cityDropdown.addEventListener("change", getCategoriesByCity)
 
 map.on("zoom", function () {
     if (map.getZoom() < 12) {
@@ -137,11 +135,10 @@ map.on("zoom", function () {
 
 function refreshMap() {
 
-    // selectedPlaces = []
-    var selected_city = city_dropdown.value
-    var selected_category = category_dropdown.value
+    var selectedCity = cityDropdown.value
+    var selectedCategory = categoryDropdown.value
 
-    fetch("/coords/" + selected_city)
+    fetch("/coords/" + selectedCity)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Error en la respuesta de la petición.");
@@ -152,7 +149,7 @@ function refreshMap() {
 
 
 
-    fetch("/places/" + selected_city + "/" + selected_category)
+    fetch("/places/" + selectedCity + "/" + selectedCategory)
         .then(response => {
             if (!response.ok) {
                 throw new Error("Error en la respuesta de la petición.");
@@ -194,7 +191,7 @@ function selectMarker(event) {
 function cleanUnselectedMarkers() {
     mapMarkers.forEach(marker => {
         if (!selectedPlaces.includes(marker) && !selectedCoords.includes(marker)) {
-            marker_layer.removeLayer(marker)
+            markerLayer.removeLayer(marker)
         }
     })
 }
@@ -203,11 +200,11 @@ function cleanUnselectedMarkers() {
 function renderMarkers(data) {
     // marker_layer.clearLayers();
 
-    if (currentCity != city_dropdown.value) {
+    if (currentCity != cityDropdown.value) {
         selectedPlaces = []
-        marker_layer.clearLayers();
+        markerLayer.clearLayers();
     }
-    currentCity = city_dropdown.value
+    currentCity = cityDropdown.value
     cleanUnselectedMarkers()
     for (let key in data) {
         let element = data[key]
@@ -218,7 +215,7 @@ function renderMarkers(data) {
 
         mapMarkers.push(marker)
 
-        marker.addTo(marker_layer)
+        marker.addTo(markerLayer)
 
         let popUpContent = "<b>" + element.category + "</b>"
 
@@ -237,28 +234,28 @@ function renderMarkers(data) {
     };
 }
 
-function get_categories_by_city() {
+function getCategoriesByCity() {
+    map.on('click', addCoordsMarker)
 
-
-    var city = city_dropdown.value
+    var city = cityDropdown.value
 
     fetch("/categories/" + city).then(response => {
         if (!response.ok) {
             throw new Error("Error en la respuesta de la petición.");
         }
         return response.json();
-    }).then(data => change_categories_dropdown(data))
+    }).then(data => changeCategoriesDropdown(data))
 
 
 }
 
 
 
-function change_categories_dropdown(categories) {
-    while (category_dropdown.options.length > 1) {
-        category_dropdown.options.remove(1);
+function changeCategoriesDropdown(categories) {
+    while (categoryDropdown.options.length > 1) {
+        categoryDropdown.options.remove(1);
     }
     categories.forEach(element => {
-        category_dropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
+        categoryDropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
     });
 }
