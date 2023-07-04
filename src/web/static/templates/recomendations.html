@@ -1,5 +1,5 @@
 {% from "macros/basics.html" import dropdown_list %}
-{% extends "base.html" %} {% block title %}Recomendations{% endblock %}
+{% extends "map.html" %} {% block title %}Recomendations{% endblock %}
 
 {% block head %}
 
@@ -13,55 +13,29 @@
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
 {% endblock %}
 
-{% block content %}
-<div class="container-fluid align-items-center justify-content-center" style="margin-top: 30px;">
-    <div class="row my-2 mx-2 d-flex">
-        <div id="map" class="col-lg-9 col-md-12 border border-5 border-dark rounded-3" style="height: 80vh;">
-
-        </div>
-
-
-        <div class="col-lg-3 col-md-12">
-            {% block mapInfo %}
-            {{ dropdown_list("category", categories, "categoría") }}
-            {{ dropdown_list("metric", metrics, "métrica") }}
-
-            <button type="button" id="metrics_button" class="btn btn-dark col m-1">Métricas</button>
-            <button type="button" id="transfer_button" class="btn btn-dark col m-1">Transferencia</button>
-            {% endblock %}
-            <div id="loading" class="spinner-border text-secondary" style="display: none;" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-
-            <table class="table table-dark table-hover table-responsive my-5" id="metrics-table">
-                <thead>
-                    <th>#</th>
-                    <th>Categoría</th>
-                    <th>Q</th>
-                    <th>Q raw</th>
-                </thead>
-                <tbody id="metrics-table-body" class="table-group-divider">
-
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
-
+{% block mapInfo %}
+{{ dropdown_list("category", categories, "categoría") }}
+{{ dropdown_list("metric", metrics, "métrica") }}
+<div class="d-flex flex-column justify-content-center p-1">
+    <button type="button" id="metrics_button" class="btn btn-dark col m-1"><i class="bi bi-bar-chart-fill"></i> Métricas</button>
+    <button type="button" id="transfer_button" class="btn btn-dark col m-1"><i class="bi bi-building-fill-up"></i> Transferencia</button>
 </div>
-<!-- <div class="row my-2 mx-2 d-flex"> -->
-
-
-
-<!-- </div> -->
-
-
+<table class="table table-dark table-hover table-responsive my-5" id="metrics-table">
+    <thead>
+        <th>#</th>
+        <th>Categoría</th>
+        <th>Q</th>
+        <th>Q raw</th>
+    </thead>
+    <tbody id="metrics-table-body" class="table-group-divider">
+    </tbody>
+</table>
 {% endblock %}
-
 {% block scripts%}
 <script src="/js/leaflet.extra-markers.min.js" defer></script>
-<script type="text/javascript" src="/js/categoryRecomendation.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/local/getQualityIndices.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/loadMapWithLocations.js" defer></script>
+<script type="text/javascript" src="/js/metricsTable.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/local/categoryRecommendation.js" defer></script>
 
 {% endblock %}

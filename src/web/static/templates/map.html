@@ -23,9 +23,11 @@
 				Recomendaciones</button>
 			<button type="button" id="transfer_button" class="btn btn-dark my-1"><i class="bi bi-building-up"></i>
 				Transferencia</button>
-			{% else %}
-			<button type="button" id="analysis_button" class="btn btn-dark"
-				style="display: none;">Recomendaciones</button>
+				{% else %}
+				<button type="button" id="analysis_button" class="btn btn-dark my-1" style="display: none;"><i class="bi bi-building"></i>
+					Recomendaciones</button>
+				<button type="button" id="transfer_button" class="btn btn-dark my-1" style="display: none;"><i class="bi bi-building-up"></i>
+					Transferencia</button>
 			{% endif %}
 		</div>
 		{% endblock %}
@@ -34,5 +36,5 @@
 {% endblock %}
 {% block scripts%}
 <script src="/js/leaflet.extra-markers.min.js" defer></script>
-<script type="text/javascript" src="/js/mapping.js" defer></script>
+<script type="text/javascript" src="/js/mapping/mapping.js" defer></script>
 {% endblock %}

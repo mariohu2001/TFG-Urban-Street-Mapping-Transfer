@@ -17,10 +17,10 @@ Category Net
   <div class="row h-100 w-100 g-0" style="height: 90vh;">
     <div class="col-md-12 col-lg-10 h-100 d-flex align-items-center justify-content-center" id="network_visualization">
       <div id="loading_spinner" class="spinner-border spinner-border-sm text-success"
-        style=" width: 10rem ;height: 10rem ;" role="status">
+        style=" width: 10rem ;height: 10rem ; display: none;" role="status">
       </div>
     </div>
-    <div class="col-md-12 col-lg-2 h-100" style="background-color: #2b3035">
+    <div class="col-md-12 col-lg-2" style="background-color: #2b3035">
       <div class="accordion accordion-flush" id="accordionFilters">
         <div class="accordion-item">
           <h2 class="accordion-header">
@@ -98,5 +98,5 @@ Category Net
 {% block scripts %}
 
 
-<script type="text/javascript" src="/js/network_visualization.js"></script>
+<script type="text/javascript" src="/js/networkVisualization/visNetworkVisualization.js"></script>
 {% endblock %}

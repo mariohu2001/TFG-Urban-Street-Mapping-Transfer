@@ -1,0 +1,89 @@
+{% extends "./base.html" %}
+{% from "macros/basics.html" import dropdown_list %}
+
+{% block title %}
+Transfer
+{% endblock %}
+{% block head %}
+<script>
+    const nodes = {{ nodos| tojson }}
+    const coordsNodes = {{ nodosCoords| tojson }}
+    var defaultCoords = {{ coords }}
+    var city = "{{city}}"
+</script>
+<link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
+{% endblock %}
+{% block content %}
+<!-- Tablas -->
+<div class="row d-flex justify-content-around p-5 g-0">
+    <!-- Tabla ciudad origen -->
+    <div class="col-md-12 col-lg-4 p-3">
+        <table class="table table-dark table-border ">
+            <thead style="text-align: center;">
+                <th colspan="2">{{city}}</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Number of nodes</th>
+                    <td>2413412343</td>
+                </tr>
+            </tbody>
+            <!-- Tabla ciudad destino -->
+        </table>
+    </div>
+    <div class="col-md-12 col-lg-4 p-3">
+        <table class="table table-dark table-border">
+            <thead style="text-align: center;">
+                <th colspan="2">Ciudad</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <th>Number of nodes</th>
+                    <td>2413412343</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <!-- Desplegables Ciudad y categoría -->
+    <div class="col-md-12 col-lg-4 p-3">
+        {{ dropdown_list("city", cities, "ciudad") }}
+        {{ dropdown_list("category", categories, "categoría") }}
+        <button type="button" id="metrics_button" class="btn btn-dark col m-1"><i class="bi bi-bar-chart-fill"></i>
+            Métricas</button>
+
+    </div>
+</div>
+<!-- Mapa -->
+<div class="row h-75 px-3 g-0">
+    <div id="usmt-map" class="border border-5 border-dark-subtle rounded-1" style="box-sizing: border-box;"></div>
+</div>
+<!-- Gráfico PCA y tabla de métricas -->
+<div class="row p-5 g-0">
+    <!-- PCA Biplot -->
+    <div class="col-md-12 col-lg-4">
+
+    </div>
+    <div class="col-md-12 col-lg-8 px-5">
+        <table class="table table-dark table-hover table-responsive" id="metrics-table">
+            <thead>
+                <th>#</th>
+                <th>Categoría</th>
+                <th>Q <i>jensen</i></th>
+                <th>Q <i>jensen raw</i></th>
+                <th>Q <i>permutation</i></th>
+                <th>Q <i>permutation raw</i></th>
+            </thead>
+            <tbody id="metrics-table-body" class="table-group-divider">
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/js/leaflet.extra-markers.min.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/transfer/QualityIndicesFull.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/loadMapWithLocations.js" defer></script>
+<script type="text/javascript" src="/js/metricsTable.js" defer></script>
+<script type="text/javascript" src="/js/recommendation/transfer/transfer.js" defer></script>
+
+{% endblock%}
