@@ -57,7 +57,7 @@ class CategoryDAO(baseDAO):
         cypher_query = """
         MATCH (n:Category)-[r:Rel]-()
         where n.city = $city
-        return id(n) as id, n.name as label, sum(r.real_value) as value, toString(n.n_nodes) + " nodes" as title,
+        return id(n) as id, replace(n.name,"_"," ") as label, sum(r.real_value) as value, toString(n.n_nodes) + " nodes" as title,
         n.type as group
         """
 
@@ -80,4 +80,19 @@ class CategoryDAO(baseDAO):
         with self.driver.session() as session:
             result: Result = session.run(cypher_query, city=city)
 
-            return result.data()    
+            return result.data()   
+
+
+    def get_intersection_categories_between_cities(self, city_1: str, city_2: str) :
+        cypher_query = """
+        match (c:Category) where c.city = $city_1
+        with collect(c.name) as cats
+        match (q:Category)
+        where q.name in cats and q.city = $city_2
+        return q.name as name order by name
+        """
+
+        with self.driver.session() as session:
+            result : Result = session.run(cypher_query, city_1=city_1, city_2=city_2)
+
+            return result.value("name")

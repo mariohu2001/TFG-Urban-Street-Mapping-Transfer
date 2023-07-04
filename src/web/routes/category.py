@@ -14,8 +14,7 @@ categories_routes = Blueprint("categories", __name__, url_prefix='/')
 def get_city_categories(city: str):
     DAO = CategoryDAO(current_app.driver)
 
-    categories_nodes = list(
-        map(lambda x: x["label"].replace("_", " "), DAO.get_visjs_nodes(city)))
+    categories_nodes = DAO.get_visjs_nodes(city)
 
     return jsonify(categories_nodes)
 
@@ -34,6 +33,14 @@ def get_categories_by_city(city: str):
     DAO = CategoryDAO(current_app.driver)
 
     categories = DAO.get_by_city_values_names(city)
+
+    return jsonify(categories)
+
+@categories_routes.route("/categories/<city1>/<city2>")
+def get_categories_intersection(city1: str, city2: str):
+    DAO = CategoryDAO(current_app.driver)
+
+    categories = DAO.get_intersection_categories_between_cities(city1, city2)
 
     return jsonify(categories)
 

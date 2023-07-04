@@ -76,9 +76,31 @@ def get_quality_indices_permutation_coords(coords: str, city: str, category: str
 
     dao = PlaceDAO(current_app.driver)
 
+    #TODO tratamiento de excepcion cuando coordenadas no float
     lat, lon = coords.split(":")
 
     quality_indices = dao.get_quality_index_permutation_coords(float(lat), float(lon), category, city)
+
+    return jsonify(quality_indices)
+
+
+@places_routes.route("/quality_indices/all/<string:city>/<string:category>/<string:coords>")
+def get_all_quality_indices_coords(coords: str, city: str, category: str):
+    
+    dao = PlaceDAO(current_app.driver)
+
+    #TODO tratamiento de excepcion cuando coordenadas no float
+    lat, lon = coords.split(":")
+
+    quality_indices = dao.get_all_quality_indices_coords(float(lat), float(lon), category, city)
+
+    return jsonify(quality_indices)
+
+@places_routes.route("/quality_indices/all/<string:city>/<string:category>/<int:id>")
+def get_all_quality_indices_place(id: int, city: str, category: str):
+    dao = PlaceDAO(current_app.driver)
+
+    quality_indices = dao.get_all_quality_indices_place(id, category, city)
 
     return jsonify(quality_indices)
 

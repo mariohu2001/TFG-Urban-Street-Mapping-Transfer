@@ -78,9 +78,10 @@ def create_app():
     def recomendation(city: str):
         places: list = [int(place) for place in request.args.getlist('place')]
 
-        coords: list = [ tuple(coord.split(":")) for coord in request.args.getlist('coords') ]
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
         dao = PlaceDAO(app.driver)
-        cities = dao.get_cities()
+
         nodos = []
 
         for p in places:
@@ -89,18 +90,18 @@ def create_app():
         coords_markers = []
         for c in coords:
             coords_markers.append({
-             "lat": float(c[0]),
-             "lon": float(c[1]),
-             "category": "Coords",
-             "area": city
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
             })
 
         city_coords = get_city_coords(city)
 
-
-        return render_template("/recomendations.html",usuario=session.get("current_user"),
-                                nodos=nodos, nodosCoords= coords_markers, city=city, coords=list(city_coords.values()),
-                                  metrics=["permutation", "jensen"], cities=cities)
+        return render_template("recomendations.html", usuario=session.get("current_user"),
+                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+                                   city_coords.values()),
+                               metrics=["permutation", "jensen"])
 
     @app.route('/map')
     def map():
@@ -111,8 +112,46 @@ def create_app():
 
         return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
 
+    @app.route('/transfer/<city>')
+    def transfer_recomendation(city: str):
 
-    @app.route('/transfer')
+        places: list = [int(place) for place in request.args.getlist('place')]
+
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
+        dao = PlaceDAO(app.driver)
+
+        nodos = []
+
+        for p in places:
+            nodos.append(dao.get_by_id(p))
+
+        coords_markers = []
+        for c in coords:
+            coords_markers.append({
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            })
+
+        city_coords = get_city_coords(city)
+        cities = dao.get_cities()
+        cities.remove(city)
+        return render_template("transfer.html", nodos=nodos, city=city, cities=cities,
+                               coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))
+
+
+    @app.route('/pca', methods=["POST"])
+    def quality_indices_pca():
+        datos = request.get_json()
+   
+
+        print(datos, type(datos))
+
+        return "ok"
+
+
 
     @app.route("/protected")
     @role_required(["admin"])
