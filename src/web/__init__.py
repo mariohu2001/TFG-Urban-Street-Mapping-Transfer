@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager, jwt_required, get_jwt, get_jwt_identi
 from .driver_neo4j import init_neo4j
 
 from .dao.place import PlaceDAO
+
 from .routes.accounts import accounts_routes
 from .routes.places import places_routes
 from .routes.category import categories_routes
@@ -15,6 +16,11 @@ from .routes.authentication import role_required
 
 from .utils import get_city_coords
 
+
+from sklearn.decomposition import PCA
+import pandas as pd
+import plotly.express as px
+import numpy as np
 # from .routes.users import users
 # from .routes.common import common
 # from driver_neo4j import init_neo4j
@@ -52,6 +58,7 @@ def create_app():
             app.config.get('NEO4J_USERNAME'),
             app.config.get('NEO4J_PASSWORD'),
         )
+        
 
     jwt = JWTManager(app)
 
@@ -141,17 +148,52 @@ def create_app():
         return render_template("transfer.html", nodos=nodos, city=city, cities=cities,
                                coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))
 
-
     @app.route('/pca', methods=["POST"])
     def quality_indices_pca():
         datos = request.get_json()
-   
 
-        print(datos, type(datos))
+        print(datos, type(datos), type(datos[0]))
 
-        return "ok"
+        data_df = pd.DataFrame(datos)
 
+        pca = PCA(n_components=2)
 
+        # features = { feature for row in datos for feature in row.keys() }
+        features = ["Qjensen", "Qjensen_raw",
+                    "Qpermutation", "Qpermutation_raw"]
+
+        components = pca.fit_transform(data_df[features])
+
+        loadings = pca.components_.T * np.sqrt(pca.explained_variance_)
+
+        fig = px.scatter(components, x=0, y=1)
+
+        for i, feature in enumerate(features):
+            fig.add_annotation(
+                ax=0, ay=0,
+                axref="x", ayref="y",
+                x=loadings[i, 0],
+                y=loadings[i, 1],
+                showarrow=True,
+                arrowsize=2,
+                arrowhead=2,
+                xanchor="right",
+                yanchor="top"
+            )
+            fig.add_annotation(
+                x=loadings[i, 0],
+                y=loadings[i, 1],
+                ax=0, ay=0,
+                xanchor="center",
+                yanchor="bottom",
+                text=feature,
+                yshift=5,
+            )
+        fig.show()
+
+        # print(components.tolist(), type(components.tolist()))
+        print(jsonify(components.tolist()))
+        return jsonify(components.tolist())
 
     @app.route("/protected")
     @role_required(["admin"])

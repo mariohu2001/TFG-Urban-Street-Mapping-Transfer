@@ -89,10 +89,10 @@ class CategoryDAO(baseDAO):
         with collect(c.name) as cats
         match (q:Category)
         where q.name in cats and q.city = $city_2
-        return q.name as name order by name
+        return q.name as value, replace(q.name, "_", " ") as name order by name
         """
 
         with self.driver.session() as session:
             result : Result = session.run(cypher_query, city_1=city_1, city_2=city_2)
 
-            return result.value("name")
+            return result.values()
