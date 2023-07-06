@@ -108,7 +108,7 @@ def calculate_z_score(city: str):
 
 
 if __name__ == "__main__":
-    ciudades = common_queries.obtain_cities()
+    ciudades = common_queries.get_cities()
 
     for c in ciudades:
         print(c)

@@ -5,7 +5,7 @@ from utils.neo4j_driver import neo4j_driver
 import concurrent.futures
 import time
 from utils.logger import create_logger
-from common_queries import obtain_cities
+from common_queries import get_cities
 
 driver: Driver = neo4j_driver
 
@@ -81,7 +81,7 @@ def create_categories_net(tx: Transaction, city: str):
 if __name__ == "__main__":
     n_sims = 1000
 
-    cities = obtain_cities()
+    cities = get_cities()
 
     for c in cities:
         with driver.session() as session:

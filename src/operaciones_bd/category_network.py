@@ -5,7 +5,7 @@ from utils.neo4j_driver import neo4j_driver
 import concurrent.futures
 import time
 from utils.logger import create_logger
-from common_queries import obtain_cities
+from common_queries import get_cities
 
 driver: Driver = neo4j_driver
 
@@ -62,7 +62,7 @@ def set_category_info(tx:Transaction, city: str):
 
 if __name__ == "__main__":
 
-    cities = obtain_cities()
+    cities = get_cities()
     with driver.session() as session:
         for c in cities:
             print(c)

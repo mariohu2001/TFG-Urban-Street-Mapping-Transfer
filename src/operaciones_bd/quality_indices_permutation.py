@@ -1,7 +1,7 @@
 from utils.neo4j_driver import neo4j_driver
 from neo4j import Result, Session, Transaction, Driver
 import concurrent.futures
-from common_queries import obtain_cities
+from common_queries import get_cities
 
 driver: Driver = neo4j_driver
 
@@ -88,7 +88,7 @@ def set_quality_indices(city: str):
 
 
 if __name__ == "__main__":
-    cities = obtain_cities()
+    cities = get_cities()
 
     with concurrent.futures.ProcessPoolExecutor() as pool:
         futures = [pool.submit( set_quality_indices, c) for c in cities]
