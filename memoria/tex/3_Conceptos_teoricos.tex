@@ -5,18 +5,66 @@ en la elección de la ubicación en la que colocar una nueva tienda de forma que
 
 \section{Retail Store Location Problem}
 
+El conocido como <<Retail Store Location Problem>> consiste en encontrar
+las mejores ubicaciones para un comercio de determinada categoría de forma 
+que esta aporte ventajas competitivas con respecto a la competencia.
+
+Originalmente este problema no se limitaba a comercios minoristas como se hará en este
+trabajo, sino que también abarcaba ámbitos como la industria, teniendo en consideración
+no solo la ubicación sino que también la distribución y recursos.
 
 
+\section{Ciencia de Redes y Redes Complejas}
+Uno de los puntos centrales teóricos del proyecto es el modelado del problema desde la
+perspectiva de la Ciencia de Redes. Esta disciplina representa los objetos de estudio
+como grafos, siendo estos compuestos por vértices y nodos. Esta representación permite analizar
+la relación entre los objetos.
 
+\subsection{Ciencia de redes}
+La Ciencia de Redes se trata de una disciplina que se encarga del análisis de redes complejas. Esta representa los componentes como nodos o vértices, y las relaciones entre
+estos como enlaces o aristas.
 
-\section{Ciencia de Redes}
+Este planteamiento puede aplicarse a distintos ámbitos y problemas, cómo las redes sociales,
+control de transmisiones de enfermedades y demás. En este caso se usará para hacer recomendaciones de comercios en distintas ubicaciones.
 
 
 \section{Técnicas}
+%Construcción de la red de ubicaciones y comercios?
+Para obtener las recomendaciones de ubicaciones contamos con 3 distintos métodos:
+\begin{itemize}
+	\item Jensen
+	\item \textit{Permutation}
+	\item \textit{Rewiring}
+\end{itemize}
+
+A continuación se hará una descripción de cada uno de estos métodos. Conviene hacer una
+breve explicación de los términos utilizados.
+\begin{align*}
+	& T: \quad \text{Conjunto de todas las distintas ubicaciones} \\
+	& A,B: \quad \text{Conjuntos de ubicaciones de determinadas categorías}\\
+	& null\_model: \quad \text{Obtenido a partir de las simulaciones de Monte Carlo de \textit{Permutation} y  
+		\textit{Rewiring}} \\
+	& N_s(p,r): \quad \text{Tamaño del conjunto de ubicaciones de categoría \textit{s} en una proximidad de \textit{r} metros }
+\end{align*}
+
+\subsection{Jensen}
+El método de Jensen consta de 2 distintos coeficientes, uno intracategoría (Una categoría consigo misma) e intercategoría (Una categoría con el resto).
+
+\begin{equation*}
+	M_\text{AA} = \frac{|T| - 1}{|A|(|A|-1)} \sum_{a \in A}\frac{N_A(a,r)}{N_T(a,r)}
+\end{equation*}
+
+\begin{equation*}
+	M_\text{AB} = \frac{|T| - |A|}{|A||B|} \sum_{a \in A}\frac{N_B(a,r)}{N_T(a,r) - N_A(a,r)}
+\end{equation*}
+
+\subsection{Permutation}
+
+\subsection{Rewiring}
 
 \section{Métricas de Calidad}
 
-
+\section{Transfer}
 % En aquellos proyectos que necesiten para su comprensión y desarrollo de unos conceptos teóricos de una determinada materia o de un determinado dominio de conocimiento, debe existir un apartado que sintetice dichos conceptos.
 
 % Algunos conceptos teóricos de \LaTeX \footnote{Créditos a los proyectos de Álvaro López Cantero: Configurador de Presupuestos y Roberto Izquierdo Amo: PLQuiz}.

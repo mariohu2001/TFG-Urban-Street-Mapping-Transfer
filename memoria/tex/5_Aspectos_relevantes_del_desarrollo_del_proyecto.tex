@@ -1,7 +1,40 @@
 \capitulo{5}{Aspectos relevantes del desarrollo del proyecto}
 
-Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, comentados por los autores del mismo.
-Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor relevancia de las fases de análisis, diseño e implementación.
-Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
-Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
-Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+%Este apartado pretende recoger los aspectos más interesantes del desarrollo del proyecto, %comentados por los autores del mismo.
+%Debe incluir desde la exposición del ciclo de vida utilizado, hasta los detalles de mayor %relevancia de las fases de análisis, diseño e implementación.
+%Se busca que no sea una mera operación de copiar y pegar diagramas y extractos del código fuente, sino que realmente se justifiquen los caminos de solución que se han tomado, especialmente aquellos que no sean triviales.
+%Puede ser el lugar más adecuado para documentar los aspectos más interesantes del diseño y de la %implementación, con un mayor hincapié en aspectos tales como el tipo de arquitectura elegido, los índices de las tablas de la base de datos, normalización y desnormalización, distribución en ficheros3, reglas de negocio dentro de las bases de datos (EDVHV GH GDWRV DFWLYDV), aspectos de desarrollo relacionados con el WWW...
+%Este apartado, debe convertirse en el resumen de la experiencia práctica del proyecto, y por sí mismo justifica que la memoria se convierta en un documento útil, fuente de referencia para los autores, los tutores y futuros alumnos.
+
+
+\section{Carga y almacenamiento de ubicaciones}
+
+El primer paso del desarrollo del proyecto consiste en el almacenamiento de las ubicaciones obtenidas desde un servicio de geolocación como \textit{Open Street Map}. La elección de este sobre otras viene motivada debido principalmente a que se trata de un proyecto completamente abierto sin ninguna restricción monetaria sobre la extracción de datos, además es mantenido por la comunidad proporcionando documentación sobre el uso y la estructura de datos que se manejan.
+
+Para la obtención de las ubicaciones se realizarían peticiones a la API de Overpass, siendo esta perteneciente al proyecto de Open Street Map. Esta es la que se suele utilizar para labores de lectura de datos.
+
+\subsection{Carga inicial de ubicaciones}
+
+Inicialmente se consideró el cargar las ubicaciones de distintas capitales de Europa, incluyéndose entre estas Madrid, París, Roma, Londres, Berlín y Amsterdam. Dado que Open Street Map cuenta con un sistema de etiquetado con formato \textit{clave-valor} sobre los elementos del su modelo de datos se determinar el incluir únicamente aquellos nodos con clave <<amenity>>. Esta se suele utilizar para cubrir diversos establecimientos públicos, servicios y negocios, por lo que se consideró adecuada para los objetivos buscados en el proyecto.
+
+Para introducir las ubicaciones en la base de datos se optó inicialmente por usar la librería \textit{OSMPythonTools}, que provee una interfaz sencilla con la que hacer peticiones a la API. Debido a que el proceso conllevaba cierto tiempo, se empleó una alternativa con el plugin \textit{APOC} que permite cargar datos de la respuesta de una petición HTTP o un fichero JSON.
+
+Una vez el proceso de carga se terminó, contábamos con un total de unos 280.000 nodos y 443 distintos valores de <<amenity>>. 
+
+Al analizar los datos nos percatamos de que muchas <<amenities>> tenían fallos ortográficos o poseían un significado similar a otros. Este problema es debido a que las distintas claves de \textit{Open Street Map} no cuentan con un diccionario predefinido de posibles valores, sino que son los usuarios que crean las ubicaciones quienes escogen el valor de estas, estén registradas anteriormente o no.
+
+Para resolver este problema se intentaron aplicar algoritmos de distancia de cadenas con el objetivo de unificar valores de <<amenity>>. Esta solución concluyó con que solo a partir de un 95\% de similitud se podrían juntar etiquetas con relativa precisión, aunque esta operación tendría que hacerse con supervisión para evitar posibles errores.
+
+Otra solución que se buscó es utilizar la información de una página auxiliar de \textit{Open Street Map} que cuenta con estadísticas de los valores de las distintas etiquetas. Se intentó unificar las etiquetas a solo aquellas consideradas como <<oficiales>>, siendo estas las que cuentan con una página dentro de la wiki de \textit{Open Street Map}. Esta técnica se acabó desestimando debido a que muchas de las categorías con más aparición entre las ubicaciones cargadas no contaban con página en la wiki, siendo irrelevante este factor en su relevancia.
+
+Adicionalmente se descubrió que gran cantidad de los nodos que estaban cargados en la base de datos pertenecían a mobiliario urbano (bancos, aparcamientos, papeleras, fuentes...), por lo que se consideró su eliminación debido a que no se tenían como tan importantes en comparación con el resto de categorías. Finalmente se desestimó para evitar el caso de un posible sesgo de los datos con su eliminación. Se terminó borrando aquellos nodos que contaban con un valor de \textit{amenity} auxiliar del modelo de datos de \textit{Open Street Map} (Yes, No, Fixme...) debido a que no contaban con ningún significado comercial o similar.
+
+
+\subsubsection{Enlazado de nodos}
+
+Mientras se encontraba una solución a los problemas enumerados anteriormente se decidió continuar con el enlazado de los nodos en la base de datos. Esto consistía en crear enlaces entre aquellos nodos que estuvieran en un radio de 100 metros. Para hacer esto se dotaron a los nodos con atributos tipo <<Point>>, creados a partir de la latitud y longitud de cada una de las ubicaciones, ya que estos eran valores obligatorios en los nodos de \textit{Open Street Map}. Una vez dotados a los nodos de estos atributos se crearon los enlaces entre los nodos con tal proximidad usando utilidades que el lenguaje de consultas Cypher provee para manejar distancias y coordenadas. Uno de los problemas de Neo4j es que posee es que solo permite crear enlaces unidireccionales. Si bien esto al principio resultaba problemático puesto que se creaban enlaces dobles entre cada par de nodos duplicando el número necesario de relaciones, al final se optó por crear un único enlace por par de nodos teniendo en consideración que habría que obviar la dirección en las consultas que se hagan a la base de datos sobre las ubicaciones, reduciendo así el número de aristas del grafo. Una vez este proceso se completó para todas las ciudades, se saldó el número total de enlaces de proximidad en 5.712.246. Dados los resultados anteriores se consideró que el número de conexiones era bastante superior al esperado y se desestimó el continuar con las ciudades actuales debido al esfuerzo computacional que conllevaría su procesamiento.
+
+\section{Desarrollo Web}
+
+
+\section{Sistema de Recomendación}
