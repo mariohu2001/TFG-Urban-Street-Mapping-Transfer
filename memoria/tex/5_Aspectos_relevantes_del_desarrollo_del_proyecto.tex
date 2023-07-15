@@ -34,6 +34,29 @@ Adicionalmente se descubrió que gran cantidad de los nodos que estaban cargados
 
 Mientras se encontraba una solución a los problemas enumerados anteriormente se decidió continuar con el enlazado de los nodos en la base de datos. Esto consistía en crear enlaces entre aquellos nodos que estuvieran en un radio de 100 metros. Para hacer esto se dotaron a los nodos con atributos tipo <<Point>>, creados a partir de la latitud y longitud de cada una de las ubicaciones, ya que estos eran valores obligatorios en los nodos de \textit{Open Street Map}. Una vez dotados a los nodos de estos atributos se crearon los enlaces entre los nodos con tal proximidad usando utilidades que el lenguaje de consultas Cypher provee para manejar distancias y coordenadas. Uno de los problemas de Neo4j es que posee es que solo permite crear enlaces unidireccionales. Si bien esto al principio resultaba problemático puesto que se creaban enlaces dobles entre cada par de nodos duplicando el número necesario de relaciones, al final se optó por crear un único enlace por par de nodos teniendo en consideración que habría que obviar la dirección en las consultas que se hagan a la base de datos sobre las ubicaciones, reduciendo así el número de aristas del grafo. Una vez este proceso se completó para todas las ciudades, se saldó el número total de enlaces de proximidad en 5.712.246. Dados los resultados anteriores se consideró que el número de conexiones era bastante superior al esperado y se desestimó el continuar con las ciudades actuales debido al esfuerzo computacional que conllevaría su procesamiento.
 
+
+\subsection{Segunda carga de nodos}
+
+Una vez vistos los resultados aportados por la elección de las ciudades anteriores se decidió utilizar otras nuevas con un tamaño inferior. Se eligieron Barcelona, Bilbao, Logroño, Oviedo, Santander, Zaragoza, Valladolid, Sevilla, Valencia y Madrid como primera aproximación, con intención de descartar alguna en caso de que se contara con un número muy elevado de ubicaciones.
+
+Tras el análisis de las nuevas ciudades reducimos estas a solo 3; Sevilla, Zaragoza y Valencia, para evitar incurrir en el mismo problema que hemos visto anteriormente, centrándonos en alcanzar los objetivos propuestos para el proyecto con estas ciudades antes de incluir otras nuevas.
+
+Una vez determinadas las ciudades con las que trabajar se procedió a realizar el enlazado de nodos como se hizo anteriormente, dándonos un número manejable de relaciones de proximidad, por lo que se continuó con la creación de las redes de interacción entre categorías.
+
+\subsubsection{Interacción entre categorías}
+
+Tras haber creado la red de ubicaciones para cada ciudad el siguiente paso sería el de ver la interacción de las categorías por ciudad. Esta tomaría forma similar a una matriz de adyacencia siendo cada componente el número de veces que los nodos de una categoría poseen enlaces de proximidad con nodos de la misma u otra categoría.
+
+Neo4j nos permite obtener mediante consultas la información que contendrían estas matrices de categorías, solo que en una estructura tabular en lugar de matricial, por lo que habría que transformar los datos a una matriz. Un problema que se nos presenta es que en la base de datos no podemos almacenar matrices, ya que Neo4j no soporta este tipo de estructuras, además de sería complicado hacer consultas para obtener datos de esta matriz.
+
+Para solventar el problema de la representación de la matriz de categorías se pensó esta como un grafo pesado con enlaces no dirigidos, forma que Neo4j sí que es capaz de manejar. Para ello se crearán nodos <<Categoría>> que contarán como atributos el nombre de la categoría, la ciudad a la que pertenecen y el número de nodos con los que cuenta. En cuanto a los enlaces estos serían no dirigidos (dentro de las limitaciones de Neo4j) con un atributo representativo del número de interacciones entre categorías. Este grafo también contaría con autoenlaces para almacenar la interacción de una categoría consigo misma. 
+
+Un problema de esta representación es que normalmente conlleva a crear grafos totalmente conectados y por tanto con un número elevado de enlaces. Pese a las desventajas que esto presenta, se tomó ventaja creando enlaces entre par de categorías aunque estas no interactúen, pero con un atributo de interacción igual a 0. De esta forma se podrán almacenar los coeficientes que nos proporcionen los distintos métodos a aplicar en un atributo del enlace pese a que no exista interacción.
+
+\subsubsection{Aplicación del método \textit{Permutation}}
+
+\subsubsection{Aplicación del método \textit{Rewiring}}
+
 \section{Desarrollo Web}
 
 
