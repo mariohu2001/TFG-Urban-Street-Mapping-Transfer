@@ -132,7 +132,6 @@ if __name__ == "__main__":
                     }
 
                 session.execute_write(assign_quality_indexes, id, Q)
-            # with open("Q.json", "w") as file:
-            #     json.dump(Q, file, indent=4)
+
 
             print(f"Tiempo {time.time() - timeini} s")
