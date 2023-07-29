@@ -86,12 +86,12 @@ class PlaceDAO(baseDAO):
         cypher_query = """
         MATCH (n:Place)
         WHERE n.id = $id
-        RETURN properties(n) as props
+        RETURN n.id as id, n.name as name, n.category as category, n.area as area, n.coords as coords
         """
         with self.driver.session() as session:
             result: Result = session.run(cypher_query, id=id)
 
-            return result.single().get(key="props")
+            return result.single().data()
 
     def get_quality_index_permutation(self, id: int, category: str, city: str):
 
@@ -280,3 +280,27 @@ class PlaceDAO(baseDAO):
                 cypher_query, latitude=latitude, longitude=longitude, category=category, city=city)
 
             return result.single().data()
+
+    def get_top_categories(self, id: int, n: int = 5) -> dict:
+        cypher_query = """
+        MATCH (n:Place)
+        WHERE n.id = $id
+        return apoc.convert.FromJsonMap(n.Q) as Q
+        """
+        with self.driver.session() as session:
+            result: Result = session.run(cypher_query, id=id)
+
+            data = result.data()
+
+        quality_indices_names = [
+            "Qperm", "Qperm_raw", "Qjensen", "Qjensen_raw"]
+
+        top_categories: dict = dict()
+        for index in quality_indices_names:
+            top_categories[index] = sorted(
+                data, key=lambda x: x[index], reverse=True)[:n]
+            
+        return top_categories
+
+
+

@@ -109,6 +109,24 @@ def get_city_coords(city: str):
     return utils.get_city_coords(city)
 
 
+@places_routes.route("/top_categories/<city>", methods=["POST"])
+def top_categories(city: str):
+
+    data = request.get_json
+
+    nodes = data["nodes"]
+    coords = data["coords"]
+
+    dao = PlaceDAO(current_app.driver)
+
+    response = dict()
+    for node in nodes:
+        response[node.num] = dao.get_top_categories(node.id)
+
+    response.update()
+    
+
+
 
 
 

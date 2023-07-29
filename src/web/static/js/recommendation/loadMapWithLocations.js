@@ -1,3 +1,5 @@
+
+
 const colors = [
 
     "#00AA00",
@@ -60,66 +62,47 @@ const tiles = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 const nColors = colors.length
 var colorIndex = Math.floor(Math.random() * nColors)
-var nodeColors = {}
-var nodeToId = {}
 var nodeCount = 1
 
-nodes.forEach((nodo) => {
-    let element = nodo
-    nodeToId[element.id] = element
-    let lon = element.coords[0];
-    let lat = element.coords[1];
-    var marker = L.marker([lat, lon], { id: element.id, icon: getMarkerColor(nodeCount), num: nodeCount }).addTo(placesLayer)
-    element.num = nodeCount
-    element.color = nodeColors[nodeCount]
+var nodesMarkers = {}
+var coordsMarkers = {}
 
-    let popUpContent = "#" + nodeCount + "</br>" +
-        "<b>" + element.category + "</b>"
+Object.keys(nodes).forEach((nodeKey) => {
 
-    if (element.name !== null && "name" in element) {
-        popUpContent += "<br><i>" + element.name + "</i>"
-    }
-
-    popUpContent += `<br> lat: ${element.coords[1]} lon: ${element.coords[0]}`
-    popUpContent += `<br> <b>ID: <i>${element.id}</i></b>`
-    marker.bindPopup(popUpContent);
-    marker.on('mouseover', function (e) {
-        this.openPopup();
-    });
-    marker.on('mouseout', function (e) {
-        this.closePopup();
-    });
+    let nodo = nodes[nodeKey]
+    let pMarker = new PlaceMarker(nodeKey, getColor(), nodo.category, nodo.coords,
+        nodo.area, nodo.id, nodo.name)
+    pMarker.createMarker(getMarkerColor(), placesLayer)
+    nodesMarkers[nodeCount] = pMarker
     nodeCount++
 })
 
 
 
-coordsNodes.forEach((nodo) => {
-    
-    var marker = L.marker([nodo.lat, nodo.lon], { icon: getMarkerColor(nodeCount), num: nodeCount }).addTo(coordsLayer)
-    nodo.color = nodeColors[nodeCount]
-    nodo.num = nodeCount
-    let popUpContent = `#${nodeCount}<br>lat: ${nodo.lat.toFixed(7)} lon: ${nodo.lon.toFixed(7)}`
-    marker.bindPopup(popUpContent);
-    marker.on('mouseover', function (e) {
-        this.openPopup();
-    });
-    marker.on('mouseout', function (e) {
-        this.closePopup();
-    });
+Object.keys(coordsNodes).forEach((coordsKey) => {
+
+    let coord = coordsNodes[coordsKey]
+
+    let pMarker = new PlaceMarker(coordsKey, getColor(), coord.category, [coord["lon"], coord["lat"]],
+        coord.area)
+    pMarker.createMarker(getMarkerColor(), coordsLayer)
+    coordsMarkers[nodeCount] = pMarker
     nodeCount++
 })
 
 
-function getMarkerColor(nodeNum) {
+function getMarkerColor() {
     let marker = L.ExtraMarkers.icon({
         icon: 'fa-circle',
-        markerColor: colors[colorIndex % colors.length],
+        markerColor: getColor(),
         iconColor: 'white',
         svg: true,
         prefix: 'fas'
     })
-    nodeColors[nodeNum] = colors[colorIndex % colors.length]
     colorIndex++
     return marker
+}
+
+function getColor() {
+    return colors[colorIndex % colors.length]
 }

@@ -15,7 +15,7 @@ from .routes.authentication import role_required
 
 
 from .utils import get_city_coords
-
+from .calculate_quality_indices import get_quality_indices
 
 from sklearn.decomposition import PCA
 import pandas as pd
@@ -58,7 +58,6 @@ def create_app():
             app.config.get('NEO4J_USERNAME'),
             app.config.get('NEO4J_PASSWORD'),
         )
-        
 
     jwt = JWTManager(app)
 
@@ -89,6 +88,38 @@ def create_app():
                         for coord in request.args.getlist('coords')]
         dao = PlaceDAO(app.driver)
 
+        nodos = {}
+
+        marker_index = 1
+        for p in places:
+            nodos[marker_index] = dao.get_by_id(p)
+            marker_index += 1
+
+        coords_markers = {}
+        for c in coords:
+            coords_markers[marker_index] = {
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            }
+            marker_index += 1
+
+        city_coords = get_city_coords(city)
+
+        return render_template("recomendations.html", usuario=session.get("current_user"),
+                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+                                   city_coords.values()),
+                               metrics=["permutation", "jensen"])
+
+    @app.route('/top/<city>')
+    def best_category(city: str):
+        places: list = [int(place) for place in request.args.getlist('place')]
+
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
+        dao = PlaceDAO(app.driver)
+
         nodos = []
 
         for p in places:
@@ -103,12 +134,15 @@ def create_app():
                 "area": city
             })
 
-        city_coords = get_city_coords(city)
+    @app.route('/tops', methods=['POST'])
+    def get_places_tops():
+        body = request.get_json()
 
-        return render_template("recomendations.html", usuario=session.get("current_user"),
-                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
-                                   city_coords.values()),
-                               metrics=["permutation", "jensen"])
+        places = body.get("places")
+        coords = body.get("coords")
+        city = body.get("city")
+
+        return jsonify(get_quality_indices(coords, places, city))
 
     @app.route('/map')
     def map():

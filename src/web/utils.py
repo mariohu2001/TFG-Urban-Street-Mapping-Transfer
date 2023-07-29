@@ -1,6 +1,6 @@
 from OSMPythonTools.overpass import Overpass, OverpassResult, overpassQueryBuilder
 from OSMPythonTools.nominatim import Nominatim, NominatimResult
-
+from neo4j import Driver
 
 def get_city_coords(city):
     nominatim = Nominatim()
@@ -16,3 +16,7 @@ def get_city_coords(city):
     node = result.elements()[0]
 
     return {"lat": node.lat(), "lon": node.lon()}
+
+
+
+

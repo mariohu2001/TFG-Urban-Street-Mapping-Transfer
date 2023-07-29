@@ -29,13 +29,13 @@ async function updateIndicesTable() {
 
     dataTableMetrics.rows().remove().draw(false)
 
-    await Promise.all(nodes.map(obtainQualityIndicesMethod)).then(
+    await Promise.all(Object.values(nodesMarkers).map(obtainQualityIndicesMethod)).then(
         filas => filas.forEach((fila) =>
             dataTableMetrics.row.add(fila)
         )
     )
 
-    await Promise.all(coordsNodes.map(obtainQualityIndicesCoordsMethod)).then(
+    await Promise.all(Object.values(coordsMarkers).map(obtainQualityIndicesCoordsMethod)).then(
         filas => filas.forEach( (fila) =>
             dataTableMetrics.row.add(fila)
         )
