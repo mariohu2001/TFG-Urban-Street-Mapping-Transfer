@@ -142,7 +142,7 @@ def create_app():
         coords = body.get("coords")
         city = body.get("city")
 
-        return jsonify(get_quality_indices(coords, places, city))
+        return jsonify(get_quality_indices(coords, places, city, app.driver))
 
     @app.route('/map')
     def map():
