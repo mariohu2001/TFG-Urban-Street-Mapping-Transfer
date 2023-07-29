@@ -126,6 +126,8 @@ Neo4j nos supone un problema en este aspecto ya que los nodos que utiliza funcio
 
 Dado lo anterior, se decidió cambiar la aproximación que iba a tomar el proyecto. Si inicialmente se buscaba encontrar la categoría más adecuada para unas ubicaciones, ahora sería, dadas una ubicaciones encontrar cuál es la más adecuada para una categoría determinada. Esto haría que en lugar de almacenar los indices de calidad estos se calcularían <<al vuelo>>, bajo demanda. Lo anterior viene también motivado por los tiempos de cálculo que, haciéndose desde Neo4j conllevaban un tiempo de unos 3 minutos por nodo. Teniendo en cuenta que contamos con un numero de aproximadamente 12.000 nodos resultaría inviable.
 
+Esta forma implicaría que no sería posible el uso combinado de índices de calidad mediante un modelo de inteligencia artificial para realizar recomendaciones. No dispondríamos un conjunto de datos con el que poder entrenar y evaluar la precisión del modelo.
+
 Cambiada la aproximación, se prosiguió con los correspondientes cambios en la web para adaptar la funcionalidad.
 
 Tras un tiempo después centrándose en desarrollo web se encontró una posible solución. Para resolver el problema que suponía el almacenamiento, los índices de calidad se almacenarían como un JSON formateado como \textit{string}. Esto pese a parecer una solución pobre nos solventa los problemas que teníamos anteriormente, pudiendo convertir este \textit{string} de vuelta a JSON desde Python y así obtener los valores que buscábamos. Además dentro del plugin APOC de Neo4j, se incluyen procedimientos que permiten para hacer estas conversiones, ya que, aunque Neo4j no permita almacenar <<maps>> o <<diccionarios>> en sus nodos, permite utilizarlos en su lenguaje de consultas, Cypher.
@@ -136,3 +138,19 @@ Una vez completada la alternativa, esta mostraba buenos resultados temporales, l
 permitiéndonos contar con un conjunto de datos sobre el que aplicar un modelo de clasificación.
 
 \subsection{Random Forest}
+
+
+Obtenidos los índices de calidad para cada una de la ubicaciones contamos con un conjunto de datos con los que poder entrenar un modelo y hacer recomendaciones en base a ubicación.
+
+La elección de \textit{Random Forest} sobre otros modelos de inteligencia artificial viene motivada por el buen rendimiento que presentan los modelos de tipo \textit{ensemble} sobre otros simples. Estos están compuesto por un conjunto de clasificadores en lugar de solo uno, permitiendo reducir el sobre ajuste asegurando un buen rendimiento del clasificador.
+
+\subsubsection{Recomendaciones Locales}
+
+Una parte de las recomendaciones que se harían serían utilizando únicamente datos locales, es decir, de la propia ciudad. Esto implica crear un modelo de \textit{Random Forest} para cada ciudad. Las posibles categorías que se pueden recomendar serían exclusivamente aquellas que la propia ciudad posee.
+
+
+\subsubsection{Transferencia}
+
+A la hora de realizar transferencia de información mediante la utilización de un \textit{Random Forest} se nos presenta un problema con respecto al conjunto de datos a utilizar. Este problema tiene origen en el hecho de que las ciudades tienen conjuntos distintos de categorías, teniendo un total de unas 250 en el conjunto de datos. Esto supone que las ubicaciones de una ciudad no van a tener índices de calidad asociados a categorías que no están presentan en dicha ciudad. Además la diferencia de categorías entre ciudades en algunos casos roza las 100, por lo que de hacerse de esta forma habría muchas ubicaciones con gran parte de índices de calidad desconocidos.
+
+Otro problema derivado que supondría el utilizar al información de todas la ubicaciones que disponemos sería el tamaño del conjunto de datos con el que trabajaríamos. De hacerlo así cada ubicación tendría asociada valores para cada índice de calidad y para cada ubicación, teniendo así unos 1.000 atributos con 12.000 ubicaciones. Esto supone un conjunto de datos bastante grande, especialmente si utilizamos técnicas como la validación cruzada para validar el modelo.
