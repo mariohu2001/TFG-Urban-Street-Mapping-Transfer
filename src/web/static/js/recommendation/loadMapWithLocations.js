@@ -64,6 +64,7 @@ const nColors = colors.length
 var colorIndex = Math.floor(Math.random() * nColors)
 var nodeCount = 1
 
+var allMarkers = []
 var nodesMarkers = {}
 var coordsMarkers = {}
 
@@ -72,6 +73,7 @@ Object.keys(nodes).forEach((nodeKey) => {
     let nodo = nodes[nodeKey]
     let pMarker = new PlaceMarker(nodeKey, getColor(), nodo.category, nodo.coords,
         nodo.area, nodo.id, nodo.name)
+    allMarkers.push(pMarker)
     pMarker.createMarker(getMarkerColor(), placesLayer)
     nodesMarkers[nodeCount] = pMarker
     nodeCount++
@@ -85,6 +87,7 @@ Object.keys(coordsNodes).forEach((coordsKey) => {
 
     let pMarker = new PlaceMarker(coordsKey, getColor(), coord.category, [coord["lon"], coord["lat"]],
         coord.area)
+    allMarkers.push(pMarker)
     pMarker.createMarker(getMarkerColor(), coordsLayer)
     coordsMarkers[nodeCount] = pMarker
     nodeCount++

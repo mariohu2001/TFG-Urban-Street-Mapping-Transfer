@@ -15,7 +15,7 @@ from .routes.authentication import role_required
 
 
 from .utils import get_city_coords
-from .calculate_quality_indices import get_quality_indices
+from .calculate_quality_indices import get_quality_indices, get_tops
 
 from sklearn.decomposition import PCA
 import pandas as pd
@@ -120,19 +120,26 @@ def create_app():
                         for coord in request.args.getlist('coords')]
         dao = PlaceDAO(app.driver)
 
-        nodos = []
+        nodos = {}
+        coords_markers = {}
+        marker_index = 1
 
         for p in places:
-            nodos.append(dao.get_by_id(p))
-
-        coords_markers = []
+            nodos[marker_index] = (dao.get_by_id(p))
+            marker_index += 1
         for c in coords:
-            coords_markers.append({
+            coords_markers[marker_index] = {
                 "lat": float(c[0]),
                 "lon": float(c[1]),
                 "category": "Coords",
                 "area": city
-            })
+            }
+            marker_index += 1
+            
+        city_coords = get_city_coords(city)
+        return render_template("topCategories.html",usuario=session.get("current_user"),
+                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+                                   city_coords.values()))
 
     @app.route('/tops', methods=['POST'])
     def get_places_tops():
@@ -142,7 +149,8 @@ def create_app():
         coords = body.get("coords")
         city = body.get("city")
 
-        return jsonify(get_quality_indices(coords, places, city, app.driver))
+        tops = get_tops(coords, places, city, app.driver)
+        return jsonify(tops)
 
     @app.route('/map')
     def map():

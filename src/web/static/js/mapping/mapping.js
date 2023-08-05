@@ -14,6 +14,7 @@ const cityDropdown = document.getElementById("city")
 const categoryDropdown = document.getElementById("category")
 const analysisButton = document.getElementById("analysis_button")
 const clearButton = document.getElementById("clear_btn")
+const topsButton = document.getElementById("tops_button")
 const transferButton = document.getElementById("transfer_button")
 
 const markerDefaultOpacity = 0.5;
@@ -95,6 +96,18 @@ transferButton.addEventListener('click', function () {
 
 });
 
+topsButton.addEventListener('click', function() {
+    let queryStringPlaces = selectedPlaces.map(function (marker) {
+        return 'place=' + encodeURIComponent(marker.options.id)
+    }).join('&')
+
+    let queryStringCoords = selectedCoords.map(function (marker) {
+        return 'coords=' + encodeURIComponent(marker.getLatLng().lat) + ":" + encodeURIComponent(marker.getLatLng().lng)
+    }).join('&')
+
+
+    window.location.href = "/top/"+ cityDropdown.value +"?"+ queryStringPlaces + "&" +queryStringCoords
+})
 
 function addCoordsMarker(e) {
     newMarker = L.marker(e.latlng, { icon: coordsIcon })

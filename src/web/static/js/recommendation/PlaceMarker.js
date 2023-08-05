@@ -64,31 +64,25 @@ class PlaceMarker {
     //     nodo.category, datos.Q.toFixed(3), datos.Q_raw.toFixed(3)]
     // }
 
-    getTableRow() {
-        icon = `<td><span><i class="bi bi-circle-fill" style="color: ${this.color}; "></i> ${this.number} </span> </td>`
-        tops = {}
-        tops["Perm"] = this.getTopList("Perm")
-        tops["PermRaw"] = this.getTopList("PermRaw")
-        tops["Jensen"] = this.getTopList("Jensen")
-        tops["JensenRaw"] = this.getTopList("JensenRaw")
+    getTableRow(method) {
+        let icon = `<td><span><i class="bi bi-circle-fill" style="color: ${this.color}; "></i> ${this.number} </span> </td>`
+        
+        let tops = this.getTopList(method)
 
-
-        return `<tr> 
+        return `<tr class="tops-tr"> 
         ${icon}
-        ${tops["Perm"]}
-        ${tops["PermRaw"]}
-        ${tops["Jensen"]}
-        ${tops["JensenRaw"]}
+        <td>${this.category}</td>
+        <td>${tops}</td>
         </tr>`
     }
 
 
     getTopList(method) {
-        let methodTops = topCats[method]
+        let methodTops = this.topCats[method].slice(0,5)
         let top = ""
         methodTops.forEach(element => {
-            top += `<li> ${element} </li>`
+            top += `<li class="tops-il"> ${element.replaceAll("_", " ")} </li>`
         });
-        return `<ol> ${top} </ol>`
+        return `<ol > ${top} </ol>`
     }
 }

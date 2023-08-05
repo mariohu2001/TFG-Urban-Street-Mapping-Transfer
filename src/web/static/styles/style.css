@@ -12,6 +12,15 @@
 }
 
 
+.tops-tr {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.tops-il {
+    text-align: justify;
+}
+
 #usmt-map {
     width: 100%;
     height: 100%;
