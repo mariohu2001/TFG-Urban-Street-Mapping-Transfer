@@ -109,7 +109,7 @@ if __name__ == "__main__":
             jensen = session.execute_read(get_jensen_coeff_matrix, ciudad)
             zscore = session.execute_read(get_zscore_matrix, ciudad)
             nei_avg = session.execute_read(get_avg_nei_matrix, ciudad)
-
+            print(f"Tiempo {time.time() - timeini} s")
             for id in get_city_places_ids(ciudad):
                 nei = session.execute_read(get_nei_matrix, id)
 
