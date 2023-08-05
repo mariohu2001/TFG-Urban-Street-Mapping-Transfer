@@ -1,4 +1,50 @@
 \capitulo{7}{Conclusiones y Líneas de trabajo futuras}
 
-Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
-Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+%Todo proyecto debe incluir las conclusiones que se derivan de su desarrollo. Éstas pueden ser de diferente índole, dependiendo de la tipología del proyecto, pero normalmente van a estar presentes un conjunto de conclusiones relacionadas con los resultados del proyecto y un conjunto de conclusiones técnicas. 
+%Además, resulta muy útil realizar un informe crítico indicando cómo se puede mejorar el proyecto, o cómo se puede continuar trabajando en la línea del proyecto realizado. 
+
+\section{Conclusiones}
+
+En este proyecto se ha conseguido realizar un sistema de recomendación de categorías que puede ser de gran utilidad para todas aquellas personas que estén pensando en abrir un negocio, o simplemente para analizar la estructura comercial de las distintas ciudades.
+
+
+Durante el desarrollo han surgido bastantes dificultades que no se preveían inicialmente que han obligado tomar distintas decisiones para llevar el proyecto a cabo. Muchas de estas están relacionadas con las herramientas utilizadas. Si bien el uso de estas nos ha llevado a problemas, cabe destacar que son las mejores opciones disponibles. Desarrollaré en los apartados sucesivos al respecto.
+
+\subsection{Sobre la base de datos}
+
+El uso de Neo4j vino principalmente motivado porque fue una de las herramientas propuestas para el proyecto. Tratándose de una base de datos orientada a grafos parecía ser apropiada para el desarrollo del trabajo, puesto que se han utilizado conceptos y estrategias propias de la ciencia de redes.
+
+Desde el comienzo del proyecto se instó a usar lo máximo posible Neo4j para la mayoría de las etapas del proyecto con objetivo de aprovechar las funcionalidades que nos provee así cómo para justificar su uso de cara al trabajo.
+
+Si bien es cierto que Neo4j hace bastante cómoda la obtención de datos de un grafo, no es tan flexible en otros aspectos. Esto se ha visto en los momentos en los que se buscaba aplicar los métodos de \textit{Rewiring} y \textit{Permutation}, así como el almacenamiento de los coeficientes que estos nos proporcionaban.
+
+Cuando se requiere hacer una consulta más allá de lo más básico que se pueda hacer con \textit{Cypher}, el lenguaje de consultas de Neo4j, inevitablemente se tendrá que recurrir a procedimientos del plugin APOC. Esta característica hace que las consultas se vuelvan bastante tediosas y complejas, con varias llamadas a procedimientos de este plugin, dificultando su uso. Las capacidades que nos provee \textit{Cypher} nativo están bastante limitadas sin el uso de este plugin.
+
+%https://github.com/neo4j/neo4j/issues/6282
+Otro problema que plantea la base de datos es el modelo de datos que emplea. Neo4j no cuenta con la flexibilidad que otras bases de datos no relacionales tienen en este aspecto. Esto puede verse cuando se busca almacenar datos anidados en alguna de las entidades(nodos o relaciones), que no pueden almacenarse como una simple propiedad de estas sino que tienen que serializarse de un alguna forma (cómo se ha hecho en este trabajo) o recurrir a crear una nueva entidad relacionada que almacene dichos datos pese a que estos no tengan una relevancia suficiente como para considerase como nodos o relaciones, además de complicar las consultas que pudieran hacerse al respecto.
+
+En cuanto a la realización de cálculos complejos también se ha visto que no es recomendable su uso más allá de las operaciones que estamos acostumbrados en otras bases de datos, puesto que tras intentar hacerlos se ha comprobado que son mucho más lentas de lo esperado. Aunque lo anterior puede que sea consecuencia de la complejidad de las consultas como se comentado anteriormente.
+
+Sobre conceptos propios de la ciencia de redes tampoco aporta mucha ayuda en ver las entidades de la base de datos cómo se haría desde esta disciplina, puesto que no aporta alguna representaciones utilizadas habitualmente como matrices o el no soporte a relaciones no dirigidas. Además resulta complicado trabajar con datos derivados de grafos para realizar operaciones o cálculos sobre el grafo, especialmente si estos constituyen una entidad propia como se ha hecho en este trabajo con las matrices de interacción y relacionados.
+
+Habiendo expuesto lo anterior, parece que Neo4j no termina de comprometerse totalmente con ninguno de los conceptos en los que se basa, las bases de datos no relacionales y la ciencia de redes. No cuenta con la flexibilidad de otras bases de datos ni aporta algunos elementos propios de la ciencia de redes. Si alguien fuese a valorarse su uso, como opinión personal diría que debería verse como más próximo a las bases de datos no relacionales que a la ciencia de redes. Tras haber trabajado con ella parece más apropiada para otros contextos, como redes sociales y similares, en lugar de la temática de este trabajo.
+
+Pese a lo que se ha dicho, probablemente no exista una herramienta más adecuada para las labores realizadas en este proyecto que esta. También cabe mencionar que quizás se tenían unas expectativas no realistas con respecto a Neo4j. Si bien nos permite almacenar un grafo de forma persistente y operar con el directamente creo que no es competencia de una base de datos la realización de unas operaciones tan complejas como las que se han realizado, teniendo en su lugar que realizarse desde un lenguaje de programación que nos aporte una versatilidad que un lenguaje de consultas no es capaz de dar. Lo anterior sería lo ideal en caso de no contar con limitaciones como la capacidad de la memoria para alojar el grafo o similares, aunque tiene el impedimento de tener que construir el grafo mediante consultas, proceso que lleva tiempo, además de no poder operar directamente sobre el grafo en casos que se requiera hacer modificaciones o borrados ni obtener información tan fácilmente como se hace desde Neo4j mediante consultas de \textit{Cypher}.
+
+
+
+\subsection{Sobre \textit{OpenStreetMap}}
+
+\textit{OpenStreetMap} también se trataba de una de las herramientas propuestas. Si bien la obtención de datos no ha supuesto un problema de por sí ya que al tratarse de un proyecto abierto no ha habido barreras monetarias al respecto, y contar con un lenguaje de consultas propio para la obtención de datos; sí que lo ha habido sobre el contenido de las ubicaciones y su cantidad.
+
+Uno de los problemas que nos ha presentado los datos son los valores de sus etiquetas de categorías. Cómo se ha mencionado en uno de los apartados del trabajo, no existe un diccionario de valores, sino que los usuarios son quienes los asignan. Esto conlleva a que existan gran cantidad de categorías, algunas con múltiples valores, faltas ortográficas y demás que han dificultado ciertas fases del proyecto.
+
+Otro punto a destacar es la diferencia de número de ubicaciones en distintas ciudades, esto lejos de adecuarse a la realidad creo que viene determinado por la falta de cobertura de algunas zonas por parte del proyecto, además de la falta de puesta al día de la información de ciertas ubicaciones.
+
+\textit{Overpass QL}, el lenguaje de consultas de esta API, si bien facilita la obtención de datos presenta problemas al obtener datos de ciertas áreas si existen más de una con ese mismo nombre. Tampoco pueden hacerse búsquedas de áreas dentro de áreas, cosa que es problemática al querer operar con determinadas zonas. En este caso planteó problemas al obtener datos de las ciudades finales del proyecto puesto que había más ciudades con ese nombre, por lo que se tuvo que recurrir al número de municipio para obtener sus nodos.
+
+Expuesto lo anterior concluir que \textit{OpenStreetMap} supone una buena herramienta abierta para la obtención de datos, no sin sus inconvenientes, que probablemente si se hubiese utilizado una API de pago no se presentarían además de probablemente contar con una mejor calidad de datos.
+
+
+
+\section{Líneas de trabajo futuras}

@@ -8,6 +8,8 @@
 \usepackage{lmodern} % Scalable font
 \usepackage{microtype}
 \usepackage{placeins}
+\usepackage{graphicx}
+
 
 \RequirePackage{booktabs}
 \RequirePackage[table]{xcolor}
@@ -423,12 +425,22 @@ D. Jesús Manuel Maudes
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-En este primer apartado se hace una \textbf{breve} presentación del tema que se aborda en el proyecto.
+Uno de los principales factores que considerar cuando se busca abrir un nuevo negocio es la localización. Esto plantea un problema conocido como el \textit{ Location Problem}, el cual busca encontrar la ubicación más adecuada que pueda reportar más beneficios. En el caso del proyecto se aplicará al \textit{retailing}, es decir, a tiendas minoristas.
+
+Existen distintas aproximaciones a este problema, en este proyecto se aplicará un enfoque desde la ciencia de redes, teniendo en consideración las distintas categorías comerciales y demás servicios en determinadas ciudades con el objetivo de crear un sistema de recomendación con capacidad de ofrecer propuestas de comercios. Para ello se extraerán las relaciones de atracción y repulsión entre las distintas categorías en base a la distribución geográfica de estas.
+
+Para lograr lo anterior se utilizarán datos extraídos de una API de geolocalización de un proyecto conocido como \textit{OpenStreetMap} de uso libre, así como,\textit{Neo4j}, que forma parte de un nuevo paradigma conocido como la orientación a grafos en el contexto de las bases de datos.
+
+Además de contemplar recomendaciones a nivel local, también se empleará la transferencia de información entre ciudades, pudiendo usar las relaciones comerciales de una ciudad sobre otra en lugar de las propias. Con este objetivo  se creará también un modelo de inteligencia artificial que integre los datos de todas las ciudades.
+
+Para facilitar el uso de la herramienta de este proyecto, se desarrollará una aplicación web sencilla que permita a los usuarios obtener recomendaciones basadas la ubicación.
+
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
-Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+%Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
+Ciencia de redes, sistema de recomendación, comercio minorista, \textit{machine learning}, web, aprendizaje transferido, API de geolocalización, base de datos de grafos.
 \end{abstract}
 
 \clearpage
@@ -436,12 +448,20 @@ Palabras separadas por comas que identifiquen el contenido del proyecto Ej: serv
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-A \textbf{brief} presentation of the topic addressed in the project.
+One of the main factors to consider when looking to open a new business is location. This poses a problem known as the Location Problem, which seeks to find the most suitable location that can bring the most benefits. In the case of this project, it will be applied to retailing, i.e. retail stores.
+
+There are different approaches to this problem, in this project we will apply a network science approach, taking into consideration the different commercial categories and other services in certain cities in order to create a recommendation system with the ability to offer proposals of stores. For this purpose, the attraction and repulsion relationships between the different categories will be extracted based on their geographic distribution.
+
+To achieve this, we will use data extracted from a geolocation API of a project known as OpenStreetMap of free use, as well as Neo4j, which is part of a new paradigm known as graph orientation in the context of databases.
+
+In addition to contemplating recommendations at the local level, the transfer of information between cities will also be used, being able to use the commercial relations of one city over another instead of its own. To this end, an artificial intelligence model will also be created to integrate data from all cities.
+
+To facilitate the use of this project's tool, a simple web application will be developed to allow users to obtain location-based recommendations.
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-keywords separated by commas.
+Network science, recommendation system, retailing, machine learning, web, knowledge transfer, geolocation API, graph database
 \end{abstract}
 
 \clearpage

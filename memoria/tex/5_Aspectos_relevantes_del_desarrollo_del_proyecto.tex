@@ -34,6 +34,8 @@ Adicionalmente se descubrió que gran cantidad de los nodos que estaban cargados
 
 Mientras se encontraba una solución a los problemas enumerados anteriormente se decidió continuar con el enlazado de los nodos en la base de datos. Esto consistía en crear enlaces entre aquellos nodos que estuvieran en un radio de 100 metros. Para hacer esto se dotaron a los nodos con atributos tipo <<Point>>, creados a partir de la latitud y longitud de cada una de las ubicaciones, ya que estos eran valores obligatorios en los nodos de \textit{Open Street Map}.
 
+\imagen{Places}{Ejemplo de creación de enlaces por proximidad}{1}
+
  Una vez dotados a los nodos de estos atributos se crearon los enlaces entre los nodos con tal proximidad usando utilidades que el lenguaje de consultas Cypher provee para manejar distancias y coordenadas. Uno de los problemas de Neo4j es que posee es que solo permite crear enlaces unidireccionales. Si bien esto al principio resultaba problemático puesto que se creaban enlaces dobles entre cada par de nodos duplicando el número necesario de relaciones, al final se optó por crear un único enlace por par de nodos teniendo en consideración que habría que obviar la dirección en las consultas que se hagan a la base de datos sobre las ubicaciones, reduciendo así el número de aristas del grafo.
  
   Tras finalizar este proceso se completó para todas las ciudades, se saldó el número total de enlaces de proximidad en 5.712.246. Dados los resultados anteriores se consideró que el número de conexiones era bastante superior al esperado y se desestimó el continuar con las ciudades actuales debido al esfuerzo computacional que conllevaría su procesamiento.
@@ -51,11 +53,15 @@ Una vez determinadas las ciudades con las que trabajar se procedió a realizar e
 
 Tras haber creado la red de ubicaciones para cada ciudad el siguiente paso sería el de ver la interacción de las categorías por ciudad. Esta tomaría forma similar a una matriz de adyacencia siendo cada componente el número de veces que los nodos de una categoría poseen enlaces de proximidad con nodos de la misma u otra categoría.
 
+\imagen{InteractionMatrix}{Ejemplo de interacción entre categorías}{1}
+
 Neo4j nos permite obtener mediante consultas la información que contendrían estas matrices de categorías, solo que en una estructura tabular en lugar de matricial, por lo que habría que transformar los datos a una matriz. Un problema que se nos presenta es que en la base de datos no podemos almacenar matrices, ya que Neo4j no soporta este tipo de estructuras, además de sería complicado hacer consultas para obtener datos de esta matriz.
 
 Se intentó buscar alguna forma en la que almacenar los datos de las categorías además de herramientas para operar con ellos en los \textit{plugins} que Neo4j tiene, especialmente GDS (Graph Data Science) por obvias razones. Tras realizar búsquedas en la documentación de dichos \textit{plugins}, así como hacer distintos cursos oficiales que se ofrecen de forma gratuita no se encontró ninguna utilidad que nos sirviera.
 
 Para solventar el problema de la representación de la matriz de categorías se pensó esta como un grafo pesado con enlaces no dirigidos, forma que Neo4j sí que es capaz de manejar. Para ello se crearán nodos <<Categoría>> que contarán como atributos el nombre de la categoría, la ciudad a la que pertenecen y el número de nodos con los que cuenta. En cuanto a los enlaces estos serían no dirigidos (dentro de las limitaciones de Neo4j) con un atributo representativo del número de interacciones entre categorías. Este grafo también contaría con autoenlaces para almacenar la interacción de una categoría consigo misma. 
+
+\imagen{CategoryNetwork}{Ejemplo de red de categorías}{1}
 
 Un problema de esta representación es que normalmente conlleva a crear grafos totalmente conectados y por tanto con un número elevado de enlaces. Pese a las desventajas que esto presenta, se tomó ventaja creando enlaces entre par de categorías aunque estas no interactúen, pero con un atributo de interacción igual a 0. De esta forma se podrán almacenar los coeficientes que nos proporcionen los distintos métodos a aplicar en un atributo del enlace pese a que no exista interacción.
 
@@ -65,6 +71,8 @@ Una vez obtenidas las redes de categorías para cada ciudad tocaría aplicar uno
 Este método consiste en, sobre la red de ubicaciones de cada ciudad, mantener su estructura (nodos y enlaces) pero permutando las categorías de cada nodo. Una vez permutados se volvería a crear la red de categorías y guardarla. Esto se haría multitud de iteraciones haciendo así una simulación de Monte Carlo. Inicialmente el número de simulaciones que se realizarían sería de 10.000, pero una vez observado el tiempo que conlleva el realizar cada una se redujo a 1000. Todo lo anterior se hizo modificando la red desde Neo4j.
 
 Otra vez más se nos planteó el problema de cómo almacenar la red de categorías de cada iteración de este método, ya que crear una nueva red con nuevos nodos y enlaces supondría una gran carga en cuestión de almacenamiento en la base de datos. Como solución se aprovechó el hecho de que la red de categorías constituye un grafo completamente conectado, almacenando dentro de las propiedades de los enlaces una lista que contenga la interacción entre cada par de categorías en cada iteración del método.
+
+\imagen{PermutationNetwork}{Representación de las simulaciones del método \textit{Permutation}}{0.75}
 
 
 \subsubsection{Aplicación del método \textit{Rewiring}}
