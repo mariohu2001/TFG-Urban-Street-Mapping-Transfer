@@ -96,32 +96,18 @@ class PlaceDAO(baseDAO):
     def get_quality_index_permutation(self, id: int, category: str, city: str):
 
         cypher_query = """
-        match (n:Place), (p:Category)
+        match (n:Place)
         where n.id = $id
-        and  p.city = $city and p.name = $category
-        call
-        {
-            with n,p
-            match (m:Place),(p)-[z:Rel]-(q:Category)
-            optional match (n)-[r]-(m:Place)
-            where m.category = q.name and m <> n
-            and m.area = n.area and p.city = q.city
-            
-
-            return z.z_score as aij, count(r) as nei, toFloat(z.real_value)/toFloat(p.n_nodes) as mean
-        }
-
-        with n,p,(aij* (nei-mean)) as not_raw, (aij * nei) as raw
-        with n,p, sum(not_raw) as sum_not_raw, sum(raw) as sum_raw
-        with n, sum_not_raw as Qperm, sum_raw as Qperm_raw
-        return n.id as id, n.category as category ,Qperm as Q, Qperm_raw as Q_raw
+        return apoc.convert.fromJsonMap(n.Q) as Q
         """
 
         with self.driver.session() as session:
             result: Result = session.run(
                 cypher_query, id=id, category=category, city=city)
 
-            return result.single().data()
+            res = result.single().value("Q")
+  
+            return {"Q": res[category]["Qperm"], "Q_raw": res[category]["Qperm_raw"] }
 
     def get_quality_index_permutation_coords(self, latitude: float, longitude: float, category: str, city: str):
         cypher_query = """
@@ -149,32 +135,18 @@ class PlaceDAO(baseDAO):
     def get_quality_index_jensen(self, id: int, category: str, city: str):
 
         cypher_query = """
-        match (n:Place), (p:Category)
+        match (n:Place)
         where n.id = $id
-        and  p.city = $city and p.name = $category
-        call
-        {
-            with n,p
-            match (m:Place),(p)-[z:Jensen]->(q:Category),(p)-[x:Rel]-(q)
-            optional match (n)-[r]-(m:Place)
-            where m.category = q.name and m <> n
-            and m.area = n.area and p.city = q.city
-            
-
-            return toFloat(log(z.coeff)) as aij, count(r) as nei, toFloat(x.real_value)/toFloat(p.n_nodes) as mean
-        }
-
-        with n,p,(aij* (nei-mean)) as not_raw, (aij * nei) as raw
-        with n,p, sum(not_raw) as sum_not_raw, sum(raw) as sum_raw
-        with n, sum_not_raw as Qjensen, sum_raw as Qjensen_raw
-        return n.id as id, n.category as category ,toFloat(Qjensen) as Q, toFloat(Qjensen_raw) as Q_raw
+        return apoc.convert.fromJsonMap(n.Q) as Q
         """
 
         with self.driver.session() as session:
             result: Result = session.run(
                 cypher_query, id=id, category=category, city=city)
 
-            return result.single().data()
+            res = result.single().value("Q")
+  
+            return {"Q": res[category]["Qjensen"], "Q_raw": res[category]["Qjensen_raw"] }
 
     def get_quality_index_jensen_coords(self, latitude: float, longitude: float, category: str, city: str):
         cypher_query = """
@@ -203,46 +175,21 @@ class PlaceDAO(baseDAO):
 
     def get_all_quality_indices_place(self, id: int, category: str, city: str):
         cypher_query = """
-        match (n:Place), (p:Category)
+        match (n:Place)
         where n.id = $id
-        and  p.city = $city and p.name = $category
-        call
-        {
-            with n,p
-            match (m:Place),(p)-[z:Jensen]->(q:Category),(p)-[x:Rel]-(q)
-            optional match (n)-[r]-(m:Place)
-            where m.category = q.name and m <> n
-            and m.area = n.area and p.city = q.city
-            
-
-            with n,p ,toFloat(log(z.coeff)) as aij_jensen, count(r) as nei_jensen, toFloat(x.real_value)/toFloat(p.n_nodes) as mean_jensen
-         with n,p, (aij_jensen * (nei_jensen-mean_jensen)) as not_raw_jensen, (aij_jensen * nei_jensen) as raw_jensen
-         with n,p, sum(not_raw_jensen) as sum_not_raw_jensen, sum(raw_jensen) as sum_raw_jensen
-         return sum_raw_jensen as Qjensen_raw, sum_not_raw_jensen as Qjensen
-        }
-
-        call
-        {
-            with n,p
-            match (m:Place),(p)-[z:Rel]-(q:Category)
-            optional match (n)-[r]-(m:Place)
-            where m.category = q.name and m <> n
-            and m.area = n.area and p.city = q.city
-            
-
-         with  n,p ,z.z_score as aij_perm, count(r) as nei_perm, toFloat(z.real_value)/toFloat(p.n_nodes) as mean_perm
-         with n,p, (aij_perm* (nei_perm-mean_perm)) as not_raw_perm, (aij_perm * nei_perm) as raw_perm
-         with n,p, sum(not_raw_perm) as sum_not_raw_perm, sum(raw_perm) as sum_raw_perm
-         return sum_raw_perm as Qperm_raw, sum_not_raw_perm as Qperm
-        }
-        return n.id as id, n.category as category, Qjensen, Qjensen_raw, Qperm, Qperm_raw
+        return apoc.convert.fromJsonMap(n.Q) as Q
         """
 
         with self.driver.session() as session:
             result: Result = session.run(
                 cypher_query, id=id, category=category, city=city)
 
-            return result.single().data()
+            res = result.single().value("Q")
+  
+            return {"Qjensen": res[category]["Qjensen"], "Qjensen_raw": res[category]["Qjensen_raw"],
+                    "Qperm": res[category]["Qperm"], "Qperm_raw": res[category]["Qperm_raw"] }
+
+
 
     def get_all_quality_indices_coords(self, latitude: float, longitude: float, category: str, city: str):
         cypher_query = """

@@ -10,6 +10,7 @@ accounts_routes = Blueprint("accounts", __name__, url_prefix='/')
 @accounts_routes.route("/login", methods=["GET", "POST"])
 def login():
 
+
     login_form = LoginForm()
 
     if request.method == "POST":

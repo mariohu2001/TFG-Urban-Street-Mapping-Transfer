@@ -112,7 +112,7 @@ def get_city_coords(city: str):
 @places_routes.route("/top_categories/<city>", methods=["POST"])
 def top_categories(city: str):
 
-    data = request.get_json
+    data = request.get_json()
 
     nodes = data["nodes"]
     coords = data["coords"]

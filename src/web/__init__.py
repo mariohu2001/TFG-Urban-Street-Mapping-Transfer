@@ -1,5 +1,5 @@
 import os
-
+import joblib
 
 from flask import Flask, jsonify, render_template, request, url_for, redirect, session
 from configparser import ConfigParser
@@ -59,7 +59,11 @@ def create_app():
             app.config.get('NEO4J_PASSWORD'),
         )
 
-    jwt = JWTManager(app)
+        print(">>> Cargando modelos")
+        app.local_models = joblib.load("web/models/local/local.gz")
+        app.transfer_model = joblib.load("web/models/transfer/transfer.gz")
+        print(">>> Finalizado cargando modelos")
+        jwt = JWTManager(app)
 
     app.register_blueprint(accounts_routes)
     app.register_blueprint(places_routes)
@@ -149,7 +153,7 @@ def create_app():
         coords = body.get("coords")
         city = body.get("city")
 
-        tops = get_tops(coords, places, city, app.driver)
+        tops = get_tops(coords, places, city, app.driver, app.local_models[city])
         return jsonify(tops)
 
     @app.route('/map')

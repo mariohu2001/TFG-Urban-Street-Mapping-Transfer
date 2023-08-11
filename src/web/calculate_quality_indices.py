@@ -1,8 +1,10 @@
 from neo4j import Driver, Transaction, Result, Session
 from flask import current_app
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+import pandas as pd
+import numpy as np
 
-
+from sklearn.ensemble import RandomForestClassifier
 
 
 def create_matrix(rows: list) -> dict:
@@ -101,7 +103,7 @@ def get_nei_matrix_coords(tx: Transaction, lat: float, lon: float) -> dict:
     return nei_matrix
 
 
-def get_quality_indices_coords(session:Session, coords: dict, jensen: dict, perm: dict, nei_avg: dict, categories: list) -> dict:
+def get_quality_indices_coords(session: Session, coords: dict, jensen: dict, perm: dict, nei_avg: dict, categories: list) -> dict:
     full_Q = {}
 
     for coord in coords:
@@ -139,7 +141,6 @@ def get_quality_indices_places(session: Session, places: dict, jensen: dict, per
         node_id: int = place["id"]
         Q = {}
 
-
         nei = session.execute_read(get_nei_matrix, node_id)
         for i in categories:
             Q_perm = 0
@@ -167,7 +168,7 @@ def get_categories(city: str, driver: Driver):
     cypher_query = """
     MATCH (n:Place)
     WHERE n.area = $city
-    return distinct(n.category) as cats
+    return distinct(n.category) as cats order by cats
     """
     with driver.session() as session:
         result: Result = session.run(cypher_query, city=city)
@@ -177,18 +178,15 @@ def get_categories(city: str, driver: Driver):
 
 def get_quality_indices(coords: dict, places: dict, city: str, driver: Driver):
 
-    categories = get_categories( city, driver)
-    jensen = get_jensen_coeff_matrix( city, driver)
-    perm = get_zscore_matrix( city, driver)
-    nei_avg = get_avg_nei_matrix( city, driver)
+    categories = get_categories(city, driver)
+    jensen = get_jensen_coeff_matrix(city, driver)
+    perm = get_zscore_matrix(city, driver)
+    nei_avg = get_avg_nei_matrix(city, driver)
 
-
-
-
-    places_q = get_quality_indices_places( driver.session(),
-                            places, jensen, perm, nei_avg, categories)
-    coords_q = get_quality_indices_coords( driver.session(),
-                            coords, jensen, perm, nei_avg, categories)
+    places_q = get_quality_indices_places(driver.session(),
+                                          places, jensen, perm, nei_avg, categories)
+    coords_q = get_quality_indices_coords(driver.session(),
+                                          coords, jensen, perm, nei_avg, categories)
 
     return {"coords": coords_q, "places": places_q}
 
@@ -196,6 +194,8 @@ def get_quality_indices(coords: dict, places: dict, city: str, driver: Driver):
 def calculate_tops(quality_indices):
     with ProcessPoolExecutor() as pool:
         tops = dict(pool.map(get_top, quality_indices.items()))
+
+
     return tops
 
 
@@ -203,14 +203,38 @@ def get_top(items):
     k, v = items
     sorted_tops = {}
     for key in ["Qperm", "Qperm_raw", "Qjensen", "Qjensen_raw"]:
-            sorted_tops[key] = list(
-                sorted(v.keys(), key=lambda x: v[x][key], reverse=True))
-            
-    sorted_tops["random_forest"] = ["Bar" for i in range(len(sorted_tops["Qperm"]))]
+        sorted_tops[key] = list(
+            sorted(v.keys(), key=lambda x: v[x][key], reverse=True))
+
+    # sorted_tops["random_forest"] = [
+    #     "Bar" for i in range(len(sorted_tops["Qperm"]))]
     return k, sorted_tops
 
 
-def get_tops(coords: dict, places: dict, city: str, driver: Driver):
+def get_local_top_rf(city: str, quality_indices, model: RandomForestClassifier):
+
+    tops = dict()
+
+    for number, indices in quality_indices.items():
+
+        df = pd.json_normalize({"QualityIndices": indices},)
+        df = df[model.feature_names_in_]
+        predictions = model.predict_proba(df)
+
+        cat_prob = []
+        print(model.classes_, type(model.classes_))
+        for c, p in zip(model.classes_.flatten(),predictions.flatten()):
+
+            cat_prob.append((p,c))
+
+        tops[number] = [x[1]
+                        for x in sorted(cat_prob, key=lambda x: x[0], reverse=True)]
+
+    print(tops, flush=True)
+    return tops
+
+
+def get_tops(coords: dict, places: dict, city: str, driver: Driver, model: RandomForestClassifier):
     quality_indices = get_quality_indices(coords, places, city, driver)
 
     q_places = quality_indices["places"]
@@ -220,4 +244,24 @@ def get_tops(coords: dict, places: dict, city: str, driver: Driver):
         nodes_f = pool.submit(calculate_tops, q_places)
         coords_f = pool.submit(calculate_tops, q_coords)
 
-        return {"places": nodes_f.result(), "coords": coords_f.result()}
+        # LLamada a método de RF
+        rf_places = pool.submit(get_local_top_rf, city, q_places, model)
+        rf_coords = pool.submit(get_local_top_rf, city, q_coords, model)
+
+        places_tops = nodes_f.result()
+        coords_tops = coords_f.result()
+
+        rfp = rf_places.result()
+        rfc = rf_coords.result()
+
+        print(rfc, rfp, flush=True)
+
+        for k, v in rfp.items():
+            places_tops[k]["random_forest"] = v
+
+        for k, v in rfc.items():
+            coords_tops[k]["random_forest"] = v
+
+        ret = {"places": places_tops, "coords":  coords_tops}
+        print(ret)
+        return ret
