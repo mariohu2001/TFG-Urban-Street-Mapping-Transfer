@@ -2,38 +2,78 @@
 
 \section{Introducción}
 
-Una muestra de cómo podría ser una tabla de casos de uso:
+Una parte imprescindible para llevar a cabo cualquier proyecto de software son los requisitos, que definirán el comportamiento esperado por el producto final. Una vez especificados estos se podrá proceder al desarrollo del proyecto, utilizando como guía la definición de requisitos realizada.
 
-% Caso de Uso 1 -> Consultar Experimentos.
-\begin{table}[p]
-	\centering
-	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
-		\toprule
-		\textbf{CU-1}    & \textbf{Ejemplo de caso de uso}\\
-		\toprule
-		\textbf{Versión}              & 1.0    \\
-		\textbf{Autor}                & Alumno \\
-		\textbf{Requisitos asociados} & RF-xx, RF-xx \\
-		\textbf{Descripción}          & La descripción del CU \\
-		\textbf{Precondición}         & Precondiciones (podría haber más de una) \\
-		\textbf{Acciones}             &
-		\begin{enumerate}
-			\def\labelenumi{\arabic{enumi}.}
-			\tightlist
-			\item Pasos del CU
-			\item Pasos del CU (añadir tantos como sean necesarios)
-		\end{enumerate}\\
-		\textbf{Postcondición}        & Postcondiciones (podría haber más de una) \\
-		\textbf{Excepciones}          & Excepciones \\
-		\textbf{Importancia}          & Alta o Media o Baja... \\
-		\bottomrule
-	\end{tabularx}
-	\caption{CU-1 Nombre del caso de uso.}
-\end{table}
+La especificación de requisitos abarcan tanto las funciones de las que debe de ser capaz el producto, los conocidos como requisitos funcionales; como de comportamiento de este y otras características no relacionadas a sus funciones, los requisitos no funcionales.
+%Una muestra de cómo podría ser una tabla de casos de uso:
+%
+%% Caso de Uso 1 -> Consultar Experimentos.
+%\begin{table}[p]
+%	\centering
+%	\begin{tabularx}{\linewidth}{ p{0.21\columnwidth} p{0.71\columnwidth} }
+%		\toprule
+%		\textbf{CU-1}    & \textbf{Ejemplo de caso de uso}\\
+%		\toprule
+%		\textbf{Versión}              & 1.0    \\
+%		\textbf{Autor}                & Alumno \\
+%		\textbf{Requisitos asociados} & RF-xx, RF-xx \\
+%		\textbf{Descripción}          & La descripción del CU \\
+%		\textbf{Precondición}         & Precondiciones (podría haber más de una) \\
+%		\textbf{Acciones}             &
+%		\begin{enumerate}
+%			\def\labelenumi{\arabic{enumi}.}
+%			\tightlist
+%			\item Pasos del CU
+%			\item Pasos del CU (añadir tantos como sean necesarios)
+%		\end{enumerate}\\
+%		\textbf{Postcondición}        & Postcondiciones (podría haber más de una) \\
+%		\textbf{Excepciones}          & Excepciones \\
+%		\textbf{Importancia}          & Alta o Media o Baja... \\
+%		\bottomrule
+%	\end{tabularx}
+%	\caption{CU-1 Nombre del caso de uso.}
+%\end{table}
 
 \section{Objetivos generales}
 
+Los objetivos que se buscan alcanzar con este proyecto son los siguientes:
+
+\begin{enumerate}
+	\item Obtención de ubicaciones comerciales de distintas ciudades mediante el uso de peticiones a la API de geolocalización de \textit{OpenStreetMap}.
+	\item Almacenamiento de dichas ubicaciones en una base de datos no relacional orientada a grafos de Neo4j.
+	\item Obtención de las relaciones de interacción entre las distintas categorías comerciales, así como de los coeficientes que nos proporcionan la aplicación de distintos métodos.
+	\item Obtención de índices de calidad en base a los anteriores coeficientes que nos permitan estimar la adecuación de un establecimiento comercial a su ubicación con respecto a su categoría como a otras.
+	\item Uso combinado de distintos índices de calidad mediante el entrenamiento de modelos de clasificación con los índices de calidad obtenidos con objetivo de realizar recomendaciones de ubicaciones a nivel local.
+	\item Integración de datos de distintas ciudades, realizando así transferencia de conocimiento usando modelos de inteligencia artificial.
+	\item Creación de una aplicación web que permita a los usuarios de la herramienta obtener recomendaciones fácilmente mediante los índices de calidad y modelos obtenidos.
+	
+	El producto final constituirá un sistema de recomendación de categorías comerciales y ubicaciones de forma que se maximicen los beneficios y el rendimiento de hipotéticos negocios en las ubicaciones dadas.
+	
+	En cuanto a las herramientas a utilizar cabe destacar el uso de Neo4j, una base de datos no relacional que pertenece a un nuevo paradigma, la orientación a grafos. Su aprendizaje y correcto uso será parte crucial del proyecto.
+\end{enumerate}
+
 \section{Catalogo de requisitos}
+
+Dados los objetivos del proyecto, extraemos los siguientes requisitos:
+
+\begin{itemize}
+	\item \textbf{RF-1. Extracción de datos:} La aplicación debe de ser capaz de extraer datos de ubicaciones comerciales.
+		\begin{itemize}
+			\item \textbf{RF-1.1. Extracción de ubicaciones de determinada categoría:} La aplicación debe de ser capaz de extraer ubicaciones con cierta categoría asociada.
+			\item \textbf{RF-1.2.Extracción de ubicaciones de ciudades:} La aplicación debe permitir extraer ubicaciones de determinados núcleos urbanos.
+		\end{itemize}
+	\item \textbf{RF-2. Almacenamiento de datos:} La aplicación debe guardar los datos obtenidos en una base de datos.
+		\begin{itemize}
+			\item \textbf{RF-2.1. Correcto almacenamiento de los datos:} La aplicación debe de realizar transformaciones para adecuar el formato de los datos al modelo de datos de la base de datos.
+		\end{itemize}
+	\item \textbf{RF-3. Obtención de información:} El sistema debe poder proveer información de las ubicaciones guardadas en la base de datos.
+		\begin{itemize}
+			\item \textbf{RF-3.1. Obtención de datos de ubicaciones:} El sistema debe permitir obtener información asociada a determinadas ubicaciones
+			\item \textbf{RF-3.2. Obtención de datos de categorías:} El sistema debe permitir obtener información derivada de las ubicaciones y agruparla según categoría comercial.
+			\item \textbf{RF-3.3. }
+		\end{itemize}
+\end{itemize}
+
 
 \section{Especificación de requisitos}
 
