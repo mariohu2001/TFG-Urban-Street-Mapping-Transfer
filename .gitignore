@@ -332,8 +332,7 @@ cache/
 .idea
 __pycache__/
 *.csv
-*.png
-*.png
+src/models/plots/*.png
 Sim_Results/
 *.ini
 *.csv

@@ -19,7 +19,19 @@ Inicialmente se consideró el cargar las ubicaciones de distintas capitales de E
 
 Para introducir las ubicaciones en la base de datos se optó inicialmente por usar la librería \textit{OSMPythonTools}, que provee una interfaz sencilla con la que hacer peticiones a la API. Debido a que el proceso conllevaba cierto tiempo, se empleó una alternativa con el plugin \textit{APOC} que permite cargar datos de la respuesta de una petición HTTP o un fichero JSON.
 
-Una vez el proceso de carga se terminó, contábamos con un total de unos 280.000 nodos y 443 distintos valores de <<amenity>>. 
+Una vez el proceso de carga se terminó, contábamos con un total de unos 280.000 nodos y 443 distintos valores de <<amenity>>.
+
+
+\tablaSmall{Nodos por ciudad en la primera carga de datos}{ |l|c|}{carganodos1}
+{\textbf{Ciudad} & \textbf{Número de nodos}\\}{ 
+	Madrid & 27.117\\
+	París & 54.048\\
+	Berlín & 82.900\\
+	Londres & 84.558\\
+	Roma & 16.675\\
+	Amsterdam & 13.214\\
+}
+
 
 Al analizar los datos nos percatamos de que muchas <<amenities>> tenían fallos ortográficos o poseían un significado similar a otros. Este problema es debido a que las distintas claves de \textit{Open Street Map} no cuentan con un diccionario predefinido de posibles valores, sino que son los usuarios que crean las ubicaciones quienes escogen el valor de estas, estén registradas anteriormente o no.
 
@@ -45,7 +57,22 @@ Mientras se encontraba una solución a los problemas enumerados anteriormente se
 
 Una vez vistos los resultados aportados por la elección de las ciudades anteriores se decidió utilizar otras nuevas con un tamaño inferior. Se eligieron Barcelona, Bilbao, Logroño, Oviedo, Santander, Zaragoza, Valladolid, Sevilla, Valencia y Madrid como primera aproximación, con intención de descartar alguna en caso de que se contara con un número muy elevado de ubicaciones.
 
+\tablaSmall{Nodos iniciales por ciudad en la segunda carga de datos}{ |l |c|}{carganodos2ini}
+{\textbf{Ciudad} & \textbf{Número de nodos}\\}{ 
+	Barcelona & 24.860\\	
+	Madrid & 27.186\\	
+	Sevilla & 6.323	\\
+	Zaragoza & 6.384\\	
+	Oviedo & 1.983\\	
+	Valladolid & 3.034\\	
+	Bilbao & 4.352\\	
+	Valencia & 8.154\\	
+	Logroño & 1.363\\	
+	Santander & 3.038\\	
+}
+
 Tras el análisis de las nuevas ciudades reducimos estas a solo 3; Sevilla, Zaragoza y Valencia, para evitar incurrir en el mismo problema que hemos visto anteriormente, centrándonos en alcanzar los objetivos propuestos para el proyecto con estas ciudades antes de incluir otras nuevas.
+
 
 Una vez determinadas las ciudades con las que trabajar se procedió a realizar el enlazado de nodos como se hizo anteriormente, dándonos un número manejable de relaciones de proximidad, por lo que se continuó con la creación de las redes de interacción entre categorías.
 
@@ -75,6 +102,14 @@ Otra vez más se nos planteó el problema de cómo almacenar la red de categorí
 \imagen{PermutationNetwork}{Representación de las simulaciones del método \textit{Permutation}}{0.75}
 
 
+\subsubsection{Aplicación de cálculo de coeficientes de Jensen}
+
+Dado que para obtener los coeficientes de Jensen no es necesario recurrir a simulaciones de Monte Carlo ni generación de modelos nulos, su aplicación fue más inmediata. El problema que presenta está en su almacenamiento. Dado que los coeficientes no son simétricos i.e. $M_{AB}\neq M_{BA}$ no podemos utilizar los enlaces de anteriores métodos o de la red de interacción para almacenar estos coeficientes, ya que estos se usaban como si fuesen no dirigidos. Para solventar esto se recurrió a crear nuevos enlaces dirigidos con una etiqueta distinta para almacenar los coeficientes como atributos del propio enlaces. Para cada par de categorías contaríamos con dos enlaces con distinta dirección entre cada nodo categoría.
+
+Si bien lo anterior funcionaba, lo cierto es que aumentaba significativamente el número de enlaces presentes en la base de datos.
+
+\imagen{JensenNetwork}{Representación de almacenamiento de coeficientes de Jensen en la base de datos}{0.75}
+
 \subsubsection{Aplicación del método \textit{Rewiring}}
 En paralelo a la realización del método de \textit{Permutation} se pensó en una forma de realizar este método desde Neo4j a pesar de su complejidad.
 
@@ -102,6 +137,15 @@ Una vez más se tomó como inviable el continuar con los datos que teníamos en 
 Dados los hechos anteriores se buscó como solución cargar nodos de ciudades más pequeñas, por lo que se utilizarían datos obtenidos de las ciudades de Castilla y León. 
 
 Una vez cargadas la ubicaciones se hizo un análisis y eliminación de los nodos pertenecientes a mobiliario urbano. El análisis mostraba que algunas ciudades tenían un número significativamente bajo del total de ubicaciones, menor que 300, por lo que se eliminaron de la base de datos al considerarse insuficientes. Al finalizar la carga y depurado de nodos contamos con las ciudades de Valladolid, Burgos, Salamanca, León y Palencia.
+
+\tablaSmall{Nodos por ciudad en la tercera carga de datos}{ |l |c|}{carganodos3}
+{\textbf{Ciudad} & \textbf{Número de nodos}\\}{ 
+	Palencia & 947\\	
+	León & 741\\	
+	Salamanca & 3.224	\\
+	Valladolid & 3.237\\	
+	Burgos &  3.999\\	
+}
 
 \subsubsection{Obtención de coeficientes}
 
@@ -156,9 +200,24 @@ La elección de \textit{Random Forest} sobre otros modelos de inteligencia artif
 
 Una parte de las recomendaciones que se harían serían utilizando únicamente datos locales, es decir, de la propia ciudad. Esto implica crear un modelo de \textit{Random Forest} para cada ciudad. Las posibles categorías que se pueden recomendar serían exclusivamente aquellas que la propia ciudad posee.
 
+Para poder evaluar el rendimiento real de los modelos se aplicará una técnica común en el ámbito del \textit{machine learning} conocida como validación cruzada. En nuestro caso realizaremos 100 \textit{folds} para los modelos de cada ciudad.
 
+Tras realizar la validación cruzada se nos arrojan los siguientes resultados:
+
+\imagen{LocalMRR}{\textit{Mean Reciprocal Rank} en las predicciones a nivel local}{1}
+
+
+Como se puede observar, en comparación al resto de índices de calidad los modelos de \textit{Random Forest} no logran superar a todos, viéndose superados en la mayoría de casos por \textit{QJensen} y \textit{QJensen\_raw} que parecen ser los que mejor rendimiento ofrecen. Pese a lo anterior, sí que consigue obtener resultados considerables.
+
+Otra conclusión que se puede extraer de los resultados es el impacto del tamaño de la ciudad a la hora de obtener buenas predicciones. León y Palencia son las ciudades que consiguen obtener un MRR más alto que el resto siendo estas dos las regiones más pequeñas, en cuanto a nivel de nodos, de las que contamos.
 \subsubsection{Transferencia}
 
 A la hora de realizar transferencia de información mediante la utilización de un \textit{Random Forest} se nos presenta un problema con respecto al conjunto de datos a utilizar. Este problema tiene origen en el hecho de que las ciudades tienen conjuntos distintos de categorías, teniendo un total de unas 250 en el conjunto de datos. Esto supone que las ubicaciones de una ciudad no van a tener índices de calidad asociados a categorías que no están presentan en dicha ciudad. Además la diferencia de categorías entre ciudades en algunos casos roza las 100, por lo que de hacerse de esta forma habría muchas ubicaciones con gran parte de índices de calidad desconocidos.
 
 Otro problema derivado que supondría el utilizar al información de todas la ubicaciones que disponemos sería el tamaño del conjunto de datos con el que trabajaríamos. De hacerlo así cada ubicación tendría asociada valores para cada índice de calidad y para cada ubicación, teniendo así unos 1.000 atributos con 12.000 ubicaciones. Esto supone un conjunto de datos bastante grande, especialmente si utilizamos técnicas como la validación cruzada para validar el modelo.
+
+Finalmente se decidió por crear distintos modelos de \textit{Random Forest} para en las que apliquemos transferencia. Para ello se utilizaría una ciudad para entrenar (\textit{source}) el modelo y otra sobre la que realizar las predicciones(\textit{target}). Esto supondría tener 20 modelos distintos, puesto que contamos con 5 ciudades y descontamos los modelos que se utilizan para recomendaciones locales. A la hora de obtener el conjunto de datos de cada modelo se utilizarían únicamente las categorías pertenecientes a la intersección entre las categorías de ese par de ciudades, teniendo a su vez que eliminar filas con categoría fuera de esta, así como filtrar columnas con datos pertenecientes a índices de calidad asociados a categorías que no pertenecen a la intersección.
+
+Tras realizar los entrenamientos y predicciones de los distintos modelos, estos nos arrojan los siguientes resultados:
+
+\imagen{TransferMRR}{\textit{Mean Reciprocal Rank} al aplicar transferencia con \textit{Random Forest}}{0.75}
