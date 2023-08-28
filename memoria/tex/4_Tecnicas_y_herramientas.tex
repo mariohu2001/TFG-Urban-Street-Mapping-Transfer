@@ -15,7 +15,7 @@ esta pasó a requerir una licencia de pago para su uso, por lo que se sustituyó
 por Zube.
 
 \subsection{Zenhub}
-Zenhub se trata de una herramienta de gestión de proyectos basada en las metodologías
+Zenhub ~\cite{zenhubZenhubProductivity} se trata de una herramienta de gestión de proyectos basada en las metodologías
 ágiles, por lo que cuenta con funcionalidades que facilitan la creación de tareas así como su gestión.
 Además de crear tareas nos permite asignar a estas un \textit{Sprint}, puntos de poker (utilizados en SCRUM)
 o poder definir aquellas tareas que lo requieran como \textit{Epics} para diferenciarlas de las otras.
@@ -24,7 +24,7 @@ o poder definir aquellas tareas que lo requieran como \textit{Epics} para difere
 Un punto importante para su elección inicial fue que esta cuenta con integración en \textit{GitHub},
 por lo que facilita la gestión de tareas al hacerla directamente desde el propio repositorio.
 \subsection{Zube}
-Una vez Zenhub pasó a ser una herramienta de pago se optó por el uso de Zube. Esta cuenta con muchos
+Una vez Zenhub pasó a ser una herramienta de pago se optó por el uso de Zube ~\cite{zubeZubeAgile}. Esta cuenta con muchos
 de los elementos que Zenhub también tiene. Permite definir tareas y gestionarlas mediante un tablero \textit{Kanban},
 colocando las tareas en un area u otra en función de su estado (Backlog, Ready, In Progress,...)
 
@@ -33,12 +33,12 @@ colocando las tareas en un area u otra en función de su estado (Backlog, Ready,
 Una elección bastante significativa para el proyecto será el lenguaje de programación empleado
 para su desarrollo.
 \subsection{Python}
-Python se trata de un lenguaje interpretado de alto nivel bastante utilizado en ámbitos como el \textit{Machine Learning}.
+Python~\cite{Python} se trata de un lenguaje interpretado de alto nivel bastante utilizado en ámbitos como el \textit{Machine Learning}.
 Además de lo anterior cuenta con multitud de librerías de diversos propósitos desarrolladas por los propios usuarios, pudiendo
 facilitar las labores a realizar en el proyecto. En su elección también influye que es uno de los lenguajes que más hemos
 utilizado durante la carrera.
 \subsection{JavaScript}
-Al igual que Python, JavaScript se trata de un lenguaje interpretado, pero este es utilizado por los
+Al igual que Python, JavaScript~\cite{JS} se trata de un lenguaje interpretado, pero este es utilizado por los
 navegadores para poder crear páginas web dinámicas. También cuenta con diversas librerías con funcionalidades
 que permiten manejar el DOM, hacer distintas visualizaciones, entre otras. Este lenguaje será de gran importancia
 en el apartado web del proyecto.
@@ -53,7 +53,7 @@ estas necesidades tomarán gran importancia en la decisión de la base de datos.
 
 \subsection{Neo4j}
 
-Neo4j se trata de una base de datos no relacional de la familia de los grafos escrita en Java. Esta
+Neo4j ~\cite{neo4j} se trata de una base de datos no relacional de la familia de los grafos escrita en Java. Esta
 es utilizada por grandes empresas como Intel, Adobe, AstraZeneca o incluso la NASA. También cabe destacar
 su uso en el terreno de la ciencia de datos gracias a \textit{plugins} con utilidades propias de la ciencia de redes.
 
@@ -66,14 +66,15 @@ características.
 
 \subsubsection{APOC (Awesome Procedures On Cypher)}
 Como se ha mencionado antes, Neo4j cuenta con \textit{plugins} que facilitan algunas labores
-en la base de datos. Entre ellos se encuentra APOC, que tiene tanto utilidades un tanto más generales,
+en la base de datos. Entre ellos se encuentra APOC ~\cite{APOC}, que tiene tanto utilidades un tanto más generales,
 así como algunas más específicas, como por ejemplo cargar datos directamente de peticiones a una API, que nos
 será bastante útil en la carga de ubicaciones durante el desarrollo del proyecto.
+
 \section{Librerías}
 Como se ha mencionado anteriormente, se hará uso de diversas librerías para las labores del proyecto,
 tanto de Python como de JavaScript.
 \subsection{Driver de Neo4j}
-Para el manejo de la base de datos de Neo4j a través de Python existen 3 distintos drivers:
+Para el manejo de la base de datos de Neo4j a través de Python existen 3 distintos drivers ~\cite{neo4jpythonDrivers}:
 
 \begin{description}
     \item [Driver Oficial] Se trata del driver oficial de Neo4j para Python. Cuenta con cursos para su uso y una extensa documentación.
@@ -82,17 +83,17 @@ Para el manejo de la base de datos de Neo4j a través de Python existen 3 distin
 \end{description}
 
 Dado que Neo4j es una herramienta nueva, que requiere de un proceso de aprendizaje, se ha optado
-por el driver oficial por su simple uso y la gran cantidad de documentación existente. Se ha desestimado Py2Neo
+por el driver oficial ~\cite{neo4jdriver} por su simple uso y la gran cantidad de documentación existente. Se ha desestimado Py2Neo
 puesto que ya no recibe soporte; y en el caso de Neomodel, las funcionalidades que trae no aportan una ventaja
 respecto al driver oficial, puesto que en primer lugar no utilizaremos Django, sino Flask para la parte web del proyecto;
 y en cuanto al OGM que provee este no nos es necesario puesto que no requeriremos de las ventajas que este nos podría aportar.
 
 \subsection{OSMPythonTools}
-OSMPythonTools se trata de una librería que facilita el acceso a la información de los servicios de \textit{Open Street Map}
+OSMPythonTools ~\cite{OSMP} se trata de una librería que facilita el acceso a la información de los servicios de \textit{Open Street Map}
 mediante una interfaz simple. 
 
 \subsection{Flask}
-Flask se trata de un framework de desarrollo web para Python. Está caracterizado por se ligero y flexible,
+Flask~\cite{Flask} se trata de un framework de desarrollo web para Python. Está caracterizado por se ligero y flexible,
 además de contar con librerías que expanden sus funcionalidades. Permite el uso de distintas bases de datos además de contar
 con un motor de plantillas llamado \textit{Jinja2} para el renderizado de páginas web.
 
@@ -100,26 +101,26 @@ Se ha escogido este framework frente a otros debido a su simplicidad y fácil us
 las necesidades del proyecto. Otro punto significativo en su elección es que ya se había trabajado con él
 durante la carrera en la asignatura de \textit{Diseño y mantenimiento del Software}.
 
-\subsubsection{Flask JWT Extended}
-Es una librería que extiende las funcionalidades de Flask para poder utilizar JWT (JSON Web Token)
-para las labores de autenticación de usuarios y en la seguridad de la aplicación.
-\subsubsection{Flask WTForms}
-Extensión de Flask para la creación de formularios web mediante una interfaz simple, permitiendo
-la validación de estos desde el propio Python.
+%\subsubsection{Flask JWT Extended}
+%Es una librería que extiende las funcionalidades de Flask para poder utilizar JWT (JSON Web Token)
+%para las labores de autenticación de usuarios y en la seguridad de la aplicación.
+%\subsubsection{Flask WTForms}
+%Extensión de Flask para la creación de formularios web mediante una interfaz simple, permitiendo
+%la validación de estos desde el propio Python.
 
 \subsection{Leaflet.js}
-Se trata de una librería de código abierto de JavaScript que permite la visualización de mapas interactivos en páginas web.
+Se trata de una librería de código abierto de JavaScript que permite la visualización de mapas interactivos en páginas web ~\cite{leaflet}.
 Para sus mapas puede utilizar información extraída de \textit{OpenStreetMap} para hacer las visualizaciones.
 Nos servirá para mostrar las distintas ubicaciones que almacenemos en la base de datos en la web.
 
 \subsection{Vis.js}
-Es una librería de JavaScript cuyo objetivo es realizar visualizaciones interactivas de grafos en la web.
+Es una librería de JavaScript cuyo objetivo es realizar visualizaciones interactivas de grafos en la web ~\cite{visjsVisjs}.
 Permite personalizar las visualizaciones con distintas configuraciones. Con esta podremos mostrar
 la información de la base de datos en forma de grafo en la forma que se haría desde el punto de vista de la ciencia
 de redes.
 
 \subsection{Bootstrap 5}
-Se trata de un framework que se suele utilizar para la creación de interfaces web \textit{responsive}.
+Se trata de un framework que se suele utilizar para la creación de interfaces web \textit{responsive} ~\cite{Bootstrap}.
 Cuenta con una extensa documentación y ejemplos para su uso. Facilita el diseño de páginas web ofreciendo
 componentes reutilizables pudiendo utilizarse directamente en las plantillas HTML.
 
@@ -130,17 +131,17 @@ para el proyecto. Para ello se obtendrán mediante APIs de información geográf
 OpenStreetMap para este propósito. 
 
 OpenStreetMap se trata de un proyecto abierto y colaborativo que cuenta con información geográfica
-recopilada por los propios usuarios para la visualización de mapas, rutas de navegación y demás.
+recopilada por los propios usuarios para la visualización de mapas, rutas de navegación y demás ~\cite{OSM}.
 
 Para este proyecto se utilizarán las siguientes APIs de este proyecto. 
 
 \subsection{Overpass}
-Se trata de una de las APIs que componen el proyecto de OpenStreetMap, siendo esta solo de lectura de datos.
+Se trata de una de las APIs que componen el proyecto de OpenStreetMap, siendo esta solo de lectura de datos ~\cite{Overpass, openstreetmapOverpassOpenStreetMap}.
 Está optimizada para las operaciones de lectura, contando con un lenguaje propio de consultas llamado \textit{Overpass QL},
 además de introducir algunas estructuras con respecto a OpenStreetMap, como es el caso de las areas, facilitando el acceso a la información.
 
 \subsection{Nominatim}
 Nominatim es un motor de búsqueda que forma parte de OpenStreetMap. Sus funcionalidades están centradas en la 
-geolocalización en base a direcciones, nombres de ubicaciones y coordenadas. Cuenta con una API propia
+geolocalización en base a direcciones, nombres de ubicaciones y coordenadas ~\cite{nominatimNominatim}. Cuenta con una API propia
 que será de utilidad para encontrar las áreas de las distintas ciudades con las que se trabajarán en el proyecto.
 

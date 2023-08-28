@@ -5,7 +5,7 @@ en la elección de la ubicación en la que colocar una nueva tienda de forma que
 
 \section{\textit{Retail Location Problem}}
 
-El conocido como <<Retail Location Problem>> trata de un problema enfrentado por las empresas pertenecientes al comercio minorista al elegir una ubicación donde empezar un nuevo negocio. La ubicación, lejos de ser un factor carente de importancia puede marcar la diferencia entre el éxito o el fracaso del comercio. Un negocio adecuadamente posicionado cuenta con ventajas sobre la competencia que pueden hacer aumentar significativamente su rendimiento sobre el resto.
+El conocido como <<Retail Location Problem>> trata de un problema enfrentado por las empresas pertenecientes al comercio minorista al elegir una ubicación donde empezar un nuevo negocio. La ubicación, lejos de ser un factor carente de importancia puede marcar la diferencia entre el éxito o el fracaso del comercio. Un negocio adecuadamente posicionado cuenta con ventajas sobre la competencia que pueden hacer aumentar significativamente su rendimiento sobre el resto ~\cite{Ahedo2021, RSVAJSSHJG}.
 
 La elección de la ubicación puede hacerse ateniendo a distintos factores, logísticos, poblacionales, fiscales, entre otros. En este caso se hará basándose en cómo complementan los distintos comercios cercanos a una ubicación a un hipotético nuevo negocio, considerando su efecto sobre este. 
 
@@ -21,7 +21,7 @@ La elección de la ubicación puede hacerse ateniendo a distintos factores, log�
 
 \section{Teoría de grafos}
 
-Los grafos consisten en unas estructuras matemáticas compuestas por dos elementos:
+Los grafos consisten en unas estructuras matemáticas compuestas por dos elementos ~\cite{enwiki:1171835383}:
 
 \begin{itemize}
 	\item $V$: Vértices o nodos. Suponen la entidad más básica del grafo, pudiendo representar distintos conceptos.
@@ -32,34 +32,23 @@ Dada su naturaleza, los grafos han sido usados habitualmente para modelar relaci
 
 Los nodos, además de constituir el elemento más básico, pueden contener ciertas características asociadas, como pertenencias a un grupo.
 
-Existen distintos tipos en función de como se modelen las relaciones entre objetos. Si las relaciones no cuentan con dirección alguna se les conoce como no dirigidos, si existe alguna restricción en las direcciones con las que se recorren los enlaces entonces se trata de un grafo dirigido; y en caso de permitir múltiples enlaces entre cada par de nodos se trataría de un multigrafo. También pueden presentar una ponderación en los enlaces entre nodos, siendo de esta forma un grafo pesado.
+Existen distintos tipos en función de como se modelen las relaciones entre objetos. Si las relaciones no cuentan con dirección alguna se les conoce como no dirigidos, si existe alguna restricción en las direcciones con las que se recorren los enlaces entonces se trata de un grafo dirigido; y en caso de permitir múltiples enlaces entre cada par de nodos se trataría de un multigrafo. También pueden presentar una ponderación en los enlaces entre nodos, siendo de esta forma un grafo pesado~\cite{enwiki:1171835383}.
 
 \subsection{Modelos nulos}
 
-En el ámbito de las matemáticas y la teoría de grafos un modelo nulo se trata de un modelo con una generación aleatoria en alguno de sus aspectos. El objetivo detrás de estos consiste en establecerlos como punto de comparación para analizar si algunas propiedades presentes en otro grafo se alejan de ser casuales, como lo serían en estos modelos nulos. De esta forma se puede extraer ciertas características distintivas de los grafos sujetos a análisis.
+En el ámbito de las matemáticas y la teoría de grafos un modelo nulo se trata de un modelo con una generación aleatoria en alguno de sus aspectos. El objetivo detrás de estos consiste en establecerlos como punto de comparación para analizar si algunas propiedades presentes en otro grafo se alejan de ser casuales, como lo serían en estos modelos nulos. De esta forma se puede extraer ciertas características distintivas de los grafos sujetos a análisis ~\cite{enwiki:1169838323}.
 
 \section{Ciencia de Redes}
-%Uno de los puntos centrales teóricos del proyecto es el modelado del problema desde la
-%perspectiva de la Ciencia de Redes. Esta disciplina representa los objetos de estudio
-%como grafos, siendo estos compuestos por vértices y nodos. Esta representación permite analizar
-%la relación entre los objetos.
-La ciencia de redes se trata de una disciplina que utiliza los conocimientos que la teoría de grafos provee para representar elementos y relaciones de la realidad y de esta forma ser capaces de estudiar y analizar sistemas complejos. Los grafos utilizados por esta rama de conocimiento se suelen conocer como redes.
+
+La ciencia de redes se trata de una disciplina que utiliza los conocimientos que la teoría de grafos provee para representar elementos y relaciones de la realidad y de esta forma ser capaces de estudiar y analizar sistemas complejos. Los grafos utilizados por esta rama de conocimiento se suelen conocer como redes~\cite{eswiki:151888116}.
 
 Además de basarse en los conceptos de la teoría de grafos, también aplica técnicas propias de la informática y el <<Machine Learning>> para facilitar las labores de análisis de redes. Algunos ejemplos de aplicación de estas técnicas podrían ser la predicción de posibles enlaces entre nodos, detección de comunidades o la clasificación de nodos en distintas categorías.
 
 En los últimos años ha obtenido gran relevancia al aplicarse a ámbitos como las redes sociales, de transporte, de transmisión de enfermedades, entre otros. En el caso de este trabajo, se aplicará para modelar la estructura comercial de las distintas ciudades con el objetivo de hacer recomendaciones en base a la ubicación para determinados negocios.
 
 
-%\subsection{Ciencia de redes}
-%La Ciencia de Redes se trata de una disciplina que se encarga del análisis de redes complejas. Esta representa los componentes como nodos o vértices, y las relaciones entre
-%estos como enlaces o aristas.
-%
-%Este planteamiento puede aplicarse a distintos ámbitos y problemas, cómo las redes sociales,
-%control de transmisiones de enfermedades y demás. En este caso se usará para hacer recomendaciones de comercios en distintas ubicaciones.
-
-
 \section{Técnicas}
-Con el objetivo de extraer características de la estructura comercial de cada ciudad se proponen una serie de métodos. Estos nos proveen coeficientes entre las distintas categorías que nos permitirán extraer las relaciones de afinidad y repulsión; además de posteriormente permitirnos los cálculos de los índices de calidad para cada ubicación, pudiendo realizar con ellos las recomendaciones que buscamos en este trabajo.
+Con el objetivo de extraer características de la estructura comercial de cada ciudad se proponen una serie de métodos ~\cite{Ahedo2021,RSVAJSSHJG}. Estos nos proveen coeficientes entre las distintas categorías que nos permitirán extraer las relaciones de afinidad y repulsión; además de posteriormente permitirnos los cálculos de los índices de calidad para cada ubicación, pudiendo realizar con ellos las recomendaciones que buscamos en este trabajo.
 
 Se trata de los siguientes:
 \begin{itemize}
@@ -69,10 +58,10 @@ Se trata de los siguientes:
 \end{itemize}
 
 
-Antes de poder aplicar estos métodos será necesario contar con una representación en forma de red de la estructura de la ciudad. Los nodos de este grafo representarán cada una de las ubicaciones. En cuanto a las relaciones, estas se crearan en base a la proximidad espacial entre nodos. Para esto se tomará una distancia de 100 metros como máximo para la creación de un enlace.
+Antes de poder aplicar estos métodos será necesario contar con una representación en forma de red de la estructura de la ciudad ~\cite{Ahedo2021,RSVAJSSHJG}. Los nodos de este grafo representarán cada una de las ubicaciones. En cuanto a las relaciones, estas se crearan en base a la proximidad espacial entre nodos. Para esto se tomará una distancia de 100 metros como máximo para la creación de un enlace.
 
 A continuación, se hará una descripción de cada uno de estos métodos. Conviene hacer una
-breve explicación de los términos utilizados.
+breve explicación de los términos utilizados~\cite{Ahedo2021,RSVAJSSHJG}.
 \begin{itemize}
 	\item $T$: Conjunto de todas las distintas ubicaciones.
 	\item $A,B$: Conjuntos de ubicaciones de determinadas categorías.
@@ -83,7 +72,7 @@ breve explicación de los términos utilizados.
 \subsection{Jensen}
 
 
-Jensen propone unos coeficientes para una categoría sobre otra. Estos pueden ser obtenidos simplemente mediante los datos que provee la estructura comercial de la ciudad bajo análisis, sin requerir la aplicación de métodos matemáticos o estadísticos complejos. Este método puede obtener tanto las relaciones de atracción como de repulsión entre categorías comerciales. Las primeras serán aquellas con un valor por encima de 1, y las segundas aquellas en las que esté por debajo de 1.
+Jensen propone unos coeficientes para una categoría sobre otra ~\cite{Jensen2006}. Estos pueden ser obtenidos simplemente mediante los datos que provee la estructura comercial de la ciudad bajo análisis, sin requerir la aplicación de métodos matemáticos o estadísticos complejos. Este método puede obtener tanto las relaciones de atracción como de repulsión entre categorías comerciales. Las primeras serán aquellas con un valor por encima de 1, y las segundas aquellas en las que esté por debajo de 1.
 
 El cálculo de estos coeficientes es distinto cuando se trata de una categoría sobre sí misma con respecto a una categoría sobre otra distinta.
 
@@ -95,13 +84,13 @@ El cálculo de estos coeficientes es distinto cuando se trata de una categoría 
 	M_\text{AB} = \frac{|T| - |A|}{|A||B|} \sum_{a \in A}\frac{N_B(a,r)}{N_T(a,r) - N_A(a,r)}
 \end{equation*}
 
-El cálculo de estos coeficientes llevará a la obtención de una matriz de interacciones que podrá ser utilizada para posteriores cálculos.
+El cálculo de estos coeficientes llevará a la obtención de una matriz de interacciones que podrá ser utilizada para posteriores cálculos ~\cite{Jensen2006}.
 
 \subsection{Permutation}
 
-El método \textit{Permutation} al contrario del anterior, requiere de la aplicación de simulaciones de Monte Carlo con modelos nulos sobre la red. En este caso se crearán redes aleatorias, pero con la restricción de que se mantendrá la estructura real de la red, permutándose aleatoriamente las categorías asociadas a cada nodo.
+El método \textit{Permutation} al contrario del anterior, requiere de la aplicación de simulaciones de Monte Carlo ~\cite{Montecarlo} con modelos nulos sobre la red ~\cite{Ahedo2021,RSVAJSSHJG}. En este caso se crearán redes aleatorias, pero con la restricción de que se mantendrá la estructura real de la red, permutándose aleatoriamente las categorías asociadas a cada nodo.
 
-De cada simulación se obtendrá el valor de interacción entre categorías, para posteriormente obtener la media y la desviación típica de los resultados de las simulaciones.
+De cada simulación se obtendrá el valor de interacción entre categorías, para posteriormente obtener la media y la desviación típica de los resultados de las simulaciones ~\cite{Ahedo2021,RSVAJSSHJG}.
 
 Con ello se podrá obtener el Z-Score para cada par de categorías, con un funcionamiento análogo a los coeficiente de Jensen. Se obtendrá una matriz simétrica con ellos.
 
@@ -114,7 +103,7 @@ Con ello se podrá obtener el Z-Score para cada par de categorías, con un funci
 
 \subsection{Rewiring}
 
-\textit{Rewiring} se trata de un método similar al anterior, también está basado en la generación de modelos nulos con simulaciones de Monte Carlo. La diferencia entre este y el anterior está en las restricciones. En este la categoría comercial es mantenida en cada uno de los nodos, mientras que los enlaces entre nodos son aleatorizados, con la única restricción de que se debe mantener el grado que los nodos poseían en la red original.
+\textit{Rewiring} se trata de un método similar al anterior, también está basado en la generación de modelos nulos con simulaciones de Monte Carlo ~\cite{Montecarlo}. La diferencia entre este y el anterior está en las restricciones. En este la categoría comercial es mantenida en cada uno de los nodos, mientras que los enlaces entre nodos son aleatorizados, con la única restricción de que se debe mantener el grado que los nodos poseían en la red original ~\cite{Ahedo2021,RSVAJSSHJG}.
 
 Al igual que en el anterior se obtendrá una matriz con los Z-Score por pares de categorías.
 
@@ -123,7 +112,7 @@ Al igual que en el anterior se obtendrá una matriz con los Z-Score por pares de
 
 \section{Índices de calidad}
 
-Con los coeficientes de interacción entre categorías de la anterior sección se puede obtener los llamados \textit{quality indices} o índices de calidad. Con estos se puede determinar la adecuación de un negocio de cierta categoría en una ubicación determinada. En el caso de Jensen se aplica el valor del logaritmo del coeficiente, es decir, $a_{ij} = log(M_{ij})$, mientras que en el caso de \textit{Permutation} y \textit{Rewiring} se utilizará el propio Z-Score para esas categorías, $a_{ij} = Z_{ij}$. 
+Con los coeficientes de interacción entre categorías de la anterior sección se puede obtener los llamados \textit{quality indices} o índices de calidad ~\cite{Ahedo2021,Jensen2006,RSVAJSSHJG}. Con estos se puede determinar la adecuación de un negocio de cierta categoría en una ubicación determinada. En el caso de Jensen se aplica el valor del logaritmo del coeficiente, es decir, $a_{ij} = log(M_{ij})$, mientras que en el caso de \textit{Permutation} y \textit{Rewiring} se utilizará el propio Z-Score para esas categorías, $a_{ij} = Z_{ij}$~\cite{Ahedo2021}. 
 
 \begin{equation*}
 	Q_i(x,y) \equiv \sum_\textit{j=1}^N a_{ij} (nei_{ij}(x,y) - \overline{nei_{ij}})
@@ -138,11 +127,11 @@ Con los coeficientes de interacción entre categorías de la anterior sección s
 	\item $\overline{nei_{ij}}$: Promedio de negocios vecinos con categoría $j$ sobre negocios con categoría $i$.
 \end{itemize}
 
-Con esto se obtendría la adecuación de una ubicación $(x,y)$ con la categoría $i$. Si se parte de un conjunto predefinido de categorías comerciales se puede encontrar el negocio más adecuado para una ubicación $(x,y)$ calculando los índices de calidad para todas las categorías, siendo el más apropiado aquel con mayor valor de $Q_i$.
+Con esto se obtendría la adecuación de una ubicación $(x,y)$ con la categoría $i$. Si se parte de un conjunto predefinido de categorías comerciales se puede encontrar el negocio más adecuado para una ubicación $(x,y)$ calculando los índices de calidad para todas las categorías, siendo el más apropiado aquel con mayor valor de $Q_i$ ~\cite{Ahedo2021,Jensen2006}.
 
 \subsection{Índices \textit{Raw}}
 
-Detrás de los índices de calidad de la sección anterior se encuentra la idea de que una ubicación que se asemeje al promedio de negocios reales de cierta categoría puede ser una buena ubicación para un nuevo negocio con dicha categoría propuesto por Jensen. Lo anterior se manifiesta al sustraer el valor promedio para cada categoría $\overline{nei_{ij}}$ en el cálculo de los índices de calidad. Por ello se proponen unos nuevos que no tienen en consideración los valores medios. Su cálculo es el siguiente:
+Detrás de los índices de calidad de la sección anterior se encuentra la idea de que una ubicación que se asemeje al promedio de negocios reales de cierta categoría puede ser una buena ubicación para un nuevo negocio con dicha categoría propuesto por Jensen~\cite{Jensen2006}. Lo anterior se manifiesta al sustraer el valor promedio para cada categoría $\overline{nei_{ij}}$ en el cálculo de los índices de calidad. Por ello se proponen unos nuevos que no tienen en consideración los valores medios~\cite{Ahedo2021}. Su cálculo es el siguiente:
 
 \begin{equation*}
 	Q_i(x,y) \equiv \sum_\textit{j=1}^N a_{ij}  (nei_{ij}(x,y))
@@ -150,7 +139,7 @@ Detrás de los índices de calidad de la sección anterior se encuentra la idea 
 
 \subsection{\textit{Mean Reciprocal Rank}}
 
-Los índices de calidad nos proporcionan una serie de categorías comerciales ordenadas en función de la adecuación de cada una. Para poder evaluar la eficiencia de cada índice se emplea la medida conocida como \textit{Mean Reciprocal Rank}. Esta se suele emplear en sistemas de recomendación para evaluar su rendimiento usando la posición que ocupa la categoría real sobre el \textit{ranking} provisto, en este caso, por los índices de calidad. Sigue la siguiente formula:
+Los índices de calidad nos proporcionan una serie de categorías comerciales ordenadas en función de la adecuación de cada una. Para poder evaluar la eficiencia de cada índice se emplea la medida conocida como \textit{Mean Reciprocal Rank}~\cite{MRR}. Esta se suele emplear en sistemas de recomendación para evaluar su rendimiento usando la posición que ocupa la categoría real sobre el \textit{ranking} provisto, en este caso, por los índices de calidad~\cite{Ahedo2021}. Sigue la siguiente formula:
 
 \begin{equation*}
 	MRR = \frac{1}{|Q|}  \sum_{i=1}^{|Q|} \frac{1}{rank_i}
@@ -164,19 +153,19 @@ Los índices de calidad nos proporcionan una serie de categorías comerciales or
 
 \subsection{Uso combinado de índices de calidad}
 
-Si bien el uso simple de los índices de calidad ya es suficiente para obtener recomendaciones, puede darse la situación en que estas difieran dependiendo del método utilizado para obtener los índices. Si bien podemos ver qué método es más eficaz utilizando el MRR y decantarnos por uno o por otro, puede que el motivo por el que difieran es debido a que cada método esté captando un aspecto distinto del problema. Para solventar eso se puede recurrir al empleo de un modelo de inteligencia artificial de clasificación para obtener recomendaciones usando todos los índices de calidad disponibles.
+Si bien el uso simple de los índices de calidad ya es suficiente para obtener recomendaciones, puede darse la situación en que estas difieran dependiendo del método utilizado para obtener los índices. Si bien podemos ver qué método es más eficaz utilizando el MRR y decantarnos por uno o por otro, puede que el motivo por el que difieran es debido a que cada método esté captando un aspecto distinto del problema. Para solventar eso se puede recurrir al empleo de un modelo de inteligencia artificial de clasificación para obtener recomendaciones usando todos los índices de calidad disponibles~\cite{Ahedo2021}.
 
 Para poder entrenar el modelo se debe contar primero con un conjunto de datos. Este lo podremos construir con una serie de ubicaciones de las que conozcamos su categoría real, siendo esta la etiqueta a predecir. El resto de atributos se corresponderán con los valores que los métodos proporcionan a cada categoría para las ubicaciones con categoría conocida.
 
 El modelo entrenado podrá realizar las funciones de sistema de recomendación, pudiendo a su vez ser evaluado usando el MRR.
 
-En este trabajo se empleará un \textit{Random Forest}, clasificador de la familia de los \textit{ensembles}. El uso de un modelo de esta familia es debido a las ventajas que estos poseen frente a los modelos simples, ofreciendo mejor rendimiento y versatilidad.
+En este trabajo se empleará un \textit{Random Forest} ~\cite{RF}, clasificador de la familia de los \textit{ensembles}. El uso de un modelo de esta familia es debido a las ventajas que estos poseen frente a los modelos simples, ofreciendo mejor rendimiento y versatilidad.
 
 \section{\textit{Transfer Learning}}
 
-El conocido como \textit{Transfer Learning} se trata de una técnica propia del aprendizaje automático que consiste en utilizar conocimiento obtenido previamente para resolver nuevos problemas similares. Esto permite mejorar el rendimiento ya que se cuentan con datos previos que pueden ser reutilizados.
+El conocido como \textit{Transfer Learning} ~\cite{TRANSFERLEARNING} se trata de una técnica propia del aprendizaje automático que consiste en utilizar conocimiento obtenido previamente para resolver nuevos problemas similares. Esto permite mejorar el rendimiento ya que se cuentan con datos previos que pueden ser reutilizados.
 
-En el caso de este trabajo el \textit{Transfer Learning} se puede aplicar de dos formas distintas:
+En el caso de este trabajo el \textit{Transfer Learning} se puede aplicar de dos formas distintas~\cite{Ahedo2021}:
 
 \begin{enumerate}
 	\item Utilizar datos provenientes de una ciudad para realizar recomendaciones sobre otra distinta. Para ello se requiere un modelo de inteligencia artificial, utilizando los índices de calidad previamente calculados tanto para la ciudad origen como destino.
