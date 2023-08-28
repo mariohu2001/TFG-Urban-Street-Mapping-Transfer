@@ -1,3 +1,58 @@
 \capitulo{6}{Trabajos relacionados}
 
-Este apartado sería parecido a un estado del arte de una tesis o tesina. En un trabajo final grado no parece obligada su presencia, aunque se puede dejar a juicio del tutor el incluir un pequeño resumen comentado de los trabajos y proyectos ya realizados en el campo del proyecto en curso. 
+\section{\textit{Knowledge Transfer in Commercial Feature Extraction for the Retail Store Location Problem}}
+
+
+Este artículo es la mayor inspiración detrás de este trabajo, puesto que tanto las técnicas que se han aplicado como la aproximación provienen de este. 
+
+Al igual que en este artículo, se ha trabajado con ciudades de Castilla y León, aunque no con todas, pese a que no era la intención inicial esta elección de ciudades. 
+
+Las principales diferencias con respecto lo realizado en este trabajo consisten en el origen de los datos y las categorías utilizadas. En el artículo los establecimientos comerciales son extraídos desde las Páginas Amarillas de 2017 y posteriormente geolocalizadas mediante APIs. En cuanto a categorías se utilizó 68 posibles valores definidos por \textit{North American Industry Classification for Small business} (NAICS).
+
+Aplicaron los 3 métodos expuestos anteriormente, incluido el \textit{Rewiring} que no se pudo realizar en este trabajo, además de combinarlos mediante \textit{Random Forest}. Obtuvieron los siguientes resultados a nivel local:
+
+\imagen{LocalPaper}{\textit{Mean Reciprocal Rank} por método y ciudad}{1}
+
+En cuanto a la transferencia puesto que contaban con más ciudades, podían utilizar más combinaciones para probar su rendimiento.
+
+\imagen{TransferPaper}{\textit{Mean Reciprocal Rank} al utilizar transferencia}{1}
+
+En contraste con lo realizado con este trabajo, parece que la inclusión de nuevas ubicaciones pertenecientes a categorías no contempladas por el NAICS ayuda a obtener mejores resultados.
+
+\section{\textit{Retail Store Location Selection Problem with Multiple Analytical Hierarchy Process of Decision Making an Application in Turkey}}
+
+Este artículo es un ejemplo de otra aproximación al problema de selección de ubicación distinta a la ciencia de redes. En este emplean lo llamado \textit{Analytical Hierarchy Process} (AHP). Este consiste en definir distintos componentes tanto objetivos como subjetivos y hacer una decisión multicriterio en base a estos. Define 15 criterios agrupados en 5 categorías:
+
+
+\begin{itemize}
+		\item 			(M) Costes  \begin{itemize}
+		\item \textbf{M1}: Coste del alquiler.
+		\item \textbf{M2}: Coste del mobiliario.
+		\item \textbf{M3}: Tiempos y condiciones de contratación.
+	\end{itemize}
+	\item  			(R) Competencia  \begin{itemize}
+		\item \textbf{R1}: Poder de la competencia.
+		\item \textbf{R2}: Número de competidores.
+		\item \textbf{R3}: Distancia a la competencia.	
+	\end{itemize} 
+		\item 					(T) Densidad de tráfico  \begin{itemize}
+			\item \textbf{T1}: Tráfico de vehículos.
+			\item \textbf{T2}: Tráfico de viajeros.
+		\end{itemize}
+	\item 			(F) Característica físicas  \begin{itemize}
+		\item \textbf{F1}: Tamaño de la tienda.
+		\item \textbf{F2}: Aparcamientos.
+		\item \textbf{F3}: Visibilidad.
+	\end{itemize}
+	\item 			(Y) Localización  \begin{itemize}
+		\item \textbf{Y1}: Sobre calle principal.
+		\item \textbf{Y2}: En centro comercial.
+		\item \textbf{Y3}: Cercano a centros de negocio.
+		\item \textbf{Y4}: Cercano a áreas residenciales y sociales.
+	\end{itemize}
+\end{itemize}
+
+Si bien este artículo buscaba encontrar las mejores ubicaciones para un determinado negocio en 3 asentamientos, y por tanto, tomando una aproximación distinta a lo realizado en este proyecto, se puede apreciar la gran cantidad de información necesaria para poder estimar la mejor ubicación. Este problema no se presenta en nuestro proyecto, puesto que contando únicamente con las ubicaciones comerciales es capaz de inferir la adecuación de una localización a varias categorías comerciales, no solamente a una.
+
+
+
