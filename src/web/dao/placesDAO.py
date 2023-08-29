@@ -1,5 +1,5 @@
 from neo4j import Driver, Result
-from .base import baseDAO
+from .baseDAO import baseDAO
 
 
 class PlaceDAO(baseDAO):

@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import set_access_cookies, unset_access_cookies
-from ..dao.place import PlaceDAO
-from ..dao.category import CategoryDAO
+from ..dao.placesDAO import PlaceDAO
+from ..dao.categoryDAO import CategoryDAO
 from .. import utils
 import json
 

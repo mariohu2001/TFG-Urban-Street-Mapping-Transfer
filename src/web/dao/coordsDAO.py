@@ -1,7 +1,7 @@
 from neo4j import Driver, Result, Transaction
 from operaciones_bd.common_queries import get_categories
 
-from .base import baseDAO
+from .baseDAO import baseDAO
 
 
 def create_matrix(rows: list) -> dict:

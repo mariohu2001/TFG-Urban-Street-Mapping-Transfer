@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import current_user, set_access_cookies, unset_access_cookies, get_current_user
-from ...dao.auth import AuthDAO
-from ...dao.users import UserDAO
+from ...dao.authDAO import AuthDAO
+from ...dao.usersDAO import UserDAO
 from ...forms import LoginForm, SignUpForm
 
 accounts_routes = Blueprint("accounts", __name__, url_prefix='/')

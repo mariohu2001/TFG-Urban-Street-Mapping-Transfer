@@ -7,7 +7,7 @@ from flask_jwt_extended import JWTManager, jwt_required, get_jwt, get_jwt_identi
 from sklearn.ensemble import RandomForestClassifier
 from .driver_neo4j import init_neo4j
 
-from .dao.place import PlaceDAO
+from .dao.placesDAO import PlaceDAO
 
 from .routes.views.accounts import accounts_routes
 from .routes.places import places_routes
