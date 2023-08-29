@@ -1,9 +1,89 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
-
+En este apartado se desarrollará sobre la estructura del proyecto así como las partes que lo componen y la función de cada una. El código fuente de este trabajo puede encontrarse en el siguiente repositorio de GitHub \url{https://github.com/mariohu2001/TFG-Urban-Street-Mapping-Transfer}.
 \section{Estructura de directorios}
 
+El código fuente que compone el proyecto está completamente contenido dentro de la carpeta \texttt{/src}.
+
+\subsection{\texttt{/web}}
+Esta carpeta contiene todo el código necesario para el funcionamiento de la aplicación web.
+
+\subsubsection{\texttt{/web/dao}}
+Este directorio contiene los conocidos como DAOs (\textit{Data Access Object}). Los ficheros contenidos dentro definen clases que permiten acceder y modificar de una forma cómoda los datos contenidos dentro de Neo4j. En los métodos de cada DAO se utilizan sentencias de Cypher, el lenguaje de consultas de Neo4j para realizar la información que deseamos.
+
+Tiene los siguientes ficheros:
+\begin{itemize}
+	\item \texttt{baseDAO.py}: Clase base de la que heredan el resto de DAOs.
+	\item \texttt{authDAO.py}: DAO encargado de la autenticación de usuarios.
+	\item \texttt{categoryDAO.py}: DAO encargado de la obtención y modificación de la información de las categorías.
+	\item \texttt{coordsDAO.py}: Este DAO está centrado en la obtención de índices de calidad dadas unas coordenadas. Dada la complejidad de esto último se estimó encapsular la lógica en esta clase.
+	\item \texttt{placesDAO.py}: Este fichero contiene el DAO orientado a los lugares almacenados en la base de datos. Posee funciones para listar en base a ciudad o categoría, además de algunas para calcular índices de calidad.
+	\item \texttt{usersDAO.py}: En esta clase está contenida la lógica de creación de usuarios así como la obtención de datos de estos.
+\end{itemize}
+
+\subsubsection{\texttt{/web/models}}
+Este directorio contiene los distintos modelos de \textit{Random Forest} serializados y comprimidos en ficheros individuales para cada uno. Posee dos subdirectorios, \texttt{/local} y \texttt{/transfer}, siendo el primero para los modelos a nivel local y el segundo para los modelos usados para hacer transferencia.
+
+En el caso de \texttt{/local}, los modelos están almacenados siguiente la convención de nombres \texttt{/\textit{Ciudad}.gz}. Esta debe respetarse para poder cargar adecuadamente los ficheros.
+
+En cuanto a \texttt{/transfer}, sigue una convención similar al anterior, siendo esta \texttt{/\textit{CiudadOrigen}-\textit{CiudadDestino}.gz}. Esto debe tenerse en cuenta para cargar los modelos adecuadamente.
+
+\subsubsection{\texttt{/web/routes}}
+Este directorio contiene las distintas rutas de la API definidas con \textit{Blueprints} de Flask, estos permiten definir rutas más allá del fichero donde se define la aplicación de Flask. Aquí las rutas están agrupadas en módulos en base al ámbito al que pertenezcan.
+
+Existe un subdirectorio de nombre \texttt{views} que contiene todas aquellas rutas que como respuesta devuelven una plantilla HTML. A su vez estas están agrupadas en los siguientes módulos:
+
+\begin{itemize}
+	\item \texttt{/account.py}: Contiene los \textit{endpoints} relacionados a usuarios, inicio de sesión y registro.
+	\item \texttt{/common.py}: Este módulo contiene los \textit{endpoints} generales o los que no encajan en ningún otro módulo. En este caso \textit{home} y la visualización de la red de categorías.
+	\item \texttt{/maps.py}: Este fichero contiene todos aquellos \textit{endpoints} que contengan una visualización de un mapa en la plantilla devuelta como respuesta.
+\end{itemize}
+
+Los siguientes módulos definen \textit{endpoints} que no tienen una plantilla como respuesta. Estos suelen usar los métodos HTTP \textit{GET} y \textit{POST} ; tienen la función de obtener determinados datos del lado del servidor o procesar algunos incluidos en el cuerpo de la petición.
+
+Los \textit{endpoints} están agrupados en 2 módulos:
+\begin{itemize}
+	\item \texttt{/category.py}: Define rutas con relación a las categorías, pudiendo devolver datos en función de categoría o ciudad.
+	\item \texttt{/places.py}: Especifica los \textit{endpoints} relacionados con los lugares almacenados en la base de datos. Estos consisten en la obtención de ubicaciones en base a categoría o ciudad, así como los índices de calidad y recomendaciones de categorías.
+\end{itemize}
+
+\subsubsection{\texttt{/web/static}}
+Este directorio contiene todo lo relacionado con el procesamiento por parte del navegador, o es decir, del cliente. El nombre es debido a que se trata de una convención para este el directorio que contiene este tipo de ficheros.
+
+Este contiene 4 subdirectorios:
+\begin{itemize}
+	\item \texttt{/img}: Contiene los archivos de imagen utilizados en la página web.
+	\item \texttt{/js}: En este directorio se guardan todos los scripts de JavaScript utilizados en las distintas plantillas HTML.
+	\item \texttt{/styles}: Este directorio contiene todos los ficheros con hojas de estilo CSS utilizadas por las plantillas HTML.
+	\item \texttt{/templates}: Contiene todos los ficheros HTML utilizados por la aplicación web. A su vez contiene un subdirectorio de nombre \texttt{/macros} donde se encuentran definidas algunas \textit{macros} propias del motor de plantillas Jinja2.
+\end{itemize} 
+
+\subsubsection{Otros módulos}
+Además de los ficheros contenidos en directorios existen algunos que cuelgan directamente de \texttt{/web}. Estos son los siguientes:
+
+\begin{itemize}
+	\item \texttt{\_\_init\_\_.py}: Este ficheros, con un nombre que se suele utilizar para definir módulos en Python, contiene la creación de la aplicación Flask así como su configuración.
+	\item \texttt{authentication.py}: Fichero que define un decorador para restringir el acceso a determinados \textit{endpoints} si no se posee un determinado rol.
+	\item \texttt{driver\_neo4j.py}: Contiene la inicialización del \textit{driver} de Neo4j para la aplicación web.
+	\item \texttt{forms.py}: Contiene la definición de formularios a utilizar en las plantillas usando la librería Flask-WTF.
+	\item \texttt{quality\_indices.py}: Módulo que contiene métodos auxiliares para calcular los índices de calidad.
+	\item \texttt{utils.py}: Fichero de propósito general que define utilidades varias.
+\end{itemize}
+
+\subsection{\texttt{/config}}
+Esta carpeta tiene el propósito de guardar los distintos ficheros de configuración que se utilicen en el programa. Estos están en formato \texttt{.ini}, formato normalmente utilizado para estas labores. Actualmente solo
+cuenta con un fichero, pero en caso de futuros desarrollos que requieran de especificar más configuraciones estas pueden ser almacenadas aquí.
+
+\subsection{\texttt{/models}}
+En este directorio se encuentran unos ficheros en formato \textit{Jupyter Notebook} utilizados para la creación de los modelos de \textit{Random Forest}. Además se cuenta con el \textit{dataset} requerido para el entrenamiento de los modelos en el subdirectorio \texttt{/models/dataset}. Los ficheros de este están en formato JSON, puesto que es el más adecuado para almacenar estos datos. Cada ciudad cuenta con un fichero.
+
+\subsection{\texttt{/operaciones\_bbdd}}
+En este directorio se encuentran todos los \textit{scripts} utilizados para la carga de ubicaciones en la base de datos, así como distintas operaciones de uso más general que no son utilizadas en la aplicación web. Dado su número haré mención de aquellos ficheros más importantes:
+
+\begin{itemize}
+	\item \texttt{assign\_quality\_indices.py}: \textit{Script} utilizado
+\end{itemize}
 \section{Manual del programador}
 
 \section{Compilación, instalación y ejecución del proyecto}
