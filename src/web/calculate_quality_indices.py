@@ -222,7 +222,6 @@ def get_local_top_rf(city: str, quality_indices, model: RandomForestClassifier):
         predictions = model.predict_proba(df)
 
         cat_prob = []
-        print(model.classes_, type(model.classes_))
         for c, p in zip(model.classes_.flatten(),predictions.flatten()):
 
             cat_prob.append((p,c))
@@ -230,15 +229,16 @@ def get_local_top_rf(city: str, quality_indices, model: RandomForestClassifier):
         tops[number] = [x[1]
                         for x in sorted(cat_prob, key=lambda x: x[0], reverse=True)]
 
-    print(tops, flush=True)
     return tops
 
 
 def get_tops(coords: dict, places: dict, city: str, driver: Driver, model: RandomForestClassifier):
     quality_indices = get_quality_indices(coords, places, city, driver)
 
+
     q_places = quality_indices["places"]
     q_coords = quality_indices["coords"]
+
 
     with ProcessPoolExecutor() as pool:
         nodes_f = pool.submit(calculate_tops, q_places)
@@ -254,8 +254,6 @@ def get_tops(coords: dict, places: dict, city: str, driver: Driver, model: Rando
         rfp = rf_places.result()
         rfc = rf_coords.result()
 
-        print(rfc, rfp, flush=True)
-
         for k, v in rfp.items():
             places_tops[k]["random_forest"] = v
 
@@ -263,5 +261,6 @@ def get_tops(coords: dict, places: dict, city: str, driver: Driver, model: Rando
             coords_tops[k]["random_forest"] = v
 
         ret = {"places": places_tops, "coords":  coords_tops}
-        print(ret)
         return ret
+
+

@@ -36,6 +36,7 @@ def get_categories_by_city(city: str):
 
     return jsonify(categories)
 
+
 @categories_routes.route("/categories/<city1>/<city2>")
 def get_categories_intersection(city1: str, city2: str):
     DAO = CategoryDAO(current_app.driver)
@@ -53,12 +54,3 @@ def get_category_net_components(city: str):
     edges = dao.get_visjs_edges(city)
 
     return jsonify({"nodes": nodes, "edges": edges})
-
-
-@categories_routes.route("/category_net", methods=["GET"])
-def get_city_category_net():
-    dao = PlaceDAO(current_app.driver)
-
-    cities = dao.get_cities()
-
-    return render_template("category_net.html", cities=cities, usuario=session.get("current_user"))

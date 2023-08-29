@@ -3,7 +3,8 @@ from sklearn.ensemble import RandomForestClassifier
 from OSMPythonTools.overpass import Overpass, OverpassResult, overpassQueryBuilder
 from OSMPythonTools.nominatim import Nominatim, NominatimResult
 from neo4j import Driver
-from flask import current_app
+import joblib
+
 
 def get_city_coords(city):
     nominatim = Nominatim()
@@ -20,6 +21,39 @@ def get_city_coords(city):
 
     return {"lat": node.lat(), "lon": node.lon()}
 
+
+def get_local_rf_model(city: str) -> RandomForestClassifier:
+    models_path = f"web/models/local/{city}.gz"
+
+    model: RandomForestClassifier = joblib.load(models_path)
+
+    return model
+
+
+def get_transfer_rf_model(source_city: str, target_city: str) -> RandomForestClassifier:
+    model_path: str = f"./models/transfer/{source_city}-{target_city}.gz"
+
+    model: RandomForestClassifier = joblib.load(model_path)
+
+    return model
+
+
+def transform_transfer_dataset(quality_indices, model: RandomForestClassifier) -> pd.DataFrame:
+
+    # final_data = []
+
+    # for data in quality_indices:
+
+    #     data["QualityIndices"] = {
+    #         k: v for k, v in data["QualityIndices"].items() if k in model.classes_}
+        
+    #     final_data.append(data)
+    #     model.
+
+    df =  pd.json_normalize({"QualityIndices": quality_indices})
+    df_final_data : pd.DataFrame = df[model.feature_names_in_]
+
+    return df_final_data
 
 # def get_top_city_random_forest(city:str, quality_indices: dict):
 
@@ -51,7 +85,3 @@ def get_city_coords(city):
 
 
 #     return [rank[0] for rank in ranking ]
-
-
-
-

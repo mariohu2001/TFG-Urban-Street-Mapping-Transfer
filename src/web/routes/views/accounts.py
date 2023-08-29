@@ -1,8 +1,8 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session
 from flask_jwt_extended import current_user, set_access_cookies, unset_access_cookies, get_current_user
-from ..dao.auth import AuthDAO
-from ..dao.users import UserDAO
-from ..forms import LoginForm, SignUpForm
+from ...dao.auth import AuthDAO
+from ...dao.users import UserDAO
+from ...forms import LoginForm, SignUpForm
 
 accounts_routes = Blueprint("accounts", __name__, url_prefix='/')
 
@@ -25,7 +25,7 @@ def login():
         if user is False:
             flash("Usuario o contraseña incorrectos", category="error")
             return render_template("login.html", form=login_form)
-        response = redirect(url_for("home"))
+        response = redirect(url_for("common.home"))
         set_access_cookies(response, user)
         session["current_user"] = user_name
         return response
@@ -37,7 +37,7 @@ def login():
 @accounts_routes.route("/logout", methods=["POST"])
 def logout():
     session["current_user"] = None
-    response = redirect(url_for("home"))
+    response = redirect(url_for("common.home"))
     unset_access_cookies(response)
     return response
 

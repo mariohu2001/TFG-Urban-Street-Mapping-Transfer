@@ -4,17 +4,19 @@ import joblib
 from flask import Flask, jsonify, render_template, request, url_for, redirect, session
 from configparser import ConfigParser
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt, get_jwt_identity
+from sklearn.ensemble import RandomForestClassifier
 from .driver_neo4j import init_neo4j
 
 from .dao.place import PlaceDAO
 
-from .routes.accounts import accounts_routes
+from .routes.views.accounts import accounts_routes
 from .routes.places import places_routes
 from .routes.category import categories_routes
 from .routes.authentication import role_required
+from .routes.views.common import common_routes
+from .routes.views.maps import map_routes
 
-
-from .utils import get_city_coords
+from .utils import get_city_coords, get_local_rf_model, get_transfer_rf_model
 from .calculate_quality_indices import get_quality_indices, get_tops
 
 from sklearn.decomposition import PCA
@@ -59,91 +61,19 @@ def create_app():
             app.config.get('NEO4J_PASSWORD'),
         )
 
-        print(">>> Cargando modelos")
-        app.local_models = joblib.load("web/models/local/local.gz")
-        app.transfer_model = joblib.load("web/models/transfer/transfer.gz")
-        print(">>> Finalizado cargando modelos")
         jwt = JWTManager(app)
 
     app.register_blueprint(accounts_routes)
     app.register_blueprint(places_routes)
     app.register_blueprint(categories_routes)
-
-    @app.route('/')
-    def index():
-        return redirect(url_for('home'))
-
-    @app.route('/home')
-    def home():
-        print(session.get("current_user"))
-        return render_template("home.html", usuario=session.get("current_user"))
+    app.register_blueprint(common_routes)
+    app.register_blueprint(map_routes)
 
     @app.route('/test')
     def test():
 
         dao = PlaceDAO(app.driver)
         return jsonify(dao.get_quality_index_permutation([2, 3], "Bar", "Ciudad"), usuario=session.get("current_user"))
-
-    @app.route('/recomendation/<city>', methods=["GET", "POST"])
-    def recomendation(city: str):
-        places: list = [int(place) for place in request.args.getlist('place')]
-
-        coords: list = [tuple(coord.split(":"))
-                        for coord in request.args.getlist('coords')]
-        dao = PlaceDAO(app.driver)
-
-        nodos = {}
-
-        marker_index = 1
-        for p in places:
-            nodos[marker_index] = dao.get_by_id(p)
-            marker_index += 1
-
-        coords_markers = {}
-        for c in coords:
-            coords_markers[marker_index] = {
-                "lat": float(c[0]),
-                "lon": float(c[1]),
-                "category": "Coords",
-                "area": city
-            }
-            marker_index += 1
-
-        city_coords = get_city_coords(city)
-
-        return render_template("recomendations.html", usuario=session.get("current_user"),
-                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
-                                   city_coords.values()),
-                               metrics=["permutation", "jensen"])
-
-    @app.route('/top/<city>')
-    def best_category(city: str):
-        places: list = [int(place) for place in request.args.getlist('place')]
-
-        coords: list = [tuple(coord.split(":"))
-                        for coord in request.args.getlist('coords')]
-        dao = PlaceDAO(app.driver)
-
-        nodos = {}
-        coords_markers = {}
-        marker_index = 1
-
-        for p in places:
-            nodos[marker_index] = (dao.get_by_id(p))
-            marker_index += 1
-        for c in coords:
-            coords_markers[marker_index] = {
-                "lat": float(c[0]),
-                "lon": float(c[1]),
-                "category": "Coords",
-                "area": city
-            }
-            marker_index += 1
-            
-        city_coords = get_city_coords(city)
-        return render_template("topCategories.html",usuario=session.get("current_user"),
-                               nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
-                                   city_coords.values()))
 
     @app.route('/tops', methods=['POST'])
     def get_places_tops():
@@ -152,47 +82,26 @@ def create_app():
         places = body.get("places")
         coords = body.get("coords")
         city = body.get("city")
-
-        tops = get_tops(coords, places, city, app.driver, app.local_models[city])
+        model: RandomForestClassifier = get_local_rf_model(city)
+        tops = get_tops(coords, places, city, app.driver, model)
+        del (model)
         return jsonify(tops)
 
-    @app.route('/map')
-    def map():
+    @app.route('/tops/transfer', methods=['POST'])
+    def get_transfer_tops():
+        body = request.get_json()
 
-        placesDAO = PlaceDAO(app.driver)
+        source_city = body.get("source")
+        target_city = body.get("target")
+        places = body.get("places")
+        coords = body.get("coords")
+        model: RandomForestClassifier = get_transfer_rf_model(
+            source_city, target_city)
 
-        ciudades = placesDAO.get_cities()
+        tops = get_tops(coords, places, target_city, app.driver, model)
+        del (model)
 
-        return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
-
-    @app.route('/transfer/<city>')
-    def transfer_recomendation(city: str):
-
-        places: list = [int(place) for place in request.args.getlist('place')]
-
-        coords: list = [tuple(coord.split(":"))
-                        for coord in request.args.getlist('coords')]
-        dao = PlaceDAO(app.driver)
-
-        nodos = []
-
-        for p in places:
-            nodos.append(dao.get_by_id(p))
-
-        coords_markers = []
-        for c in coords:
-            coords_markers.append({
-                "lat": float(c[0]),
-                "lon": float(c[1]),
-                "category": "Coords",
-                "area": city
-            })
-
-        city_coords = get_city_coords(city)
-        cities = dao.get_cities()
-        cities.remove(city)
-        return render_template("transfer.html", nodos=nodos, city=city, cities=cities,
-                               coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))
+        return jsonify(tops)
 
     @app.route('/pca', methods=["POST"])
     def quality_indices_pca():

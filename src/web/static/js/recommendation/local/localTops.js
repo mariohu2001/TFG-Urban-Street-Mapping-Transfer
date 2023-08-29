@@ -1,28 +1,44 @@
 var calculatedTops = false
 
-document.addEventListener('DOMContentLoaded', getPlacesTops())
-
 var tops_button = document.getElementById('tops_calc')
 var topsTable = document.getElementById('tops-table')
 var method_dropdopwn = document.getElementById('method-dropdown')
+document.addEventListener('DOMContentLoaded', getPlacesTops())
+
 
 tops_button.addEventListener('click', refreshTopTable)
+method_dropdopwn.addEventListener('change', () =>
+{
+    if (method_dropdopwn.value != ""){
+        tops_button.disabled = false
+    }
+})
 
 function getPlacesTops() {
+
+    method_dropdopwn.selectedIndex = 0
+    method_dropdopwn.disabled = true
+
     if (calculatedTops) {
         return
     }
+    tops_button.disabled = false
+
+    if (method_dropdopwn.value === ""){
+        tops_button.disabled = true
+    }
+
 
     let nodesIds = []
     Object.values(nodesMarkers).forEach(node => {
         nodesIds.push({"id":node.id, "number": node.number})
     })
-
+    
     let coords = []
     Object.values(coordsMarkers).forEach(coordM => {
         coords.push({ "lat": coordM.lat, "lon": coordM.lon , "number": coordM.number})
     })
-
+    
     fetch("/tops", {
         method: "POST",
         headers: {
@@ -35,25 +51,26 @@ function getPlacesTops() {
         })
     }).then((response) => response.json())
     .then((data) => {
-
-
+        
+        
         Object.entries(data["places"]).forEach(([k,v]) => {
-
+            
             Object.entries(v).forEach(([method,top]) => {
                 nodesMarkers[k].assignTopCategories(method, top)
             })
         })
-
+        
         Object.entries(data["coords"]).forEach(([k,v]) => {
-
+            
             Object.entries(v).forEach(([method,top]) => {
                 coordsMarkers[k].assignTopCategories(method, top)
             })
         })
-
-
+        
+        
+        method_dropdopwn.disabled = false
     })
-
+    
 }
 
 
@@ -66,7 +83,7 @@ function refreshTopTable(){
     let tbody = ""
     
     allMarkers.forEach(mark => {
-        console.log("a")
+
         tbody += mark.getTableRow(method_dropdopwn.value)
     })
 
