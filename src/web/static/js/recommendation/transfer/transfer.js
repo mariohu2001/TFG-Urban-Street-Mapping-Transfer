@@ -1,46 +1,115 @@
-const categoryDropdown = document.getElementById("category")
 const cityDropdown = document.getElementById("city")
 const metricsButton = document.getElementById("metrics_button")
+var method_dropdopwn = document.getElementById('method-dropdown')
+var topsTable = document.getElementById('tops-table')
+
+var calculatedTops = false
 
 
+window.addEventListener("popstate", ()=> {
+    console.log("aaaaaaaaaaaaaaaaaaaa")
+    window.location.reload()
+})
 
 
 cityDropdown.addEventListener('change',() => {
     var selectedCity = cityDropdown.value
+    
+    metrics_button.disabled = false
+    method_dropdopwn.selectedIndex = 0
+    method_dropdopwn.disabled = true
+})
 
-    fetch("/categories/" + city+"/"+selectedCity).then(response => {
-        if (!response.ok) {
-            throw new Error("Error en la respuesta de la petición.");
-        }
-        return response.json();
-    }).then(data => changeCategoriesDropdown(data))
+method_dropdopwn.addEventListener('change', ()=>{
+    refreshTopTable()
+    
+})
+
+metricsButton.addEventListener('click', ()=>{
+    metricsButton.disabled = true
+    method_dropdopwn.disabled = true
+    getTransferPlacesTops()
+
 })
 
 
-metricsButton.addEventListener('click', async function(){
-    await updateIndicesFullTable()
-    fetch('/pca', {
+
+
+function refreshTopTable(){
+    while (topsTable.tBodies[0].rows.length > 0){
+        topsTable.tBodies[0].deleteRow(0)
+    }
+    
+    let tbody = ""
+    
+    allMarkers.forEach(mark => {
+        
+        tbody += mark.getTableRow(method_dropdopwn.value)
+    })
+    
+    topsTable.tBodies[0].innerHTML = tbody
+}
+
+
+function getTransferPlacesTops(){
+
+    method_dropdopwn.selectedIndex = 0
+    method_dropdopwn.disabled = true
+
+    if (calculatedTops) {
+        return
+    }
+    
+    
+    
+    let nodesIds = []
+    Object.values(nodesMarkers).forEach(node => {
+        nodesIds.push({"id":node.id, "number": node.number})
+    })
+    
+    let coords = []
+    Object.values(coordsMarkers).forEach(coordM => {
+        coords.push({ "lat": coordM.lat, "lon": coordM.lon , "number": coordM.number})
+    })
+    
+    fetch('/tops/transfer', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(valuesTable)
-    }).then(
-        console.log(JSON.stringify(valuesTable))
-    )
-
-})
-
-
-
-function changeCategoriesDropdown(categories) {
-    while (categoryDropdown.options.length > 1) {
-        categoryDropdown.options.remove(1);
-    }
-    categories.forEach(element => {
-        categoryDropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
-    });
+        body: JSON.stringify({
+            "target": city,
+            "source": cityDropdown.value,
+            "places": nodesIds,
+            "coords": coords
+        })
+    }).then((response) => response.json())
+    .then((data) => {
+        
+        
+        Object.entries(data["places"]).forEach(([k,v]) => {
+            
+            Object.entries(v).forEach(([method,top]) => {
+                nodesMarkers[k].assignTopCategories(method, top)
+            })
+        })
+        
+        Object.entries(data["coords"]).forEach(([k,v]) => {
+            
+            Object.entries(v).forEach(([method,top]) => {
+                coordsMarkers[k].assignTopCategories(method, top)
+            })
+        })
+        
+        
+        method_dropdopwn.disabled = false
+        metricsButton.disabled= false
+        
+    })
+    
 }
+
+
 
 
 

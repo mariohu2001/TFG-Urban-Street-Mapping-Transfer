@@ -1,16 +1,16 @@
 var calculatedTops = false
 
-var tops_button = document.getElementById('tops_calc')
+var metrics_button = document.getElementById('tops_calc')
 var topsTable = document.getElementById('tops-table')
 var method_dropdopwn = document.getElementById('method-dropdown')
 document.addEventListener('DOMContentLoaded', getPlacesTops())
 
 
-tops_button.addEventListener('click', refreshTopTable)
+metrics_button.addEventListener('click', refreshTopTable)
 method_dropdopwn.addEventListener('change', () =>
 {
     if (method_dropdopwn.value != ""){
-        tops_button.disabled = false
+        metrics_button.disabled = false
     }
 })
 
@@ -22,10 +22,10 @@ function getPlacesTops() {
     if (calculatedTops) {
         return
     }
-    tops_button.disabled = false
+    metrics_button.disabled = false
 
     if (method_dropdopwn.value === ""){
-        tops_button.disabled = true
+        metrics_button.disabled = true
     }
 
 

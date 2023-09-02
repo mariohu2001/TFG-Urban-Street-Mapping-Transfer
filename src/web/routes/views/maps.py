@@ -87,19 +87,21 @@ def transfer_recomendation(city: str):
                     for coord in request.args.getlist('coords')]
     dao = PlaceDAO(current_app.driver)
 
-    nodos = []
+    nodos = {}
+    coords_markers = {}
+    marker_index = 1
 
     for p in places:
-        nodos.append(dao.get_by_id(p))
-
-    coords_markers = []
+        nodos[marker_index] = (dao.get_by_id(p))
+        marker_index += 1
     for c in coords:
-        coords_markers.append({
+        coords_markers[marker_index] = {
             "lat": float(c[0]),
             "lon": float(c[1]),
             "category": "Coords",
             "area": city
-        })
+        }
+        marker_index += 1
 
     city_coords = get_city_coords(city)
     cities = dao.get_cities()
