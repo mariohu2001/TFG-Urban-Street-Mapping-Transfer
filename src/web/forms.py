@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, validators, EmailField
 
 USERNAME_LENGTH = (2, 10)
-PASSWORD_LENGTH = (5, 30)
+PASSWORD_LENGTH = (4, 30)
 
 
 class LoginForm(FlaskForm):
