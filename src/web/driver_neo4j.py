@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase, Driver, Record
 from flask import current_app
 import bcrypt
-
+import time
 
 def init_neo4j(uri: str, username: str, password: str) -> Driver:
 
@@ -13,8 +13,17 @@ def init_neo4j(uri: str, username: str, password: str) -> Driver:
         "utf8"), bcrypt.gensalt()).decode('utf8')
 
     # Comprobamos la conectividad con la base de datos
-    current_app.driver.verify_connectivity()
+    
 
+
+    while True:
+        try:
+            current_app.driver.verify_connectivity()
+            break
+        except Exception as ex:
+            print("Intentando conectar a la base de datos...")
+            time.sleep(5)
+    
     # Creamos el usuario admin de la web
     with current_app.driver.session() as session:
         session.run("""

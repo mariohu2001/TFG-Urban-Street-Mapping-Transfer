@@ -1,5 +1,5 @@
 from neo4j import Driver, Result, Transaction
-from operaciones_bd.common_queries import get_categories
+from operaciones_bbdd.common_queries import get_categories
 
 from .baseDAO import baseDAO
 

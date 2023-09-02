@@ -1,0 +1,14 @@
+FROM neo4j:5.11
+
+ENV NEO4J_AUTH=neo4j/UrbanStreetMappingTransfer
+
+COPY ./neo4j.dump /var/lib/neo4j/import/
+# Opcional: Establece una contraseña para el usuario neo4j
+RUN neo4j-admin database load --from-path=./import neo4j
+# RUN neo4j-admin dbms set-default-admin neo4j
+# RUN neo4j-admin dbms set-initial-password UrbanStreetMappingTransfer
+
+
+ENV NEO4_PLUGINS=\[\"apoc\"\]
+
+EXPOSE 7687 7474
