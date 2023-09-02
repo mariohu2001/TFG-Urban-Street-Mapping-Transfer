@@ -31,8 +31,7 @@ def get_local_rf_model(city: str) -> RandomForestClassifier:
 
 
 def get_transfer_rf_model(source_city: str, target_city: str) -> RandomForestClassifier:
-    model_path: str = f"./models/transfer/{source_city}-{target_city}.gz"
-
+    model_path: str = f"web/models/transfer/{source_city}-{target_city}.gz"
     model: RandomForestClassifier = joblib.load(model_path)
 
     return model
