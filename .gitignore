@@ -337,3 +337,5 @@ Sim_Results/
 *.ini
 *.csv
 data/
+
+src/models/dataset/*
