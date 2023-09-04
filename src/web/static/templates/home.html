@@ -1,13 +1,35 @@
 {% extends "./base.html" %}
 
+{% block head %}
+<link rel="preload" href="img/map.svg" as="image">
+<link rel="preload" href="img/markerlogo.svg" as="image">
+
+{% endblock %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="h-100 w-100 d-flex align-items-center justify-content-center">
-    <div class="d-flex flex-row border p-4 align-items-center" style="background-color: beige; width: 75%; height: 75%;">
-        <div style="height: 250px; width: 250px; background-color: aqua;"></div>
-        <div style="flex-grow: 1; background-color: gray;">fasfdasd</div>
+<div class="h-100 w-100 d-flex align-items-center justify-content-center" style="background-image: url('img/map.svg');">
+    <div class="my-5 align-items-center justify-content-center w-75">
+        <div class="row d-flex align-items-center justify-content-center">
+            <img src="img/markerlogo.svg" style="height: 342px; width: 342px;">
+        </div>
+        <div class="row g-0 border border-dark-subtle rounded-4 border-3" style="background-color: beige;">
+            <p style="text-justify: auto; padding: 10px;">
+                Urban Street Mapping es un proyecto que pretende utilizar la aplicación OpenStreetMap para extraer
+                tanto la categoría comercial de los distintos establecimientos en distintas ciudades. Para recoger
+                esta
+                información (así como la geolocalización de los distintos puntos), se utilizará la API de
+                OpenStreetMap. La explotación de los datos consistirá en la creación de las redes de
+                interacción entre los distintos elementos (locales comerciales clasificados por categorías y Puntos
+                de Interés) en base a una (o más) de las técnicas de disponibles en la literatura científica para
+                tal fin. El output esperado será de una herramienta que nos permita realizar recomendaciones de
+                localización para futuros negocios teniendo en cuenta el aprendizaje obtenido de las redes de
+                interacción.
+            </p>
+        </div>
     </div>
+</div>
 
 </div>
 {% endblock %}

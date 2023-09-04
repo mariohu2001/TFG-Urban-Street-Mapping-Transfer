@@ -57,7 +57,7 @@ class CategoryDAO(baseDAO):
         cypher_query = """
         MATCH (n:Category)-[r:Rel]-()
         where n.city = $city
-        return id(n) as id, replace(n.name,"_"," ") as label, sum(r.real_value) as value, toString(n.n_nodes) + " nodes" as title,
+        return id(n) as id, replace(n.name,"_"," ") as label, sum(r.real_value) as value, toString(n.n_nodes) + " nodos" as title,
         n.type as group
         """
 

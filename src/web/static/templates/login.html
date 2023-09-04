@@ -23,11 +23,11 @@
       <form method="POST" action="/login"class="d-flex-col justify-content-center align-items-center" >
         {{ form.csrf_token }}
         <div class="mb-3 text-center">
-          <p>{{ form.username.label }}</p>
+          <h3>Usuario</h3>
           {{ form.username }}
         </div>
         <div class="mb-3 text-center">
-          <p>{{ form.password.label }}</p>
+          <h3>Contraseña</h3>
           {{ form.password }}
         </div>
         <!-- 2 column grid layout for inline styling -->

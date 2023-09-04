@@ -76,7 +76,6 @@ def create_app():
     def auradb_maintain():
         driver : Driver = app.driver
         while True:
-            time.sleep(random.randint(86400,172800))
             with driver.session() as session:
                 res : Result = session.run("""
             MATCH (u:User) return {
@@ -87,6 +86,7 @@ def create_app():
                                            } as prop""")
                 for prop in res.value("prop"):
                         print(prop, flush=True)
+            time.sleep(random.randint(86400,172800))
 
     auradb_thread = threading.Thread(target=auradb_maintain)
     auradb_thread.daemon=True

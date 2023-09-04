@@ -34,9 +34,13 @@ def login():
 
 
 
-@accounts_routes.route("/logout", methods=["POST"])
+@accounts_routes.route("/logout", methods=["GET","POST"])
 def logout():
+
     session["current_user"] = None
+    if request.method == "GET":
+        return redirect(url_for("common.home"))
+
     response = redirect(url_for("common.home"))
     unset_access_cookies(response)
     return response
@@ -60,7 +64,7 @@ def sign_up():
             if user_username is None and user_email is None:
                 userDAO.create_user(sign_up_form.data)
                 session["current_user"] = sign_up_form.username.data
-                return redirect(url_for("home"))
+                return redirect(url_for("common.home"))
             else:
                 flash("El usuario o correo ya existe", category="error")
         else:
