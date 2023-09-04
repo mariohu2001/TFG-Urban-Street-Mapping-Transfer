@@ -1,7 +1,7 @@
 \apendice{Documentación técnica de programación}
 
 \section{Introducción}
-En este apartado se desarrollará sobre la estructura del proyecto así como las partes que lo componen y la función de cada una. El código fuente de este trabajo puede encontrarse en el siguiente repositorio de GitHub \url{https://github.com/mariohu2001/TFG-Urban-Street-Mapping-Transfer}.
+En este apartado se desarrollará sobre la estructura del proyecto así como las partes que lo componen y la función de cada una. El código fuente de este trabajo puede encontrarse en el siguiente \href{https://github.com/mariohu2001/TFG-Urban-Street-Mapping-Transfer}{repositorio de GitHub}.
 \section{Estructura de directorios}
 
 El código fuente que compone el proyecto está completamente contenido dentro de la carpeta \texttt{/src}.
@@ -71,21 +71,175 @@ Además de los ficheros contenidos en directorios existen algunos que cuelgan di
 	\item \texttt{utils.py}: Fichero de propósito general que define utilidades varias.
 \end{itemize}
 
-\subsection{\texttt{/config}}
-Esta carpeta tiene el propósito de guardar los distintos ficheros de configuración que se utilicen en el programa. Estos están en formato \texttt{.ini}, formato normalmente utilizado para estas labores. Actualmente solo
-cuenta con un fichero, pero en caso de futuros desarrollos que requieran de especificar más configuraciones estas pueden ser almacenadas aquí.
 
 \subsection{\texttt{/models}}
 En este directorio se encuentran unos ficheros en formato \textit{Jupyter Notebook} utilizados para la creación de los modelos de \textit{Random Forest}. Además se cuenta con el \textit{dataset} requerido para el entrenamiento de los modelos en el subdirectorio \texttt{/models/dataset}. Los ficheros de este están en formato JSON, puesto que es el más adecuado para almacenar estos datos. Cada ciudad cuenta con un fichero.
 
 \subsection{\texttt{/operaciones\_bbdd}}
-En este directorio se encuentran todos los \textit{scripts} utilizados para la carga de ubicaciones en la base de datos, así como distintas operaciones de uso más general que no son utilizadas en la aplicación web. Dado su número haré mención de aquellos ficheros más importantes:
+En este directorio se encuentran todos los \textit{scripts} utilizados para la carga de ubicaciones en la base de datos, así como distintas operaciones de uso más general que no son utilizadas en la aplicación web.
+
+\subsubsection{/\texttt{docker}}
+En este directorio se encuentran los \textit{Dockerfile} necesarios para usar Docker en este proyecto.
+
+Contamos con los siguientes ficheros:
 
 \begin{itemize}
-	\item \texttt{assign\_quality\_indices.py}: \textit{Script} utilizado
+	\item \texttt{Dockerfile.neo4j}: Fichero necesario para la construcción de la imagen de Neo4j que se utilizará en el proyecto. Requiere de un fichero \texttt{neo4f.dump} para crear la base de datos cargada con los datos utilizados.
+	\item \texttt{Dockerfile.flask}: Fichero utilizado para crear la imagen de Python necesaria para la aplicación web. Para instalar todas las dependencias requiere de un fichero \texttt{requirements.txt} con todas las librerías utilizadas por la web.
 \end{itemize}
+
+Para poder crear los contenedores y utilizar la aplicación desde Docker existe un fichero que cuelga directamente de \texttt{/src} de nombre \texttt{docker-compose.yml}. Con este podemos levantar los contenedores usando \texttt{docker compose}.
+
 \section{Manual del programador}
 
+En esta sección se detallará como establecer un entorno de desarrollo para este proyecto.
+
+\subsection{Preparar la base de datos}
+
+Una de las herramientas más importantes de este proyecto es la base de datos, Neo4j. Además, cabe destacar que gran parte del funcionamiento depende de los datos extraídos durante el desarrollo del trabajo, puesto que no es suficiente contar con una base de datos Neo4j.
+
+Para descargar la copia de la base de datos, ya que debido a su peso no se encuentra en el repositorio, lo haremos desde esta \href{https://universidaddeburgos-my.sharepoint.com/:f:/g/personal/mhu1001_alu_ubu_es/Evm-45Fq9y1Ps-F3_PGd5KsBNR3G0JAR2-t1IrXBDm2BEQ?e=rQP1ls} {dirección} a una carpeta de One Drive. De esta descargaremos el fichero \texttt{neo4j.dump}.
+
+\subsubsection{Windows}
+
+Antes de pasar a descargar Neo4j, tendremos que asegurarnos de que disponemos de Java en nuestro sistema. En caso de no contar con ello podemos descargarlo de su 
+\href{https://www.java.com/es/download/}{página oficial}
+
+Para descargar Neo4j en Windows, tendremos que dirigirnos a la \href{https://neo4j.com/download/}{página oficial}. Tras esto se nos indicará que introduzcamos nuestros datos para que se nos provea con una clave con la que instalar Neo4j.
+
+\imagen{Neo4jPage}{Página de descarga de Neo4j.}
+
+Tras la instalación contaremos con Neo4j Desktop, una aplicación de escritorio con la que podremos administrar Neo4j. 
+
+Con ello crearemos un nuevo proyecto, y dentro de la sección \textit{File} añadiremos el \textit{dump} de la base de datos descargado anteriormente. Una vez hecho haremos \textit{click} sobre este y seleccionaremos la opción \textit{Create new DBMS from dump}, con lo que podremos crear la base de datos ya cargada. Se nos indicará que proporcionemos nombre y contraseña a esta para poder crearla. Una vez hecho esto podemos pulsar el botón \textit{Start} y la base de datos ya estaría en funcionamiento.
+
+En el panel lateral se nos mostrará 
+
+\subsubsection{Linux}
+
+Linux tiene un proceso distinto de instalación con respecto al de Windows.
+
+
+Tendremos que añadir el repositorio usando este comando.
+\begin{verbatim}
+	wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
+	echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+	sudo apt-get update
+\end{verbatim}
+
+Tras esto lo instalaremos con lo siguiente:
+
+\begin{verbatim}
+sudo apt-get install neo4j=1:5.11.0
+\end{verbatim}
+
+En cuanto al plugin APOC tendremos que dirigirnos al \href{https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases/4.4.0.21}{repositorio} y descargarnos una \textit{release}. Una vez hecho tendremos que incluir el archivo descargado dentro del directorio \texttt{\$NEO4J\_HOME/plugins}. Puede que sea necesario reiniciar la base de datos en caso de que esté levantada.
+
+Para cargar la copia de la base de datos deberemos copiar el volcado dentro del directorio \texttt{/neo4j/import} e introducir el siguiente comando:
+
+\begin{verbatim}
+	neo4j-admin database load --from-path=./import neo4j
+\end{verbatim}}
+
+Puede que se nos pida introducir una contraseña inicial. Podemos hacerlo con el comando: 
+\begin{verbatim}
+	neo4j-admin dbms set-initial-password (contraseña)
+\end{verbatim}
+
+Para arrancar el servidor podemos introducir:
+
+\begin{verbatim}
+	neo4j start
+\end{verbatim}
+
+La base de datos podrá ser accedida desde \texttt{http://localhost:7474} para contar con una interfaz a través de web. Si queremos hacer peticiones desde código se hará desde \texttt{bolt://localhost:7687}.
+
+\subsection{Variables de entorno}
+\label{sec:venv}
+Para el funcionamiento de la aplicación web será necesario definir una serie de variables de entorno que Flask utilizará en su ejecución. Estas las podemos definir manualmente o colocando un fichero \texttt{.env} dentro de la carpeta \texttt{/src}. Necesitaremos las siguientes variables:
+
+\begin{itemize}
+	\item \texttt{FLASK\_APP}: Nombre del módulo de Python que contiene la definición de nuestra aplicación web de Flask. En este caso es <<web>>.
+	\item \texttt{FLASK\_DEBUG}: Variable de entorno que indica si queremos lanzar Flask en modo \textit{debug}. Puede tomar los valores true/false. Puede ser útil cuando se esté desarrollando la aplicación.
+	\item \texttt{FLASK\_RUN\_PORT}: Variable que indica el número de puerto sobre el que se servirá la aplicación.
+	\item \texttt{FLASK\_RUN\_HOST}: Variable que indica sobre qué IP debe servir la aplicación web. Si utilizamos \texttt{0.0.0.0} se servirá en todas las interfaces.
+	\item \texttt{NEO4J\_URI}: URI de conexión a la base de datos. Aquí debemos incluir aquella que Neo4j nos provea al levantar la base de datos.
+	\item \texttt{NEO4J\_USER}: Usuario con el que se accederá a la base de datos. Por defecto Neo4j tiene el usuario \texttt{neo4j}.
+	\item \texttt{NEO4J\_PASSWORD}: Contraseña de acceso a la base de datos. Esta depende de la que asignemos a la base de datos en el momento de crearla.
+	\item \texttt{JWT\_SECRET\_KEY}: Clave secreta utilizada para la autenticación mediante JWT.
+	\item \texttt{DEFAULT\_USER}: Nombre de usuario por defecto al iniciar la aplicación web.
+	\item \texttt{DEFAULT\_PASSWORD}: Contraseña del usuario por defecto.
+	\item \texttt{SECRET\_KEY}: Clave secreta utilizada por Flask para las sesiones y cookies.
+\end{itemize}
+
+\subsection{Preparación entorno de desarrollo}
+A continuación se detallará cómo preparar el entorno de desarrollo para este proyecto.
+\subsubsection{Instalación de Python}
+Dado que este proyecto está escrito en Python necesitaremos tenerlo instalado en nuestro sistema para poder trabajar en el.
+
+En el caso de Windows para descargarlo nos dirigiremos a la \href{https://www.python.org/downloads/windows/}{página oficial} y nos bajaremos el fichero \texttt{.exe} correspondiente a la version 3.10.9, que es la utilizada para el desarrollo de este proyecto, lo ejecutaremos y los instalaremos.
+
+En cuanto a Linux la instalación varía un poco, esta se hará desde el gestor de paquetes de la distribución de Linux en particular. En el caso de las distribuciones basadas en Debian se hará introduciendo en la terminal:
+
+\begin{verbatim}
+	sudo apt install python3.10
+\end{verbatim}
+
+Con esto se instalará Python en nuestro sistema.
+
+Para verificar que se ha instalado adecuadamente podemos introducir en la consola \texttt{python --version} o \texttt{python3 --version} en Linux. Si se muestra la versión, esto indica que se ha instalado correctamente.
+
+\subsubsection{Creación de entorno virtual}
+Una buena práctica a realizar en desarrollos con Python es la creación de entornos virtuales para cada proyecto en el que se trabaje. Estos permiten contar con un ambiente aislado con dependencias propias separadas de las del resto de proyectos.
+
+Para su creación introduciremos desde consola:
+
+\begin{verbatim}
+	python -m venv (nombre del entorno virtual)
+\end{verbatim}
+
+Tras su ejecución contaremos con un directorio con el nombre que hayamos especificado al ejecutar el comando. Este será el entorno virtual. Para activarlo introducimos:
+
+\begin{itemize}
+	\item Windows: \begin{verbatim} (nombre del entorno virtual)/Scripts/activate
+	\end{verbatim}
+	\item Linux: \begin{verbatim} source (nombre del entorno virtual)/bin/activate
+	\end{verbatim}
+\end{itemize}
+
+Una vez activado, en el \textit{prompt} de la terminal nos aparecerá al inicio el nombre de nuestro entorno virtual.
+
+En caso de que queramos desactivarlo bastará con usar \texttt{deactivate}.
+
+Para instalar las dependencias del proyecto tendremos que introducir lo siguiente mientras tenemos en entorno virtual activado.
+
+\begin{verbatim}
+	pip install -r requirements.txt
+\end{verbatim}
+
+Con esto se instalarán en el entorno virtual todas aquellas librerías especificadas por el fichero \texttt{requirements.txt}. Con ello podremos ejecutar código de Python usando las dependecias contenidas por el entorno.
+\subsection{Especificación de la API REST}
+
 \section{Compilación, instalación y ejecución del proyecto}
+Este proyecto cuenta con distintas maneras de poder ejecutarse. A continuación se explicará cada una de ellas. Podremos descargar el código desde el \href{https://github.com/mariohu2001/TFG-Urban-Street-Mapping-Transfer}{repositorio de GitHub} para las ejecuciones en local y con Docker.
+\subsection{Ejecución en local}
+Para poder ejecutar este proyecto en local, en primer lugar se necesitará tener instalado Neo4j y Python como se ha indicado en apartados anteriores.
+
+Sobre la base de datos se tendrá que crear una una base de datos a partir del volcado que se puede obtener a partir del volcado que se puede obtener en esta \href{https://universidaddeburgos-my.sharepoint.com/:f:/g/personal/mhu1001_alu_ubu_es/Evm-45Fq9y1Ps-F3_PGd5KsBNR3G0JAR2-t1IrXBDm2BEQ?e=rQP1ls}{dirección} con el nombre de \textit{neo4j.dump}. Con ello crearemos la base de datos con la contraseña que especifiquemos. Guardaremos la URI, junto con la contraseña y crearemos las variables de entorno \texttt{NEO4J\_URI} y \texttt{NEO4J\_PASSWORD} con sus valores. \texttt{NEO4J\_USER} tendrá que ser <<neo4j>>. Esto también lo podremos hacer creando un fichero \texttt{.env} dentro de el directorio \texttt{/src}. Una vez hecho arrancaremos la base de datos.
+
+Hecho lo anterior pasaremos al código y Flask. Tendremos que especificar el resto de variables de entorno como se indica en el apartado de \hyperref[sec:venv]{variables de entorno}.
+
+Con esto ya podremos situarnos en el directorio \texttt{/src} y ejecutar el comando \texttt{flask run}. Con esto la aplicación web estará disponible en la dirección \texttt{http://localhost:} seguido del número de puerto que le hayamos asignado.
+\subsection{Ejecución con Docker}
+Docker nos permite evitar la instalación de los programas, puesto que es capaz de contenerizar aplicaciones. Esto se hace mediante la creación de entornos llamados contenedores que contienen el \textit{software} necesario para una aplicación sin necesidad de que estén instalados en el equipo anfitrión.
+
+En este proyecto se provee 2 imágenes creadas mediante \textit{Dockerfiles}, además de un fichero \textit{docker-compose} para la contrucción y ejecución de contenedores.
+
+Para poder levantar la ejecución podemos introducir en la terminal \texttt{docker compose up} desde el directorio \texttt{/src}. Con esto se crearán los contenedores es caso de no estar ya creado y se ejecutarán.
+
+Hecho lo anterior podemos dirigirnos a \url{http://localhost:5000} y utilizar la aplicación web. Decir que el puerto en el que se lanza la aplicación es debido a la configuración de las variables de entorno dentro de \texttt{docker-compose.yml}, esto está sujeto a los cambios que se quieran realizar a estas.
+
+
+\subsection{Uso desde Heroku}
 
 \section{Pruebas del sistema}
