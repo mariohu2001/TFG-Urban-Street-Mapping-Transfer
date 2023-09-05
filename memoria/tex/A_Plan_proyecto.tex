@@ -10,4 +10,128 @@
 
 \subsection{Viabilidad legal}
 
+Dado que para el desarrollo del proyecto se ha utilizado librerías ajenas, así como datos provenientes de OpenStreetMap, será necesario analizar sus términos de uso y distribución antes de poder asignar una licencia a la aplicación, de esta forma cumpliendo todos los requisitos legales relacionados.
+
+Las librerías empleadas junto con versión y licencia son las siguientes:
+
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|c|c|}
+	\hline
+\textbf{Librería} &\textbf{Versión} & \textbf{Licencia}\\ \hline
+bcrypt & 4.0.1 & Apache-2.0\\
+\hline
+beautifulsoup4 & 4.12.2 & MIT \\
+\hline
+blinker & 1.6.2 & MIT\\
+\hline
+click & 8.1.7 & BSD-3-Clause License\\
+\hline
+colorama & 0.4.6 & BSD-3-Clause License\\
+\hline
+contourpy & 1.1.0 & BSD-3-Clause License\\
+\hline
+cycler & 0.11.0 & BSD-3-Clause License\\
+\hline
+Flask & 2.3.3 & BSD-3-Clause License \\
+\hline
+Flask-JWT-Extended & 4.5.2 & MIT\\
+\hline
+Flask-WTF & 1.1.1 & BSD-3-Clause License \\
+\hline
+fonttools & 4.42.1 & MIT\\
+\hline
+geojson & 3.0.1 & BSD-3-Clause License \\
+\hline
+itsdangerous & 2.1.2 & BSD-3-Clause License \\
+\hline
+Jinja2 & 3.1.2 & BSD-3-Clause License\\
+\hline
+joblib & 1.3.2 & BSD-3-Clause License\\
+\hline
+kiwisolver & 1.4.5 & BSD-3-Clause License\\
+\hline
+lxml & 4.9.3 & BSD License \\
+\hline
+MarkupSafe & 2.1.3 & BSD-3-Clause License \\
+\hline
+matplotlib & 3.7.2 & PSF\\
+\hline
+neo4j & 5.12.0 & Apache-2.0\\
+\hline
+numpy & 1.25.2 & BSD-3-Clause License\\
+\hline
+OSMPythonTools & 0.3.5 &  GPL-3\\
+\hline
+packaging & 23.1 &  Apache-2.0\\
+\hline
+pandas & 2.1.0 & BSD-3-Clause License\\
+\hline
+Pillow & 10.0.0 & HPND License\\
+\hline
+PyJWT & 2.8.0 & MIT \\
+\hline
+pyparsing & 3.0.9 & MIT\\
+\hline
+python-dateutil & 2.8.2 & BSD License\\
+\hline
+python-dotenv & 1.0.0 &  BSD-3-Clause License\\
+\hline
+pytz & 2023.3 & MIT \\
+\hline
+scikit-learn & 1.3.0 & BSD-3-Clause License\\
+\hline
+scipy & 1.11.2 & BSD-3-Clause License\\
+\hline
+six & 1.16.0 & MIT \\
+\hline
+soupsieve & 2.5 & MIT\\
+\hline
+threadpoolctl & 3.2.0 & BSD-3-Clause License\\
+\hline
+tzdata & 2023.3 &  Apache-2.0\\
+\hline
+ujson & 5.8.0 & BSD License\\
+\hline
+Werkzeug & 2.3.7  &BSD-3-Clause License \\
+\hline
+WTForms & 3.0.1 & BSD-3-Clause License\\
+\hline
+xarray & 2023.8.0 & Apache-2.0 \\
+\hline
+gunicorn & 21.2.0 & MIT \\
+\hline
+Bootstrap & 5.2.3 & MIT \\
+\hline
+Vis.js & 9.1.6 & MIT \\
+\hline
+Leaflet.js & 1.9.4 & BSD-2-Clause License \\
+\hline
+Leaflet.ExtraMarkers & 1.0.5 & MIT \\
+\hline
+\end{tabular}
+\caption{Librerías utilizadas con su versión y licencia}
+\label{tab:librerias-licencias}
+\end{table}
+
+Las licencias mostradas en la tabla anterior cuentan con las siguientes características:
+
+\begin{itemize}
+	\item \textbf{Licencia MIT}: Esta licencia fue definida por el instituto de tecnología de Massachusetts, permitiendo el uso libre de las obras independientemente de su fin. No proporciona garantías de uso, librando de responsabilidades a los autores. Se trata de una de las licencias menos restrictivas.
+	\item \textbf{Apache License 2.0}: Es una licencia de código abierto que permite el uso gratuito así como la modificación y distribución. Obliga a que se mantenga el aviso de \textit{copyright} y de licencia tanto en los archivos originales como aquellos que se modifiquen, así como cuando se se distribuya el \textit{software}. Tampoco ofrece garantías, librando a los autores toda responsabilidad. Requiere otorgar una licencias a los usuarios.
+	
+	\item \textbf{BSD-3-Clause License}: También se trata de una licencia de código abierto. Permite realizar modificaciones sobre el código, pero indicando si se han realizado cambios en el trabajo original. Al igual que Apache, permite la distribución y exime de responsabilidades con respecto a garantías a los autores. No requiere de otorgar una licencia a los usuarios del software y no otorga derechos sobre nombre o marcas asociados con el producto. Destaca por su compatibilidad con otras licencias.
+	
+	\item \textbf{Licencias GPL}: Las licencias Públicas Generales de GNU son una familia de licencias. Las más comunes son las versiones GPL-2 y GPL-3. Destacan por ser bastante restrictivas en comparación al resto. Tiene lo que se conoce como un \textit{copyleft} fuerte, es decir, obliga que cualquier obra derivada o vinculada con \textit{software} con esta licencia se distribuya también bajo GPL. Obliga que a mantener los avisos de \textit{copyright} y la licencia bajo cualquier distribución del programa. Tienen como objetivo garantizar que los trabajos derivados se mantengan como código abierto.
+	
+\end{itemize}
+
+Dadas la licencias de las distintas librerías empleadas en el proyecto parece que la más apropiada resulta ser GPL-3. Esta garantiza que el \textit{software} desarrollado permanezca siendo libre, imposibilitando añadir restricciones que puedan limitar las libertades que aporta esta licencia.
+
+\subsubsection{Uso de datos de OpenStreetMap}
+
+En este proyecto más allá de librerías también se emplea datos extraidos del proyecto OpenStreetMap que también cuenta con una licencia propia. Su uso se encuentra bajo los términos definidos por ODbL (Licencia de bases de datos abiertas de Open Data Common) por la fundación OpenStreetMap.
+
+Esta licencia hace que tengamos que atribuir los datos utilizados a OpenStreetMap y sus contribuidores. Además descarga de responsabilidad del posible uso que se pueda hacer de ellos, desentendiendose de posibles errores de precisión o integridad de los datos.
 

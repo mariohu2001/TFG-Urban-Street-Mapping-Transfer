@@ -220,6 +220,7 @@ Para instalar las dependencias del proyecto tendremos que introducir lo siguient
 Con esto se instalarán en el entorno virtual todas aquellas librerías especificadas por el fichero \texttt{requirements.txt}. Con ello podremos ejecutar código de Python usando las dependecias contenidas por el entorno.
 \subsection{Especificación de la API REST}
 
+\label{sec:compilación}
 \section{Compilación, instalación y ejecución del proyecto}
 Este proyecto cuenta con distintas maneras de poder ejecutarse. A continuación se explicará cada una de ellas. Podremos descargar el código desde el \href{https://github.com/mariohu2001/TFG-Urban-Street-Mapping-Transfer}{repositorio de GitHub} para las ejecuciones en local y con Docker.
 \subsection{Ejecución en local}
@@ -243,3 +244,5 @@ Hecho lo anterior podemos dirigirnos a \url{http://localhost:5000} y utilizar la
 \subsection{Uso desde Heroku}
 
 \section{Pruebas del sistema}
+
+En cuanto a la realización de pruebas del sistema hay que tener en cuenta que las partes más complejas se realizan dentro de la base de datos al realizar los cálculos de indices de calidad y similares. Para comprobar que los cálculos son correctos se ha creado <<mocks>> con una estructura similar a los datos reales de ubicaciones, y sobre ellos se han realizado los cálculos, validándolos manualmente. Esto es debido a la dificultad que presenta la realización de pruebas automatizadas con la base de datos y la alta complejidad de los cálculos realizados.
