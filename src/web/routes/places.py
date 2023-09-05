@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
-from flask_jwt_extended import set_access_cookies, unset_access_cookies
+from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session, abort
+from flask_jwt_extended import jwt_required
 from ..dao.placesDAO import PlaceDAO
 from ..dao.categoryDAO import CategoryDAO
 from .. import utils
@@ -40,6 +40,7 @@ def get_place_by_id(id: str):
     return jsonify(place)
 
 @places_routes.route("/quality_indices/permutation/<string:city>/<string:category>/<int:id>")
+@jwt_required()
 def get_quality_indices_permutation(id: int, city: str, category: str):
 
     dao = PlaceDAO(current_app.driver)
@@ -48,8 +49,8 @@ def get_quality_indices_permutation(id: int, city: str, category: str):
 
     return jsonify(quality_indices)
 
-
 @places_routes.route("/quality_indices/jensen/<string:city>/<string:category>/<int:id>")
+@jwt_required()
 def get_quality_indices_jensen(id: int, city: str, category: str):
 
     dao = PlaceDAO(current_app.driver)
@@ -58,45 +59,51 @@ def get_quality_indices_jensen(id: int, city: str, category: str):
 
     return jsonify(quality_indices)
 
-
 @places_routes.route("/quality_indices/jensen/<string:city>/<string:category>/<string:coords>")
+@jwt_required()
 def get_quality_indices_jensen_coords(coords: str, city: str, category: str):
 
     dao = PlaceDAO(current_app.driver)
 
-    lat, lon = coords.split(":")
+    try:
+        lat, lon = coords.split(":")
 
-    quality_indices = dao.get_quality_index_jensen_coords(float(lat), float(lon), category, city)
-
+        quality_indices = dao.get_quality_index_jensen_coords(float(lat), float(lon), category, city)
+    except:
+        abort(400, "Formato incorrecto")
     return jsonify(quality_indices)
 
-
 @places_routes.route("/quality_indices/permutation/<string:city>/<string:category>/<string:coords>")
+@jwt_required()
 def get_quality_indices_permutation_coords(coords: str, city: str, category: str):
 
     dao = PlaceDAO(current_app.driver)
 
-    #TODO tratamiento de excepcion cuando coordenadas no float
-    lat, lon = coords.split(":")
+    try:
+        lat, lon = coords.split(":")
 
-    quality_indices = dao.get_quality_index_permutation_coords(float(lat), float(lon), category, city)
+        quality_indices = dao.get_quality_index_permutation_coords(float(lat), float(lon), category, city)
+    except:
+        abort(400, "Formato incorrecto")
 
     return jsonify(quality_indices)
 
-
 @places_routes.route("/quality_indices/all/<string:city>/<string:category>/<string:coords>")
+@jwt_required()
 def get_all_quality_indices_coords(coords: str, city: str, category: str):
     
     dao = PlaceDAO(current_app.driver)
 
-    #TODO tratamiento de excepcion cuando coordenadas no float
-    lat, lon = coords.split(":")
+    try:
+        lat, lon = coords.split(":")
 
-    quality_indices = dao.get_all_quality_indices_coords(float(lat), float(lon), category, city)
-
+        quality_indices = dao.get_all_quality_indices_coords(float(lat), float(lon), category, city)
+    except:
+        abort(400, "Formato incorrecto")
     return jsonify(quality_indices)
 
 @places_routes.route("/quality_indices/all/<string:city>/<string:category>/<int:id>")
+@jwt_required()
 def get_all_quality_indices_place(id: int, city: str, category: str):
     dao = PlaceDAO(current_app.driver)
 
@@ -109,21 +116,6 @@ def get_city_coords(city: str):
     return utils.get_city_coords(city)
 
 
-@places_routes.route("/top_categories/<city>", methods=["POST"])
-def top_categories(city: str):
-
-    data = request.get_json()
-
-    nodes = data["nodes"]
-    coords = data["coords"]
-
-    dao = PlaceDAO(current_app.driver)
-
-    response = dict()
-    for node in nodes:
-        response[node.num] = dao.get_top_categories(node.id)
-
-    response.update()
     
 
 

@@ -1,69 +1,76 @@
-from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session
-
+from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session, abort
+from flask_jwt_extended import jwt_required, get_jwt
 from web.dao.placesDAO import PlaceDAO
 from web.utils import get_city_coords
 
 map_routes = Blueprint("maps",__name__, url_prefix='/')
 
 
-
 @map_routes.route('/recomendation/<city>', methods=["GET", "POST"])
+@jwt_required()
 def recomendation(city: str):
-    places: list = [int(place) for place in request.args.getlist('place')]
-
-    coords: list = [tuple(coord.split(":"))
-                    for coord in request.args.getlist('coords')]
     dao = PlaceDAO(current_app.driver)
+    if city not in dao.get_cities(): abort(404)
+    try:
+        places: list = [int(place) for place in request.args.getlist('place')]
 
-    nodos = {}
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
 
-    marker_index = 1
-    for p in places:
-        nodos[marker_index] = dao.get_by_id(p)
-        marker_index += 1
+        nodos = {}
 
-    coords_markers = {}
-    for c in coords:
-        coords_markers[marker_index] = {
-            "lat": float(c[0]),
-            "lon": float(c[1]),
-            "category": "Coords",
-            "area": city
-        }
-        marker_index += 1
+        marker_index = 1
+        for p in places:
+            nodos[marker_index] = dao.get_by_id(p)
+            marker_index += 1
 
-    city_coords = get_city_coords(city)
+        coords_markers = {}
+        for c in coords:
+            coords_markers[marker_index] = {
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            }
+            marker_index += 1
 
+        city_coords = get_city_coords(city)
+    except:
+        abort(400)
     return render_template("recomendations.html", usuario=session.get("current_user"),
                             nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
                                 city_coords.values()),
                             metrics=["permutation", "jensen"])
 
 @map_routes.route('/top/<city>')
+@jwt_required()
 def best_category(city: str):
-    places: list = [int(place) for place in request.args.getlist('place')]
-
-    coords: list = [tuple(coord.split(":"))
-                    for coord in request.args.getlist('coords')]
     dao = PlaceDAO(current_app.driver)
+    if city not in dao.get_cities(): abort(404)
+    try:
+        places: list = [int(place) for place in request.args.getlist('place')]
 
-    nodos = {}
-    coords_markers = {}
-    marker_index = 1
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
+        nodos = {}
+        coords_markers = {}
+        marker_index = 1
 
-    for p in places:
-        nodos[marker_index] = (dao.get_by_id(p))
-        marker_index += 1
-    for c in coords:
-        coords_markers[marker_index] = {
-            "lat": float(c[0]),
-            "lon": float(c[1]),
-            "category": "Coords",
-            "area": city
-        }
-        marker_index += 1
-        
-    city_coords = get_city_coords(city)
+        for p in places:
+            nodos[marker_index] = (dao.get_by_id(p))
+            marker_index += 1
+        for c in coords:
+            coords_markers[marker_index] = {
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            }
+            marker_index += 1
+            
+        city_coords = get_city_coords(city)
+    except:
+        abort(400)
     return render_template("topCategories.html",usuario=session.get("current_user"),
                             nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
                                 city_coords.values()))
@@ -77,34 +84,37 @@ def map():
 
     return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
 
-
 @map_routes.route('/transfer/<city>')
+@jwt_required()
 def transfer_recomendation(city: str):
-
-    places: list = [int(place) for place in request.args.getlist('place')]
-
-    coords: list = [tuple(coord.split(":"))
-                    for coord in request.args.getlist('coords')]
     dao = PlaceDAO(current_app.driver)
+    if city not in dao.get_cities(): abort(404)
+    try:
+        places: list = [int(place) for place in request.args.getlist('place')]
 
-    nodos = {}
-    coords_markers = {}
-    marker_index = 1
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
 
-    for p in places:
-        nodos[marker_index] = (dao.get_by_id(p))
-        marker_index += 1
-    for c in coords:
-        coords_markers[marker_index] = {
-            "lat": float(c[0]),
-            "lon": float(c[1]),
-            "category": "Coords",
-            "area": city
-        }
-        marker_index += 1
+        nodos = {}
+        coords_markers = {}
+        marker_index = 1
 
-    city_coords = get_city_coords(city)
-    cities = dao.get_cities()
-    cities.remove(city)
+        for p in places:
+            nodos[marker_index] = (dao.get_by_id(p))
+            marker_index += 1
+        for c in coords:
+            coords_markers[marker_index] = {
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            }
+            marker_index += 1
+
+        city_coords = get_city_coords(city)
+        cities = dao.get_cities()
+        cities.remove(city)
+    except:
+        abort(400)
     return render_template("transfer.html", nodos=nodos, city=city, cities=cities,
                             coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))

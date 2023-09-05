@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, current_app, redirect, url_for, jsonify, session
-from flask_jwt_extended import set_access_cookies, unset_access_cookies
+from flask_jwt_extended import jwt_required
 from ..dao.placesDAO import PlaceDAO
 from ..dao.categoryDAO import CategoryDAO
 from .. import utils
@@ -35,7 +35,7 @@ def get_categories_by_city(city: str):
 
     return jsonify(categories)
 
-
+@jwt_required()
 @categories_routes.route("/categories/<city1>/<city2>")
 def get_categories_intersection(city1: str, city2: str):
     DAO = CategoryDAO(current_app.driver)

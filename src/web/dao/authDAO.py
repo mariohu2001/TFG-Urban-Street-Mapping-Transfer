@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import bcrypt
 
 
@@ -47,6 +47,7 @@ class AuthDAO(baseDAO):
                 "user": user["user_name"],
                 "role": user["role"]
             }
-            token = create_access_token(identity=payload)
+            token = create_access_token(
+                identity=payload, expires_delta=timedelta(days=1))
 
             return token

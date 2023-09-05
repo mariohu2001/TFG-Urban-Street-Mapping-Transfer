@@ -92,12 +92,7 @@ def create_app():
     auradb_thread.daemon=True
     auradb_thread.start()
 
-    @app.route('/test')
-    def test():
-
-        dao = PlaceDAO(app.driver)
-        return jsonify(dao.get_quality_index_permutation([2, 3], "Bar", "Ciudad"), usuario=session.get("current_user"))
-
+    @jwt_required
     @app.route('/tops', methods=['POST'])
     def get_places_tops():
         body = request.get_json()
@@ -110,6 +105,7 @@ def create_app():
         del (model)
         return jsonify(tops)
 
+    @jwt_required
     @app.route('/tops/transfer', methods=['POST'])
     def get_transfer_tops():
         body = request.get_json()
@@ -126,7 +122,7 @@ def create_app():
 
         return jsonify(tops)
 
-
+    @jwt_required
     @app.route("/protected")
     @role_required(["admin"])
     def protected():
