@@ -4,7 +4,9 @@ from OSMPythonTools.overpass import Overpass, OverpassResult, overpassQueryBuild
 from OSMPythonTools.nominatim import Nominatim, NominatimResult
 from neo4j import Driver
 import joblib
+import os
 
+path : str = os.path.abspath(__file__)
 
 def get_city_coords(city):
     nominatim = Nominatim()
@@ -23,7 +25,7 @@ def get_city_coords(city):
 
 
 def get_local_rf_model(city: str) -> RandomForestClassifier:
-    models_path = f"web/models/local/{city}.gz"
+    models_path = f"{os.path.dirname(path)}/models/local/{city}.gz"
 
     model: RandomForestClassifier = joblib.load(models_path)
 
@@ -31,7 +33,7 @@ def get_local_rf_model(city: str) -> RandomForestClassifier:
 
 
 def get_transfer_rf_model(source_city: str, target_city: str) -> RandomForestClassifier:
-    model_path: str = f"web/models/transfer/{source_city}-{target_city}.gz"
+    model_path: str = f"{os.path.dirname(path)}/models/transfer/{source_city}-{target_city}.gz"
     model: RandomForestClassifier = joblib.load(model_path)
 
     return model
