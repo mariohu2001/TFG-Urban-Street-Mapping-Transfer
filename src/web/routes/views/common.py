@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session
 
-from web.dao.placesDAO import PlaceDAO
+from ...dao import PlaceDAO
 
 
 common_routes = Blueprint("common", __name__, url_prefix='/')
