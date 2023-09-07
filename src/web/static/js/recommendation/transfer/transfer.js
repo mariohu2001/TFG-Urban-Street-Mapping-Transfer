@@ -1,13 +1,12 @@
-const cityDropdown = document.getElementById("city")
+const cityDropdown = document.getElementById("ciudad")
 const metricsButton = document.getElementById("metrics_button")
 var method_dropdopwn = document.getElementById('method-dropdown')
 var topsTable = document.getElementById('tops-table')
-
+var loading_div = document.getElementById('loading-div')
 var calculatedTops = false
 
 
 window.addEventListener("popstate", ()=> {
-    console.log("aaaaaaaaaaaaaaaaaaaa")
     window.location.reload()
 })
 
@@ -52,6 +51,7 @@ function refreshTopTable(){
 
 
 function getTransferPlacesTops(){
+    loading_div.style.display = "block"
 
     method_dropdopwn.selectedIndex = 0
     method_dropdopwn.disabled = true
@@ -104,6 +104,7 @@ function getTransferPlacesTops(){
         
         method_dropdopwn.disabled = false
         metricsButton.disabled= false
+        loading_div.style.display = "none"
         
     })
     

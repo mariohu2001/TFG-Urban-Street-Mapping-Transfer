@@ -22,7 +22,7 @@
   <select class="form-select" id="{{name}}" title="{{default}}">
     <option value="" disabled selected>{{ default }}</option>
     {% for option in options %}
-      <option value="{{option}}">{{option}}</option>
+      <option value="{{option[0]}}">{{option[1]}}</option>
     {% endfor %}
   </select>
   <label for="{{name}}" style="z-index: 0;">{{name}}</label>

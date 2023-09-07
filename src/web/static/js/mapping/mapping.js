@@ -10,8 +10,9 @@ const markerLayer = L.layerGroup().addTo(map);
 
 const searchBtn = document.getElementById("search_btn")
 
-const cityDropdown = document.getElementById("city")
-const categoryDropdown = document.getElementById("category")
+const cityDropdown = document.getElementById("ciudad")
+const categoryDropdown = document.getElementById("categoria")
+categoryDropdown.disabled = true
 const analysisButton = document.getElementById("analysis_button")
 const clearButton = document.getElementById("clear_btn")
 const topsButton = document.getElementById("tops_button")
@@ -61,6 +62,9 @@ clearButton.addEventListener('click',() => {
     selectedPlaces = []
     selectedCoords = []
     markerLayer.clearLayers()
+    topsButton.disabled = true
+    transferButton.disabled = true
+    analysisButton.disabled = true
 })
 
 analysisButton.addEventListener('click', function () {
@@ -110,6 +114,9 @@ topsButton.addEventListener('click', function() {
 })
 
 function addCoordsMarker(e) {
+    topsButton.disabled = false
+    transferButton.disabled = false
+    analysisButton.disabled = false
     newMarker = L.marker(e.latlng, { icon: coordsIcon })
 
 
@@ -119,6 +126,12 @@ function addCoordsMarker(e) {
         let index = selectedPlaces.indexOf(this);
         selectedCoords.splice(index, 1);
         markerLayer.removeLayer(this)
+        if (selectedCoords.length <= 0 && selectedPlaces.length == 0)
+        {
+            topsButton.disabled = true
+            transferButton.disabled = true
+            analysisButton.disabled = true
+        }
     })
     newMarker.on('mouseover', function (e) {
         this.openPopup();
@@ -190,8 +203,15 @@ function selectMarker(event) {
         var index = selectedPlaces.indexOf(marker);
         selectedPlaces.splice(index, 1);
         marker.setIcon(defaultIcon)
+        if(selectedPlaces.length <= 0 &&  selectedCoords.length == 0){
+            topsButton.disabled = true
+            transferButton.disabled = true
+            analysisButton.disabled = true
+        }
     } else {
-
+        topsButton.disabled = false
+        transferButton.disabled = false
+        analysisButton.disabled = false
         selectedPlaces.push(marker);
         marker.setIcon(selectedIcon)
 
@@ -259,7 +279,7 @@ function getCategoriesByCity() {
         return response.json();
     }).then(data => changeCategoriesDropdown(data))
 
-
+    categoryDropdown.disabled = false
 }
 
 
@@ -272,3 +292,7 @@ function changeCategoriesDropdown(categories) {
         categoryDropdown.innerHTML += "<option value=" + element[0] + ">" + element[1] + "</option>"
     });
 }
+
+categoryDropdown.addEventListener("change", () => {
+    searchBtn.disabled = false
+})

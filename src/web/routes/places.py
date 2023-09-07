@@ -3,7 +3,10 @@ from flask_jwt_extended import jwt_required
 from ..dao.placesDAO import PlaceDAO
 from ..dao.categoryDAO import CategoryDAO
 from .. import utils
+from ..quality_indices import get_quality_indices
 import json
+import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
 
 places_routes = Blueprint("places", __name__, url_prefix='/')
 
@@ -101,6 +104,36 @@ def get_all_quality_indices_coords(coords: str, city: str, category: str):
     except:
         abort(400, "Formato incorrecto")
     return jsonify(quality_indices)
+
+
+@places_routes.route("/quality_indices/all/<string:city>", methods=["POST"])
+def get_quality_indices_api(city: str):
+        body = request.get_json()
+        places = body.get("places")
+        coords = body.get("coords")
+
+        response = get_quality_indices(city=city, places=places, coords=coords, driver=current_app.driver)
+        model : RandomForestClassifier = utils.get_local_rf_model(city)
+
+        for k,coord in response["coords"].items():
+            data = {"QualityIndices": coord}
+            data = pd.json_normalize(data)
+            data = data[model.feature_names_in_]
+
+            probs = [ [i,j] for i,j in zip(list(model.predict_proba(data).ravel()), list(model.classes_))]
+            for probi, probj in probs:
+                response["coords"][k][probj]["random_forest"] = probi
+
+        for k,coord in response["places"].items():
+            data = {"QualityIndices": coord}
+            data = pd.json_normalize(data)
+            data = data[model.feature_names_in_]
+            probs = [ [i,j] for i,j in zip(list(model.predict_proba(data).ravel()), list(model.classes_))]
+            for probi, probj in probs:
+                response["places"][k][probj]["random_forest"] = probi
+
+        return jsonify(response)
+
 
 @places_routes.route("/quality_indices/all/<string:city>/<string:category>/<int:id>")
 @jwt_required()

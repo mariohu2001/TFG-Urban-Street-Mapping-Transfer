@@ -3,6 +3,7 @@ import joblib
 import threading
 import time
 import random
+import datetime
 
 from flask import Flask, jsonify, render_template, request, url_for, redirect, session
 from configparser import ConfigParser
@@ -85,7 +86,7 @@ def create_app():
                 username:u.user_name
                                            } as prop""")
                 for prop in res.value("prop"):
-                        print(prop, flush=True)
+                        print(f"{datetime.datetime.now()}:{prop}", flush=True)
             time.sleep(random.randint(86400,172800))
 
     auradb_thread = threading.Thread(target=auradb_maintain)

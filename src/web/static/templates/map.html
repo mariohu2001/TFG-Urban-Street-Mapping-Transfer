@@ -12,19 +12,19 @@
 	</div>
 	<div class="col-lg-3 col-md-12 p-3" id="map-selection">
 		{% block mapInfo %}
-		{{ dropdown_list("city", cities, "ciudad") }}
-		{{ dropdown_list("category", categories, "categoría") }}
+		{{ dropdown_list("ciudad", cities, "ciudad") }}
+		{{ dropdown_list("categoria", categorias, "categoría") }}
 		<div class="d-flex flex-column justify-content-around p-1">
-			<button type="button" id="search_btn" class="btn btn-success my-1"><i class="bi bi-search"></i>
+			<button type="button" id="search_btn" class="btn btn-success my-1" disabled><i class="bi bi-search"></i>
 				Buscar</button>
 			<button type="button" id="clear_btn" class="btn btn-danger my-1"><i class="bi bi-x-circle"></i>
 				Borrar</button>
 			{% if usuario is not none and usuario is defined %}
-			<button type="button" id="analysis_button" class="btn btn-dark my-1"><i class="bi bi-building"></i>
+			<button type="button" id="analysis_button" class="btn btn-dark my-1" disabled><i class="bi bi-building"></i>
 				Recomendaciones</button>
-			<button type="button" id="transfer_button" class="btn btn-dark my-1"><i class="bi bi-building-up"></i>
+			<button type="button" id="transfer_button" class="btn btn-dark my-1" disabled><i class="bi bi-building-up"></i>
 				Transferencia</button>
-			<button type="button" id="tops_button" class="btn btn-dark col my-1"><i class="bi bi-sort-up"></i> Tops</button>
+			<button type="button" id="tops_button" class="btn btn-dark col my-1" disabled><i class="bi bi-sort-up"></i> Tops</button>
 			{% else %}
 			<button type="button" id="analysis_button" class="btn btn-dark my-1" style="display: none;"><i
 					class="bi bi-building"></i>
@@ -33,7 +33,9 @@
 					class="bi bi-building-up"></i>
 				Transferencia</button>
 			<button type="button" id="tops_button" class="btn btn-dark col my-1" style="display: none;"><i class="bi bi-sort-up"></i> Tops</button>
-
+			<p>
+				Inicia sesión para tener acceso a más funcionalidades.
+			</p>
 			{% endif %}
 		</div>
 		{% endblock %}

@@ -1,17 +1,13 @@
 var calculatedTops = false
 
-var metrics_button = document.getElementById('tops_calc')
+
 var topsTable = document.getElementById('tops-table')
 var method_dropdopwn = document.getElementById('method-dropdown')
-document.addEventListener('DOMContentLoaded', getPlacesTops())
+document.addEventListener('DOMContentLoaded', getPlacesTops)
 
-
-metrics_button.addEventListener('click', refreshTopTable)
 method_dropdopwn.addEventListener('change', () =>
 {
-    if (method_dropdopwn.value != ""){
-        metrics_button.disabled = false
-    }
+    refreshTopTable()
 })
 
 function getPlacesTops() {
@@ -21,11 +17,6 @@ function getPlacesTops() {
 
     if (calculatedTops) {
         return
-    }
-    metrics_button.disabled = false
-
-    if (method_dropdopwn.value === ""){
-        metrics_button.disabled = true
     }
 
 

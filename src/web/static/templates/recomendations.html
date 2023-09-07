@@ -1,5 +1,5 @@
 {% from "macros/basics.html" import dropdown_list %}
-{% extends "map.html" %} {% block title %}Recomendations{% endblock %}
+{% extends "base.html" %} {% block title %}Mejor ubicación{% endblock %}
 
 {% block head %}
 
@@ -13,23 +13,60 @@
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
 {% endblock %}
 
-{% block mapInfo %}
-{{ dropdown_list("category", categories, "categoría") }}
-{{ dropdown_list("metric", metrics, "métrica") }}
-<div class="d-flex flex-column justify-content-center p-1">
-    <button type="button" id="metrics_button" class="btn btn-dark col m-1"><i class="bi bi-bar-chart-fill"></i> Métricas</button>
-    <button type="button" id="transfer_button" class="btn btn-dark col m-1"><i class="bi bi-building-fill-up"></i> Transferencia</button>
+{% block content %}
+<div class="row g-0 h-100 p-4 my-1">
+    <div id="usmt-map" class="border border-5 border-dark-subtle rounded-1" style="box-sizing: border-box;">
+    </div>
 </div>
-<table class="table table-dark table-hover table-responsive my-5" id="metrics-table">
-    <thead>
-        <th>#</th>
-        <th>Categoría</th>
-        <th>Q</th>
-        <th>Q raw</th>
-    </thead>
-    <tbody id="metrics-table-body" class="table-group-divider">
-    </tbody>
-</table>
+<div class="row px-4 d-flex">
+    <div class="d-flex align-items-center justify-content-start">
+        {{ dropdown_list("categoría", categories, "categoría") }}
+        <div class="form-floating my-2 ">
+            <select class="form-select" id="method-dropdown" title="método" disabled>
+                <option value="" disabled selected>Método</option>
+                <option value="Qjensen">Jensen</option>
+                <option value="Qjensen_raw">Jensen Raw</option>
+                <option value="Qperm">Permutation</option>
+                <option value="Qperm_raw">Permutation Raw</option>
+                <option value="random_forest">Random Forest</option>
+            </select>
+            <label for="Método" style="z-index: 0;">Método</label>
+        </div>
+
+    </div>
+    <div id="loading-div">
+        <p>Se están realizando calculos, espere y seleccione categoría y método... 
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+    </p>
+    </div>
+</div>
+<div class="row g-0 px-4 my-5 d-flex justify-content-around align-items-center">
+    <div>
+        <table id="tops-table" class="table table-dark table-hover table-responsive" style="table-layout: auto;">
+            <thead>
+                <tr class="text-center">
+                    <th colspan="3">Método</th>
+                </tr>
+                <tr style="text-align: center;">
+                    <th>Posición</th>
+                    <th>#</th>
+                    <th>Categoría</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr colspan="8">
+                    <td colspan="8" class="text-center">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
 {% block scripts%}
 <script type="text/javascript" src="/js/metricsTable.js" defer></script>

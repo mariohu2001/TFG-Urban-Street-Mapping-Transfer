@@ -1,16 +1,18 @@
 from flask import Blueprint, flash, render_template, request, current_app, redirect, url_for, jsonify, session, abort
 from flask_jwt_extended import jwt_required, get_jwt
 from ...dao.placesDAO import PlaceDAO
+from ...dao.categoryDAO import CategoryDAO
 from ...utils import get_city_coords
 
-map_routes = Blueprint("maps",__name__, url_prefix='/')
+map_routes = Blueprint("maps", __name__, url_prefix='/')
 
 
 @map_routes.route('/recomendation/<city>', methods=["GET", "POST"])
 @jwt_required()
 def recomendation(city: str):
     dao = PlaceDAO(current_app.driver)
-    if city not in dao.get_cities(): abort(404)
+    if city not in dao.get_cities():
+        abort(404)
     try:
         places: list = [int(place) for place in request.args.getlist('place')]
 
@@ -33,20 +35,23 @@ def recomendation(city: str):
                 "area": city
             }
             marker_index += 1
-
+        catsDAO = CategoryDAO(current_app.driver)
+        categories = catsDAO.get_by_city(city)
+        categories = [[cat, cat.replace("_", " ")]for cat in categories]
         city_coords = get_city_coords(city)
     except:
         abort(400)
     return render_template("recomendations.html", usuario=session.get("current_user"),
-                            nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
-                                city_coords.values()),
-                            metrics=["permutation", "jensen"])
+                           nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+        city_coords.values()), categories=categories)
+
 
 @map_routes.route('/top/<city>')
 @jwt_required()
 def best_category(city: str):
     dao = PlaceDAO(current_app.driver)
-    if city not in dao.get_cities(): abort(404)
+    if city not in dao.get_cities():
+        abort(404)
     try:
         places: list = [int(place) for place in request.args.getlist('place')]
 
@@ -67,13 +72,14 @@ def best_category(city: str):
                 "area": city
             }
             marker_index += 1
-            
+
         city_coords = get_city_coords(city)
     except:
         abort(400)
-    return render_template("topCategories.html",usuario=session.get("current_user"),
-                            nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
-                                city_coords.values()))
+    return render_template("topCategories.html", usuario=session.get("current_user"),
+                           nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+        city_coords.values()))
+
 
 @map_routes.route('/map')
 def map():
@@ -84,11 +90,13 @@ def map():
 
     return render_template("map.html", cities=ciudades, categories=[], usuario=session.get("current_user"))
 
+
 @map_routes.route('/transfer/<city>')
 @jwt_required()
 def transfer_recomendation(city: str):
     dao = PlaceDAO(current_app.driver)
-    if city not in dao.get_cities(): abort(404)
+    if city not in dao.get_cities():
+        abort(404)
     try:
         places: list = [int(place) for place in request.args.getlist('place')]
 
@@ -117,4 +125,4 @@ def transfer_recomendation(city: str):
     except:
         abort(400)
     return render_template("transfer.html", nodos=nodos, city=city, cities=cities,
-                            coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))
+                           coords=list(city_coords.values()), nodosCoords=coords_markers, usuario=session.get("current_user"))

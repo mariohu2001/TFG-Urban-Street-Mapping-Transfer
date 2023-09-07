@@ -15,51 +15,17 @@ Transfer
 {% endblock %}
 {% block content %}
 <!-- Tablas -->
-<div class="row d-flex justify-content-around p-5 g-0">
-    <!-- Tabla ciudad origen -->
-    <div class="col-md-12 col-lg-4 p-3">
-        <table class="table table-dark table-border ">
-            <thead style="text-align: center;">
-                <th colspan="2">{{city}}</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Number of nodes</th>
-                    <td>2413412343</td>
-                </tr>
-            </tbody>
-            <!-- Tabla ciudad destino -->
-        </table>
-    </div>
-    <div class="col-md-12 col-lg-4 p-3">
-        <table class="table table-dark table-border">
-            <thead style="text-align: center;">
-                <th colspan="2">Ciudad</th>
-            </thead>
-            <tbody>
-                <tr>
-                    <th>Number of nodes</th>
-                    <td>2413412343</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <!-- Desplegables Ciudad y categoría -->
-    <div class="col-md-12 col-lg-4 p-3">
-        {{ dropdown_list("city", cities, "ciudad") }}
 
-        <button type="button" id="metrics_button" class="btn btn-dark col m-1" disabled><i class="bi bi-bar-chart-fill"></i>
-            Métricas</button>
-
-    </div>
-</div>
 <!-- Mapa -->
-<div class="row h-75 px-4 g-0">
+<div class="row h-75 p-4 g-0">
     <div id="usmt-map" class="border border-5 border-dark-subtle rounded-1" style="box-sizing: border-box;"></div>
 </div>
 
 <div class="row p-5 g-0">
-    <div class="d-flex align-items-center">
+    <div>
+        {{ dropdown_list("ciudad", cities, "ciudad") }}
+        <button type="button" id="metrics_button" class="btn btn-dark col m-1" disabled><i class="bi bi-bar-chart-fill"></i>
+            Métricas</button>
         <div class="form-floating my-2 ">
             <select class="form-select" id="method-dropdown" title="método" disabled>
                 <option value="" disabled selected>Método</option>
@@ -71,8 +37,8 @@ Transfer
             </select>
             <label for="Método" style="z-index: 0;">Método</label>
         </div>
-        <div class="d-flex">
-            <h4>Cargando... </h4>
+        <div  id="loading-div" style="display: none;">
+            <p>Se están realizando calculos, espere y seleccione un método... </p>
             <div class="spinner-border text-secondary" role="status">
                 <span class="visually-hidden">Loading...</span>
               </div>
