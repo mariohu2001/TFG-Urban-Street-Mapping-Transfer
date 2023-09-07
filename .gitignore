@@ -336,6 +336,7 @@ src/models/plots/*.png
 Sim_Results/
 *.ini
 *.csv
+*.env
 data/
 
 src/models/dataset/*
