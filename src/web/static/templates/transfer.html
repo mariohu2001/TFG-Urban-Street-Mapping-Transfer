@@ -1,5 +1,5 @@
 {% extends "./base.html" %}
-{% from "macros/basics.html" import dropdown_list %}
+{% from "macros/basics.html" import dropdown_list, dropdown_list_cities %}
 
 {% block title %}
 Transfer
@@ -23,7 +23,7 @@ Transfer
 
 <div class="row p-5 g-0">
     <div>
-        {{ dropdown_list("ciudad", cities, "ciudad") }}
+        {{ dropdown_list_cities("ciudad", cities, "ciudad") }}
         <button type="button" id="metrics_button" class="btn btn-dark col m-1" disabled><i class="bi bi-bar-chart-fill"></i>
             Métricas</button>
         <div class="form-floating my-2 ">

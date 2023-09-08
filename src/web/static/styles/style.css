@@ -38,6 +38,11 @@ p {
 
 /* calc(var(--content-height) * 0.9); */
 
+label {
+    text-decoration: underline;
+
+}
+
 body {
     background-color: #b9f678;
 }

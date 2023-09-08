@@ -1,5 +1,5 @@
-{% from "macros/basics.html" import dropdown_list %}
-{% extends "base.html" %} {% block title %}Map{% endblock %}
+{% from "macros/basics.html" import dropdown_list, dropdown_list_cities %}
+{% extends "base.html" %} {% block title %}Mapa{% endblock %}
 {% block head %}
 <link rel="stylesheet" href="/styles/leaflet.extra-markers.min.css">
 {% endblock %}
@@ -12,7 +12,7 @@
 	</div>
 	<div class="col-lg-3 col-md-12 p-3" id="map-selection">
 		{% block mapInfo %}
-		{{ dropdown_list("ciudad", cities, "ciudad") }}
+		{{ dropdown_list_cities("ciudad", cities, "ciudad") }}
 		{{ dropdown_list("categoria", categorias, "categoría") }}
 		<div class="d-flex flex-column justify-content-around p-1">
 			<button type="button" id="search_btn" class="btn btn-success my-1" disabled><i class="bi bi-search"></i>

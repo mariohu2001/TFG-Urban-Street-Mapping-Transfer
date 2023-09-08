@@ -29,3 +29,16 @@
 </div>
 
 {% endmacro %}
+
+{% macro dropdown_list_cities (name,options, default) %}
+<div class="form-floating">
+  <select class="form-select" id="{{name}}" title="{{default}}">
+    <option value="" disabled selected>{{ default }}</option>
+    {% for option in options %}
+      <option value="{{option}}">{{option}}</option>
+    {% endfor %}
+  </select>
+  <label for="{{name}}" style="z-index: 0;">{{name}}</label>
+</div>
+
+{% endmacro %}

@@ -9,6 +9,7 @@ def init_neo4j(uri: str, username: str, password: str) -> Driver:
 
     admin_username: str = current_app.config["DEFAULT_USER"]
     admin_pass: str = current_app.config["DEFAULT_PASSWORD"]
+
     encrypted_pass = bcrypt.hashpw(admin_pass.encode(
         "utf8"), bcrypt.gensalt()).decode('utf8')
 

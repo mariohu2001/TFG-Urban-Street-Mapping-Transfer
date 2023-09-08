@@ -64,7 +64,10 @@ def sign_up():
             if user_username is None and user_email is None:
                 userDAO.create_user(sign_up_form.data)
                 session["current_user"] = sign_up_form.username.data
-                return redirect(url_for("common.home"))
+                user = AuthDAO(current_app.driver, current_app.config.get("JWT_SECRET_KEY")).login(sign_up_form.username.data,sign_up_form.password.data)
+                response = redirect(url_for("common.home"))
+                set_access_cookies(response, user)
+                return response
             else:
                 flash("El usuario o correo ya existe", category="error")
         else:
