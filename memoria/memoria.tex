@@ -425,22 +425,22 @@ D. Jesús Manuel Maudes
 % Abstract en castellano
 \renewcommand*\abstractname{Resumen}
 \begin{abstract}
-Uno de los principales factores que considerar cuando se busca abrir un nuevo negocio es la localización. Esto plantea un problema conocido como el \textit{ Location Problem}, el cual busca encontrar la ubicación más adecuada que pueda reportar más beneficios. En el caso del proyecto se aplicará al \textit{retailing}, es decir, a tiendas minoristas.
+Uno de los principales factores que considerar cuando se busca abrir un nuevo negocio es la localización. Esto plantea un problema conocido como el \textit{Location Problem}, el cual busca encontrar la ubicación más adecuada para una determinada categoría comercial pueda reportar más beneficios. En el caso del proyecto se aplicará al \textit{retailing}, es decir, a tiendas minoristas.
 
-Existen distintas aproximaciones a este problema, en este proyecto se aplicará un enfoque desde la ciencia de redes, teniendo en consideración las distintas categorías comerciales y demás servicios en determinadas ciudades con el objetivo de crear un sistema de recomendación con capacidad de ofrecer propuestas de comercios. Para ello se extraerán las relaciones de atracción y repulsión entre las distintas categorías en base a la distribución geográfica de estas.
+Existen distintas aproximaciones a este problema, en este proyecto se aplicará un enfoque desde la ciencia de redes, teniendo en consideración las distintas categorías comerciales y otros servicios en una serie de ciudades con el objetivo de crear un sistema de recomendación con capacidad de ofrecer propuestas de comercios, así como de ubicaciones dada una categoría comercial en concreto. Para ello se calcularán las relaciones de atracción y repulsión entre las distintas categorías teniendo en cuenta la distribución geográfica de estas.
 
 Para lograr lo anterior se utilizarán datos extraídos de una API de geolocalización de un proyecto conocido como \textit{OpenStreetMap} de uso libre, así como,\textit{Neo4j}, que forma parte de un nuevo paradigma conocido como la orientación a grafos en el contexto de las bases de datos.
 
-Además de contemplar recomendaciones a nivel local, también se empleará la transferencia de información entre ciudades, pudiendo usar las relaciones comerciales de una ciudad sobre otra en lugar de las propias. Con este objetivo  se creará también un modelo de inteligencia artificial que integre los datos de todas las ciudades.
+Además de contemplar recomendaciones a nivel local, también se empleará la transferencia de información entre ciudades, permitiendo utilizar la información de una ciudad sobre otra diferente, evitando de esta forma un nuevo proceso de extracción de información para esa segunda ciudad. Con este objetivo se creará también un modelo de inteligencia artificial que integre los datos de todas las ciudades.
 
-Para facilitar el uso de la herramienta de este proyecto, se desarrollará una aplicación web sencilla que permita a los usuarios obtener recomendaciones basadas la ubicación.
+Para facilitar el uso de la herramienta de este proyecto, se desarrollará una aplicación web sencilla que permita a los usuarios obtener recomendaciones basadas la ubicación o en la categoría comercial.
 
 \end{abstract}
 
 \renewcommand*\abstractname{Descriptores}
 \begin{abstract}
 %Palabras separadas por comas que identifiquen el contenido del proyecto Ej: servidor web, buscador de vuelos, android \ldots
-Ciencia de redes, sistema de recomendación, comercio minorista, \textit{machine learning}, web, aprendizaje transferido, API de geolocalización, base de datos de grafos.
+Ciencia de redes, sistema de recomendación, comercio minorista, \textit{machine learning}, web, transferencia de conocimiento, API de geolocalización, base de datos de grafos.
 \end{abstract}
 
 \clearpage
@@ -448,20 +448,21 @@ Ciencia de redes, sistema de recomendación, comercio minorista, \textit{machine
 % Abstract en inglés
 \renewcommand*\abstractname{Abstract}
 \begin{abstract}
-One of the main factors to consider when looking to open a new business is location. This poses a problem known as the Location Problem, which seeks to find the most suitable location that can bring the most benefits. In the case of this project, it will be applied to retailing, i.e. retail stores.
+One of the main factors to consider when looking to open a new business is location. This poses a problem known as the \textit{Location Problem}, which seeks to find the most suitable location for a given business category that can bring the most profit. In the case of this project, it will be applied to retailing, i.e. retail stores.
 
-There are different approaches to this problem, in this project we will apply a network science approach, taking into consideration the different commercial categories and other services in certain cities in order to create a recommendation system with the ability to offer proposals of stores. For this purpose, the attraction and repulsion relationships between the different categories will be extracted based on their geographic distribution.
+There are different approaches to this problem, in this project a network science approach will be applied, taking into consideration the different commercial categories and other services in a series of cities with the objective of creating a recommendation system with the capacity to offer proposals of stores, as well as locations given a specific commercial category. For this purpose, the attraction and repulsion relationships between the different categories will be calculated, taking into account their geographical distribution.
 
-To achieve this, we will use data extracted from a geolocation API of a project known as OpenStreetMap of free use, as well as Neo4j, which is part of a new paradigm known as graph orientation in the context of databases.
+To achieve the above, data extracted from a geolocation API of a project known as OpenStreetMap will be used, as well as Neo4j, which is part of a new paradigm known as graph orientation in the context of databases.
 
-In addition to contemplating recommendations at the local level, the transfer of information between cities will also be used, being able to use the commercial relations of one city over another instead of its own. To this end, an artificial intelligence model will also be created to integrate data from all cities.
+In addition to contemplating recommendations at the local level, the transfer of information between cities will also be used, allowing the use of information from one city on a different one, thus avoiding a new information extraction process for that second city. For this purpose, an artificial intelligence model that integrates data from all cities will also be created.
 
-To facilitate the use of this project's tool, a simple web application will be developed to allow users to obtain location-based recommendations.
+To facilitate the use of the tool of this project, a simple web application will be developed to allow users to obtain recommendations based on location or commercial category.
+
 \end{abstract}
 
 \renewcommand*\abstractname{Keywords}
 \begin{abstract}
-Network science, recommendation system, retailing, machine learning, web, transfer learning, geolocation API, graph database
+Network science, recommendation system, retailing, machine learning, web, knowledge transfer, geolocation API, graph database
 \end{abstract}
 
 \clearpage

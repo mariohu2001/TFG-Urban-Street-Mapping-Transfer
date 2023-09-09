@@ -16,29 +16,28 @@ por Zube.
 
 \subsection{Zenhub}
 Zenhub ~\cite{zenhubZenhubProductivity} se trata de una herramienta de gestión de proyectos basada en las metodologías
-ágiles, por lo que cuenta con funcionalidades que facilitan la creación de tareas así como su gestión.
+ágiles, por lo que cuenta con funcionalidades que facilitan la creación de tareas, así como su gestión.
 Además de crear tareas nos permite asignar a estas un \textit{Sprint}, puntos de poker (utilizados en SCRUM)
 o poder definir aquellas tareas que lo requieran como \textit{Epics} para diferenciarlas de las otras.
 
 
-Un punto importante para su elección inicial fue que esta cuenta con integración en \textit{GitHub},
+Un punto importante para su elección inicial fue que está integrada con \textit{GitHub},
 por lo que facilita la gestión de tareas al hacerla directamente desde el propio repositorio.
 \subsection{Zube}
-Una vez Zenhub pasó a ser una herramienta de pago se optó por el uso de Zube ~\cite{zubeZubeAgile}. Esta cuenta con muchos
+Una vez Zenhub pasó a ser una herramienta de pago, se optó por el uso de Zube ~\cite{zubeZubeAgile}. Esta cuenta con muchos
 de los elementos que Zenhub también tiene. Permite definir tareas y gestionarlas mediante un tablero \textit{Kanban},
-colocando las tareas en un area u otra en función de su estado (Backlog, Ready, In Progress,...)
+colocando las tareas en un área u otra en función de su estado (Backlog, Ready, In Progress,...).
 
 \section{Lenguajes de programación}
 
 Una elección bastante significativa para el proyecto será el lenguaje de programación empleado
 para su desarrollo.
 \subsection{Python}
-Python~\cite{Python} se trata de un lenguaje interpretado de alto nivel bastante utilizado en ámbitos como el \textit{Machine Learning}.
-Además de lo anterior cuenta con multitud de librerías de diversos propósitos desarrolladas por los propios usuarios, pudiendo
-facilitar las labores a realizar en el proyecto. En su elección también influye que es uno de los lenguajes que más hemos
+Python~\cite{Python} es un lenguaje interpretado de alto nivel bastante utilizado en ámbitos como el \textit{Machine Learning}.
+Además de lo anterior, cuenta con multitud de librerías de acceso abierto desarrolladas por los propios usuarios y/o la comunidad científica, lo cual es de gran utilidad en muchos aspectos.. En su elección también influye que es uno de los lenguajes que más hemos
 utilizado durante la carrera.
 \subsection{JavaScript}
-Al igual que Python, JavaScript~\cite{JS} se trata de un lenguaje interpretado, pero este es utilizado por los
+Al igual que Python, JavaScript~\cite{JS} es un lenguaje interpretado, pero este es utilizado por los
 navegadores para poder crear páginas web dinámicas. También cuenta con diversas librerías con funcionalidades
 que permiten manejar el DOM, hacer distintas visualizaciones, entre otras. Este lenguaje será de gran importancia
 en el apartado web del proyecto.
@@ -53,7 +52,7 @@ estas necesidades tomarán gran importancia en la decisión de la base de datos.
 
 \subsection{Neo4j}
 
-Neo4j ~\cite{neo4j} se trata de una base de datos no relacional de la familia de los grafos escrita en Java. Esta
+Neo4j ~\cite{neo4j} es de una base de datos no relacional que pertenece a un nuevo paradigma en las bases de datos, la orientación a grafos, y está desarrollada con Java. Esta
 es utilizada por grandes empresas como Intel, Adobe, AstraZeneca o incluso la NASA. También cabe destacar
 su uso en el terreno de la ciencia de datos gracias a \textit{plugins} con utilidades propias de la ciencia de redes.
 
@@ -61,7 +60,7 @@ Cabe mencionar
 que cuenta con un lenguaje de consultas propio, \textit{Cypher}, con una sintaxis que 
 facilita la obtención de información en un contexto de grafos.
 
-Expuestos los hechos anteriores, Neo4j se trata de la elección lógica para un proyecto de nuestras 
+Expuestos los hechos anteriores, Neo4j se parece la elección lógica para un proyecto de nuestras 
 características.
 
 \subsubsection{APOC (Awesome Procedures On Cypher)}
@@ -86,7 +85,7 @@ Dado que Neo4j es una herramienta nueva, que requiere de un proceso de aprendiza
 por el driver oficial ~\cite{neo4jdriver} por su simple uso y la gran cantidad de documentación existente. Se ha desestimado Py2Neo
 puesto que ya no recibe soporte; y en el caso de Neomodel, las funcionalidades que trae no aportan una ventaja
 respecto al driver oficial, puesto que en primer lugar no utilizaremos Django, sino Flask para la parte web del proyecto;
-y en cuanto al OGM que provee este no nos es necesario puesto que no requeriremos de las ventajas que este nos podría aportar.
+y en cuanto al OGM que provee, este no nos es necesario puesto que no requeriremos de las ventajas que este nos podría aportar.
 
 \subsection{OSMPythonTools}
 OSMPythonTools ~\cite{OSMP} se trata de una librería que facilita el acceso a la información de los servicios de \textit{Open Street Map}
@@ -133,18 +132,26 @@ Una parte importante de este proyecto será la información de las ubicaciones d
 para el proyecto. Para ello se obtendrán mediante APIs de información geográfica, en este caso se utilizará
 OpenStreetMap para este propósito. 
 
-OpenStreetMap se trata de un proyecto abierto y colaborativo que cuenta con información geográfica
+OpenStreetMap es un proyecto abierto y colaborativo que cuenta con información geográfica
 recopilada por los propios usuarios para la visualización de mapas, rutas de navegación y demás ~\cite{OSM}.
 
 Para este proyecto se utilizarán las siguientes APIs de este proyecto. 
 
 \subsection{Overpass}
 Se trata de una de las APIs que componen el proyecto de OpenStreetMap, siendo esta solo de lectura de datos ~\cite{Overpass, openstreetmapOverpassOpenStreetMap}.
-Está optimizada para las operaciones de lectura, contando con un lenguaje propio de consultas llamado \textit{Overpass QL},
-además de introducir algunas estructuras con respecto a OpenStreetMap, como es el caso de las areas, facilitando el acceso a la información.
+Está optimizada para las operaciones de lectura, contando con un lenguaje propio de consultas llamado \textit{Overpass QL}.
+Además introduce algunas nuevas estructuras de datos con respecto a OpenStreetMap, como es el caso de las áreas, facilitando el acceso a la información en base a regiones.
 
 \subsection{Nominatim}
 Nominatim es un motor de búsqueda que forma parte de OpenStreetMap. Sus funcionalidades están centradas en la 
 geolocalización en base a direcciones, nombres de ubicaciones y coordenadas ~\cite{nominatimNominatim}. Cuenta con una API propia
 que será de utilidad para encontrar las áreas de las distintas ciudades con las que se trabajarán en el proyecto.
 
+\section{Otros}
+Además de todas las herramientas anteriormente mencionadas también se ha utilizado para facilitar el uso y despliegue de la aplicación.
+
+\subsection{Docker}
+Docker es una plataforma de código abierto utilizada para facilitar el despliegue de aplicaciones y servicios dentro de lo que se conoce como <<contenedores>>~\cite{dockerContainer}. Estos son capaces de contener todas las dependencias de la aplicación de forma que se pueda utilizar en cualquier equipo usando docker.  
+
+\subsection{Heroku}
+Heroku es una plataforma que permite desplegar aplicaciones web en la nube de forma gratuita~\cite{herokuWhatHeroku}. Cuenta con soporte para distintos lenguajes de programación, entre ellos Python. Nos permitirá desplegar la aplicación desarrollada en este proyecto de forma que su acceso sea más fácil.
