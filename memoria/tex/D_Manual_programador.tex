@@ -111,9 +111,22 @@ Para descargar Neo4j en Windows, tendremos que dirigirnos a la \href{https://neo
 
 Tras la instalación contaremos con Neo4j Desktop, una aplicación de escritorio con la que podremos administrar Neo4j. 
 
-Con ello crearemos un nuevo proyecto, y dentro de la sección \textit{File} añadiremos el \textit{dump} de la base de datos descargado anteriormente. Una vez hecho haremos \textit{click} sobre este y seleccionaremos la opción \textit{Create new DBMS from dump}, con lo que podremos crear la base de datos ya cargada. Se nos indicará que proporcionemos nombre y contraseña a esta para poder crearla. Una vez hecho esto podemos pulsar el botón \textit{Start} y la base de datos ya estaría en funcionamiento.
 
-En el panel lateral se nos mostrará 
+
+\imagen{Neo4jDesktopDMBSDump}{Cargar fichero de volcado en Neo4j Desktop}
+
+Con ello crearemos un nuevo proyecto, y dentro de la sección \textit{File} añadiremos el \textit{dump} de la base de datos descargado anteriormente. Una vez hecho, haremos \textit{click} sobre este y seleccionaremos la opción \textit{Create new DBMS from dump}, con lo que podremos crear la base de datos ya cargada. Se nos indicará que proporcionemos nombre y contraseña a esta para poder crearla. Una vez hecho esto podemos pulsar el botón \textit{Start} y la base de datos ya estaría en funcionamiento.
+
+\imagen{CreateDB}{Pantalla de creación de base de datos de Neo4j Desktop}
+
+También tendremos que asegurarnos en incluir los \textit{plugins} que vayamos a requerir en el desarrollo. Esto lo podremos hacer pulsando sobre nuestra base de datos y se nos desplegará un menú, pulsaremos sobre la pestaña de \textit{plugins} e instalaremos los necesarios.
+
+\imagen{pluginsNeo4j}{Instalación de \textit{plugins} Neo4j}
+
+En el panel lateral se nos mostrará la información de los distintos nodos y enlaces que la base de datos posee. En la parte superior se situará un área de texto que será donde podemos introducir sentencias de \textit{Cypher} para explorar y obtener datos de forma más visual.
+
+\imagen{Neo4jDesktop}{Interfaz de base de datos de Neo4j Desktop}
+
 
 \subsubsection{Linux}
 
@@ -123,7 +136,8 @@ Linux tiene un proceso distinto de instalación con respecto al de Windows.
 Tendremos que añadir el repositorio usando este comando.
 \begin{verbatim}
 	wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
-	echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a /etc/apt/sources.list.d/neo4j.list
+	echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a
+	/etc/apt/sources.list.d/neo4j.list
 	sudo apt-get update
 \end{verbatim}
 
@@ -241,7 +255,61 @@ Para poder levantar la ejecución podemos introducir en la terminal \texttt{dock
 Hecho lo anterior podemos dirigirnos a \url{http://localhost:5000} y utilizar la aplicación web. Decir que el puerto en el que se lanza la aplicación es debido a la configuración de las variables de entorno dentro de \texttt{docker-compose.yml}, esto está sujeto a los cambios que se quieran realizar a estas.
 
 
-\subsection{Uso desde Heroku}
+\subsection{Despliegue en AuraDB}
+
+AuraDB se trata de una plataforma de Neo4j que permite alojar una base de datos en la nube. Para este proyecto se ha utilizado el plan gratuito, puesto que no suponía ninguna restricción para el alcance de este proyecto. Cabe mencionar que tiene una restricción de 200.000 nodos y 400.000 relaciones como máximo que no se puede superar en su plan gratuito.
+
+Para poder desplegar simplemente tendremos que acceder a este \href{https://neo4j.com/cloud/platform/aura-graph-database/?ref=neo4j-home-hero}{enlace} y registrarnos en caso de que no contemos ya con una cuenta de Neo4j. Tras esto se nos proveerá de una instancia de AuraDB, siendo esta la única que tendremos disponible al ser el plan gratuito. Se nos proveerá un fichero de texto que contendrá la URI para conectarnos a la base de datos, así como la contraseña. Este fichero no lo podemos perder bajo ningún concepto, por lo que tendremos que guardarlo para no olvidarlo.
+
+\imagen{AuraDB}{Pantalla de conexión a instancia de Aura DB}
+
+Ya que en este trabajo estamos empleando una base de datos con las ubicaciones ya cargadas tendremos que importar estos datos mediante un volcado de la base de datos, un fichero \texttt{.dump}. Para hacer esto podemos desplazarnos a la pestaña <<Import Database>> de nuestra instancia de Aura y cargar nuestro fichero ahí. Con esto tendríamos la base de datos ya cargada.
+
+\imagen{ImportAura}{Ventana para importar bases de datos en Aura DB}
+
+Aura DB provee bastantes funcionalidades que la versión local tiene por lo que no es mala idea utilizar esta base de datos desde un primer momento en lugar de migrar de local a la nube llegado el momento. En caso de que se vaya a utilizar \textit{plugins} como GDS es recomendable mantenerse en la versión de escritorio, puesto puede que no funcionen. En el caso de APOC está instalado ya en la instancia de Aura DB.
+
+\subsection{Despliegue en Heroku}
+
+Para poder desplegar la aplicación se ha hecho uso de Heroku. Esta es una plataforma gratuita que permite desplegar aplicaciones web en distintos idiomas.
+
+Para poder desplegar en Heroku primero será necesario contar con una cuenta en \href{https://signup.heroku.com/}{Heroku}. Se nos pedirá tomar algunas medidas para la doble autenticación que utilizaremos cada vez que iniciemos sesión.
+
+Tras esto tendremos que instalar <<HerokuCLI>>, la herramienta por línea de comandos que provee Heroku para manejar nuestras aplicaciones. Se puede descargar desde este \href{https://devcenter.heroku.com/articles/heroku-cli#install-the-heroku-cli}{enlace}.
+
+Para poder proseguir necesitamos añadir unos ficheros a nuestro proyecto, son los siguientes:
+\begin{itemize}
+	\item \texttt{requirements.txt}: Fichero con las dependencias de nuestro proyecto de Python. Heroku las instalará al lanzar la aplicación. Se puede obtener introduciendo por consola el comando \texttt{pip freeze > requirements.txt}.
+	\item \texttt{Procfile}: En este fichero se especificará donde se declara nuestra aplicación de Flask para poder lanzarla con gunicorn.
+	\item \texttt{runtime.txt}: Fichero de texto en el que se especificará la versión de Python empleada para el proyecto.
+\end{itemize}
+
+Hay que tener en cuenta que Heroku lanzará nuestra aplicación desde el directorio raíz de nuestro repositorio, por lo que hay que tener en cuenta las rutas en las importaciones.
+
+Una vez realizados estos pasos podemos proceder a lanzar nuestra aplicación en Heroku. En primer lugar tendremos que iniciar sesión. Para ello escribiremos en la terminal \texttt{heroku login}, con lo que se nos mandará a una pantalla de inicio de sesión en nuestro navegador.
+
+El siguiente paso es crear nuestra app de Heroku. Podemos hacerlo con el siguiente comando:
+
+\begin{verbatim}
+	heroku create (nombre de nuestra aplicación) --region=eu
+\end{verbatim}
+
+La ejecución de este comando nos devolverá la URL con la que podremos acceder a nuestra app.
+
+Para subir nuestro proyecto y los futuros cambios que hagamos tendremos ejecutar un comando para actualizar la aplicación de Heroku:
+
+\begin{verbatim}
+	git push heroku (nombre de la rama)
+\end{verbatim}
+
+La aplicación creará unos \textit{logs} a los que podremos acceder usando:
+\begin{verbatim}
+	heroku logs
+\end{verbatim}
+
+La aplicación también podrá ser gestionada mediante navegador a través de un \textit{dashboard} en la página de Heroku.
+
+\imagen{HerokuDashboard}{\textit{Dashboard} para la gestión de apps en Heroku}
 
 \section{Pruebas del sistema}
 

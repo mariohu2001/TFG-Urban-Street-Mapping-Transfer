@@ -6,7 +6,188 @@
 
 \section{Estudio de viabilidad}
 
+En todo proyecto de \textit{software} de hacerse un estudio de viabilidad. Para ello ha de tenerse en cuenta el coste que conlleva el desarrollo del producto, así como las posibles restricciones legales que el uso de determinadas herramientas pueden imponer sobre la aplicación.
 \subsection{Viabilidad económica}
+La viabilidad económica es un análisis sobre los costes financieros que conlleva el desarrollo del producto. Dentro de este se debe tener en consideración los gastos derivados de equipamiento e infraestructura, además del coste asociado al personal de desarrollo. Dado esto, este estudio de viabilidad económica debe de realizarse como si se tratase de una empresa real.
+
+\subsubsection{Costes derivados de recursos}
+En esta sección se analizarán los costes derivados de los recursos \textit{software} y \textit{hardware} utilizados durante el desarrollo. También incluiremos aquellos relacionados con el despliegue de la aplicación.
+
+Cabe destacar que algunos de los recursos utilizados son la licencia gratuita ofrecida por las empresas, se listarán también para tenerlos en consideración en caso de que en desarrollos futuros se requiera de obtener algunos planes de pago.
+
+La duración del proyecto ha sido del 2 de febrero hasta el 21 de septiembre, alrededor de 8 meses con 32 semanas. 
+
+\begin{itemize}
+	\item \textbf{\textit{Hardware}}:\\ Para el desarrollo de la aplicación se ha hecho uso de 2 ordenadores. El primero de ellos es un ordenador portátil modelo ASUS TUF Gaming F15 FX506HE\_FX506HE que cuenta con un procesador 11th Gen Intel(R) Core(TM) i5-11400H 2.70GHz, 16GB de RAM y una GPU NVIDIA GeForce RTX 3050 Ti con 4GB. Este equipo actualmente tiene un precio de 1199,00 € y se espera amortizarlo en 4 años.
+	
+	Su coste anual de amortización será:
+	\[
+	\text{Coste anual de amortización} = \frac{\text{1999,00 €}}{\text{4 años}} \approx \text{299,75 €/año}
+	\]
+	
+	 El segundo equipo se utilizó para realizar aquellas operaciones con una duración bastante larga; se trata de un ordenador de sobremesa que cuenta con un procesador i3-8100 8th Gen Intel(R) Core(TM), 16GB de memoria RAM y una GPU NVIDIA GeForce GTX 1050Ti de 4GB. En su momento se obtuvo este ordenador con un precio de alrededor a 800€, esperando amortizarlo en 6 años.
+	
+	Para calcular el coste de amortización de este equipo hay que tener en consideración que se compró hace 5 años y se espera amortizar en 6 años:
+	
+
+\[
+\text{Amortización acumulada} = \frac{\text{Años desde la compra}}{\text{Años de amortización total}} = \frac{5 \text{ años}}{6 \text{ años}}
+\]
+\[
+\text{Valor no amortizado} = \text{Costo original} - \text{Amortización acumulada}
+\]
+\[
+\text{Valor no amortizado} = 800 \text{ €} - \left(\frac{5}{6} \times 800 \text{ €}\right) = 800 \text{ €} - 666.67 \text{ €} = 133.33 \text{ €}
+\]
+\[
+\text{Costo anual de amortización} = \frac{\text{Valor no amortizado}}{\text{Años por amortizar}} = \frac{133.33 \text{ €}}{1 \text{ año}} \approx 133.33 \text{ €}
+\]
+
+El costo anual de amortización, teniendo en cuenta lo que ya ha sido amortizado, es de 133.33 €.
+
+\item \textbf{\textit{Software}}:
+En cuanto a \textit{software} se utilizó una licencia del sistema operativo Windows 10 Pro. Este tiene un valor aproximado de 200 € mediante medios oficiales. Dado que la fecha de fin de soporte es cercano a 2026 se espera amortizar en 3 años.
+
+\[
+\textit{Coste anual de amortización} = \frac{\text{200 €}}{\text{3 años}} \approx \text{66.6 €/año}
+\]
+
+Sobre Neo4j, la base de datos, se ha utilizado la licencia \textit{Community}, que es gratuita. 
+
+
+\item \textbf{Otros}:
+Para el despliegue de la aplicación se ha hecho uso de dos plataformas, Heroku para alojar la aplicación web, y Neo4j AuraDB para alojar la base de datos en la nube. Para estos ha bastado con los planes gratuitos, pero cabe esperar que en futuros desarrollos se sobrepase lo ofertado por estos planes. Especial mención para Neo4j AuraDB, que tiene un límite sobre el número de nodos y enlaces en su plan gratuito que actualmente está cerca de sobrepasar.
+
+
+	
+	
+\end{itemize}
+
+Todo esto nos deja con el siguiente coste anual derivado de recursos:
+%\tablaApaisadaSmall{Costes de recursos}{lc}{costesrec}{Recurso & Coste}{
+%hola & adios }
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{| l | c |}
+		\toprule
+		\textbf{Recurso} & \textbf{Coste Anual} \\ \midrule
+		Windows 10 Pro & 66,6 €\\
+		Portatil & 299,75 € \\
+		Ordenador de Sobremesa & 133,33 €\\
+		AuraDB & 0,00 €\\
+		Heroku & 0,00 €\\
+		\midrule
+		\textbf{Total:} & 499,68 € \\
+		\bottomrule
+	\end{tabular}
+	\caption{Coste anual por recursos.}
+	\label{CostResources}
+\end{table}
+
+\subsubsection{Costes de personal}
+Para estimar los costes de personal se considerará como una empresa de un único empleado, el alumno. Tendrá gran importancia la duración del desarrollo del proyecto, siendo de alrededor de 8 meses.
+
+Se considerará al desarrollador bajo la categoría de <<programador Junior>>, estos ganan en promedio en España alrededor 21.925 € brutos con una jornada completa. Para formalizar sus condiciones de trabajo se considerará que es un contrato a jornada parcial de 20 horas semanales con 14 pagas anuales.
+
+Deberemos recalcular el salario bruto para ajustarse a la jornada parcial:
+
+\[
+\text{Salario Bruto Anual Jornada Parcial} = \text{21.925 €}  \frac{\text{20 horas}}{\text{40 horas}} = \text{10.962,50 €}
+\]
+
+Y con ello obtener el salario bruto mensual:
+
+\[
+\text{Salario Bruto Mensual} = \frac{\text{10.962,50 €}}{\text{14 pagas}} = \text{783,03 €}
+\]
+
+Una vez obtenido el salario bruto mensual queda deducir impuestos aplicables en territorio español. Entre estos se encuentran las distintas contribuciones a la seguridad social.
+
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{| l | c |}
+		\toprule
+		\textbf{Concepto} & \textbf{Porcentaje} \\ \midrule
+		Contingencias Comunes & 4,70 \%\\
+		Desempleo & 1,60 \% \\
+		Formación Profesional & 0,10 \% \\
+		\midrule
+		\textbf{Total:} & 6,4 \% \\
+		\bottomrule
+	\end{tabular}
+	\caption{Conceptos de Seguridad Social empleado}
+	\label{SSemp}
+\end{table}
+
+Calculadas las contribuciones del empleado, esto se saldaría con el siguiente salario neto:
+
+\[
+\text{Salario mensual neto} = \text{Salario mensual bruto} - \text{\% de contribución}
+\]
+\[
+\text{Salario mensual neto} = \text{783,03 €} - \text{6,4 \%} = \text{732,92 €}
+\]
+
+En cuanto a la contribución por parte de la empresa, esta sería la siguiente:
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{| l | c |}
+		\toprule
+		\textbf{Concepto} & \textbf{Porcentaje} \\ \midrule
+		Contingencias Comunes & 23,60 \%\\
+		Accidentes de trabajo & 1,5 \%\\
+		Desempleo & 6,70 \% \\
+		FOGASA & 0,20 \%\\
+		Formación Profesional & 0,60 \% \\
+		\midrule
+		\textbf{Total:} & 32,60 \% \\
+		\bottomrule
+	\end{tabular}
+	\caption{Conceptos de Seguridad Social empresa}
+	\label{SSempresa}
+\end{table}
+
+Las contribuciones a la seguridad social por parte de la empresa son:
+
+\[
+\text{Contribución empresa} = \text{Salario Bruto empleado} - \text{\% de contribución}
+\]
+\[
+\text{Contribución empresa} = \text{783,03 €} - \text{32,60 \%} \approx \text{527,76 €}
+\]
+
+Por tanto, el gasto mensual de personal de la empresa son:
+
+\[
+\text{Gasto mensual en personal} = \text{Salario Bruto empleado} + \text{Contribuciones}
+\]
+\[
+\text{Gasto mensual en personal} = \text{783,03 €} + \text{527,76 €} \approx \text{1.310,79 €}
+\]
+
+\subsubsection{Costes totales}
+Al considerar todos los gastos anteriores cerramos con los siguientes gastos durante el periodo de 8 meses de desarrollo:
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{| l | c |}
+		\toprule
+		\textbf{Concepto} & \textbf{Coste} \\ \midrule
+		Personal & 10.486,32 €\\
+		\textit{Hardware} & 288,72  € \\
+		\textit{Software} & 44,40 €\\
+		Otros & 0,00 €\\
+		
+		\midrule
+		\textbf{Coste Total del Proyecto:} & 10.819,44  € \\
+		\bottomrule
+	\end{tabular}
+	\caption{Coste del proyecto}
+	\label{Costproject}
+\end{table}
 
 \subsection{Viabilidad legal}
 
