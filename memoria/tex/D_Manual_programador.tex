@@ -311,6 +311,11 @@ La aplicación también podrá ser gestionada mediante navegador a través de un
 
 \imagen{HerokuDashboard}{\textit{Dashboard} para la gestión de apps en Heroku}
 
+
+También cabe mencionar la configuración de variables de entorno de Heroku. Dado que nuestro proyecto las requiere para poder funcionar será imprescindible definirlas al desplegar la aplicación. Esto se puede hacer en la sección \textit{settings} del \textit{dashboard} de Heroku.
+
+\imagen{Herokuconfigvars}{Variables de configuración de Heroku}
+
 \section{Pruebas del sistema}
 
 En cuanto a la realización de pruebas del sistema hay que tener en cuenta que las partes más complejas se realizan dentro de la base de datos al realizar los cálculos de indices de calidad y similares. Para comprobar que los cálculos son correctos se ha creado <<mocks>> con una estructura similar a los datos reales de ubicaciones, y sobre ellos se han realizado los cálculos, validándolos manualmente. Esto es debido a la dificultad que presenta la realización de pruebas automatizadas con la base de datos y la alta complejidad de los cálculos realizados.
