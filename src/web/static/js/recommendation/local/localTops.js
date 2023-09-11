@@ -58,7 +58,7 @@ function getPlacesTops() {
             })
         })
         
-        
+        document.getElementById("loading-div").style.display = "none"
         method_dropdopwn.disabled = false
     })
     

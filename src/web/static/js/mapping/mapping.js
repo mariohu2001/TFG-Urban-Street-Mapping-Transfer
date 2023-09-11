@@ -17,6 +17,8 @@ const analysisButton = document.getElementById("analysis_button")
 const clearButton = document.getElementById("clear_btn")
 const topsButton = document.getElementById("tops_button")
 const transferButton = document.getElementById("transfer_button")
+const transferButtonRec = document.getElementById("transfer_button_rec")
+
 
 const markerDefaultOpacity = 0.5;
 
@@ -79,7 +81,7 @@ analysisButton.addEventListener('click', function () {
     }).join('&')
 
 
-    window.location.href = `/recomendation/${cityDropdown.value}?${queryStringPlaces}&${queryStringCoords}`
+    window.location.href = `/recommendation/${cityDropdown.value}?${queryStringPlaces}&${queryStringCoords}`
 
 });
 
@@ -97,6 +99,22 @@ transferButton.addEventListener('click', function () {
 
 
     window.location.href = "/transfer/"+ cityDropdown.value +"?"+ queryStringPlaces + "&" +queryStringCoords
+
+});
+
+transferButtonRec.addEventListener('click', function () {
+
+
+    let queryStringPlaces = selectedPlaces.map(function (marker) {
+        return 'place=' + encodeURIComponent(marker.options.id)
+    }).join('&')
+
+    let queryStringCoords = selectedCoords.map(function (marker) {
+        return 'coords=' + encodeURIComponent(marker.getLatLng().lat) + ":" + encodeURIComponent(marker.getLatLng().lng)
+    }).join('&')
+
+
+    window.location.href = "/recommendation/transfer/"+ cityDropdown.value +"?"+ queryStringPlaces + "&" +queryStringCoords
 
 });
 
@@ -131,6 +149,7 @@ function addCoordsMarker(e) {
             topsButton.disabled = true
             transferButton.disabled = true
             analysisButton.disabled = true
+            transferButtonRec.disabled = true
         }
     })
     newMarker.on('mouseover', function (e) {
@@ -212,6 +231,7 @@ function selectMarker(event) {
         topsButton.disabled = false
         transferButton.disabled = false
         analysisButton.disabled = false
+        transferButtonRec.disabled = false
         selectedPlaces.push(marker);
         marker.setIcon(selectedIcon)
 

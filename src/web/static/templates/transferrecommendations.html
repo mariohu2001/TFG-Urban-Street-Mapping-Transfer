@@ -1,7 +1,6 @@
-{% extends "base.html" %}
-{% block title %}
-Tops
-{% endblock %}
+{% from "macros/basics.html" import dropdown_list, dropdown_list_cities %}
+{% extends "base.html" %} {% block title %}Mejor ubicación{% endblock %}
+
 {% block head %}
 
 <script>
@@ -18,6 +17,21 @@ Tops
 <div class="row g-0 h-100 p-4 my-1">
     <div id="usmt-map" class="border border-5 border-dark-subtle rounded-1" style="box-sizing: border-box;">
     </div>
+</div>
+<div class="row px-4 d-flex g-0">
+    <div class="d-flex align-items-center justify-content-start">
+        {{ dropdown_list_cities("ciudad", cities, "ciudad") }}
+        {{ dropdown_list("categoría", categories, "categoría") }}
+        <button type="button" id="metrics_button" class="btn btn-dark my-1" disabled>Calcular</button>
+
+    </div>
+    <div id="loading-div" style="display: none;">
+        <p>Se están realizando calculos, espere y seleccione categoría y método...
+        <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        </p>
+    </div>
     <div class="d-flex align-items-center justify-content-start">
         <div class="form-floating my-2 ">
             <select class="form-select" id="method-dropdown" title="método" disabled>
@@ -30,27 +44,19 @@ Tops
             </select>
             <label for="Método" style="z-index: 0;">Método</label>
         </div>
-
-        <div  id="loading-div">
-            <p>Se están realizando calculos, espere y seleccione un método... </p>
-            <div class="spinner-border text-secondary" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              
-        </div>
     </div>
 </div>
 <div class="row g-0 px-4 my-5 d-flex justify-content-around align-items-center">
     <div>
         <table id="tops-table" class="table table-dark table-hover table-responsive" style="table-layout: auto;">
-            <thead >
-                <tr class="text-center" >
-                    <th colspan="3">Método</th>
+            <thead>
+                <tr class="text-center">
+                    <th colspan="3">Ranking</th>
                 </tr>
                 <tr style="text-align: center;">
+                    <th>Posición</th>
                     <th>#</th>
                     <th>Categoría</th>
-                    <th>Tops</th>
                 </tr>
             </thead>
             <tbody>
@@ -66,15 +72,12 @@ Tops
     </div>
 </div>
 {% endblock %}
-
-
 {% block scripts%}
 <script type="text/javascript" src="/js/metricsTable.js" defer></script>
 <script type="text/javascript" src="/js/recommendation/PlaceMarker.js" defer></script>
 <script src="/js/leaflet.extra-markers.min.js" defer></script>
 <script type="text/javascript" src="/js/recommendation/local/getQualityIndices.js" defer></script>
 <script type="text/javascript" src="/js/recommendation/loadMapWithLocations.js" defer></script>
-<script type="text/javascript" src="/js/recommendation/local/localTops.js" defer></script>
-<!-- <script type="text/javascript" src="/js/recommendation/local/categoryRecommendation.js" defer></script> -->
+<script type="text/javascript" src="/js/recommendation/transfer/transferRecommendation.js" defer></script>
 
 {% endblock %}

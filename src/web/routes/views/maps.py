@@ -7,9 +7,9 @@ from ...utils import get_city_coords
 map_routes = Blueprint("maps", __name__, url_prefix='/')
 
 
-@map_routes.route('/recomendation/<city>', methods=["GET", "POST"])
+@map_routes.route('/recommendation/<city>', methods=["GET", "POST"])
 @jwt_required()
-def recomendation(city: str):
+def recommendation(city: str):
     dao = PlaceDAO(current_app.driver)
     if city not in dao.get_cities():
         abort(404)
@@ -41,9 +41,50 @@ def recomendation(city: str):
         city_coords = get_city_coords(city)
     except:
         abort(400)
-    return render_template("recomendations.html", usuario=session.get("current_user"),
+    return render_template("recommendations.html", usuario=session.get("current_user"),
                            nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
         city_coords.values()), categories=categories)
+
+
+
+@map_routes.route('/recommendation/transfer/<city>', methods=["GET", "POST"])
+@jwt_required()
+def recommendation_transfer(city: str):
+    dao = PlaceDAO(current_app.driver)
+    if city not in dao.get_cities():
+        abort(404)
+    try:
+        places: list = [int(place) for place in request.args.getlist('place')]
+
+        coords: list = [tuple(coord.split(":"))
+                        for coord in request.args.getlist('coords')]
+
+        nodos = {}
+
+        marker_index = 1
+        for p in places:
+            nodos[marker_index] = dao.get_by_id(p)
+            marker_index += 1
+
+        coords_markers = {}
+        for c in coords:
+            coords_markers[marker_index] = {
+                "lat": float(c[0]),
+                "lon": float(c[1]),
+                "category": "Coords",
+                "area": city
+            }
+            marker_index += 1
+        catsDAO = CategoryDAO(current_app.driver)
+        categories = catsDAO.get_by_city(city)
+        categories = [[cat, cat.replace("_", " ")]for cat in categories]
+        city_coords = get_city_coords(city)
+    except:
+        abort(400)
+    return render_template("transferrecommendations.html", usuario=session.get("current_user"),
+                           nodos=nodos, nodosCoords=coords_markers, city=city, coords=list(
+        city_coords.values()), cities=[ciudad for ciudad in dao.get_cities() if ciudad != city])
+
 
 
 @map_routes.route('/top/<city>')
@@ -93,7 +134,7 @@ def map():
 
 @map_routes.route('/transfer/<city>')
 @jwt_required()
-def transfer_recomendation(city: str):
+def transfer_recommendation(city: str):
     dao = PlaceDAO(current_app.driver)
     if city not in dao.get_cities():
         abort(404)

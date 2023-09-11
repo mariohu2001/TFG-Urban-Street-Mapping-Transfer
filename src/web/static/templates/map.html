@@ -21,14 +21,18 @@
 				Borrar</button>
 			{% if usuario is not none and usuario is defined %}
 			<button type="button" id="analysis_button" class="btn btn-dark my-1" disabled><i class="bi bi-building"></i>
-				Recomendaciones</button>
-			<button type="button" id="transfer_button" class="btn btn-dark my-1" disabled><i class="bi bi-building-up"></i>
-				Transferencia</button>
+				Mejor ubicación</button>
+			<button type="button" id="transfer_button_rec" class="btn btn-dark my-1" disabled><i class="bi bi-building-up"></i>
+					Mejor ubicación Transfer</button>
 			<button type="button" id="tops_button" class="btn btn-dark col my-1" disabled><i class="bi bi-sort-up"></i> Tops</button>
+			<button type="button" id="transfer_button" class="btn btn-dark my-1" disabled><i class="bi bi-sort-up"></i>
+				Tops Transfer</button>
 			{% else %}
 			<button type="button" id="analysis_button" class="btn btn-dark my-1" style="display: none;"><i
 					class="bi bi-building"></i>
-				Recomendaciones</button>
+				Mejor ubicación</button>
+			<button type="button" id="transfer_button_rec" class="btn btn-dark my-1" style="display: none;"><i class="bi bi-building-up"></i>
+					Mejor ubicación Transfer</button>
 			<button type="button" id="transfer_button" class="btn btn-dark my-1" style="display: none;"><i
 					class="bi bi-building-up"></i>
 				Transferencia</button>

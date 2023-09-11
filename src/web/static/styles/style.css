@@ -39,7 +39,7 @@ p {
 /* calc(var(--content-height) * 0.9); */
 
 label {
-    text-decoration: underline;
+    font-weight: bold;
 
 }
 
