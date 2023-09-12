@@ -62,6 +62,39 @@ Para ello contamos con el menú desplegable de la esquina superior derecha.
 \end{figure}
 
 
+\subsection{Gestión de usuarios}
+
+Para acceder a ciertas funcionalidades de la aplicación será necesario contar con una cuenta de usuario, así como haber iniciado sesión. Para ello se dispone de dos pantallas con las que realizar tanto el registro como el inicio de sesión.
+
+\subsubsection{Registro}
+\imagen{USMTsignup}{Pantalla de registro de usuario}
+
+Para poder registrarnos será necesario proveer distintos datos. Estos son los siguientes:
+
+\begin{itemize}
+	\item Nombre de usuario
+	\item Nombre
+	\item Apellido
+	\item Correo electrónico
+	\item Contraseña
+	\item Confirmar contraseña
+\end{itemize}
+
+Mencionar que el campo de <<nombre de usuario>> tiene una restricción de longitud de un mínimo de 2 caracteres y 20 de máximo. En cuanto a la contraseña, esta debe tener una longitud de entre 4 y 30 caracteres.
+
+Todos los campos cuentan con validación, en caso de que se introduzca un campo en un formato no deseado, o por ejemplo, si el usuario a registrar ya existe se muestra un aviso con el error en la parte superior de la pantalla.
+
+\imagen{USMTsignuperror}{Notificación de error en el registro}
+
+Una vez hayamos introducido los datos podemos pulsar sobre el botón <<Aceptar>>. Si el registro ha sido exitoso se nos habrá redirigido hacia la página <<Home>> además de haber iniciado sesión.
+
+\subsubsection{Inicio de sesión}
+
+\imagen{USMTlogin}{Pantalla de inicio de sesión}
+
+Si ya contamos con una cuenta podemos iniciar sesión a través de esta pantalla. Bastará con introducir nuestro nombre de usuario y contraseña, y a continuación pulsar el botón. Si el inicio de sesión ha sido exitoso se nos redirigirá a <<home>> con la sesión iniciada. En caso de error se nos mostrará un aviso de error en la parte superior de la pantalla como sucedía con el registro.
+
+También se incluye un enlace a la página de registro en caso de que no contemos con una cuenta.
 \subsubsection{Visualización de red}
 
 Una de las funcionalidades de la aplicación es ver la interacción entre las distintas categorías de cada ciudad en formato de grafo. Se ha provisto con una visualización interactiva que permite aplicar distintos efectos.
@@ -84,7 +117,7 @@ La última opción de la que disponemos es el filtro por grupo. Dado que la red 
 
 \imagen{USMTvisred4}{Visualización de la red con filtro de grupo}
 
-\subsection{Mapas y recomendaciones}
+\subsection{Mapas}
 
 Otra de las funcionalidades de la aplicación es la visualización de los establecimientos comerciales de las ciudades. Primero tendremos que acceder a la opción <<Mapas>> de la barra de navegación. En esta tendremos que seleccionar la ciudad y la categoría que buscamos en el menú de la parte derecha de la pantalla. Una vez hecho pulsaremos sobre <<Buscar>>
 
@@ -105,3 +138,59 @@ Puede que también estemos interesados en lugares que no están registrados en l
 Al buscar nuevamente establecimientos de otra categoría comercial teniendo ya seleccionados algunos estos se mantendrán junto con las coordenadas seleccionadas.
 
 Si deseamos eliminar todos los marcadores seleccionados podemos usar el botón de <<Borrar>> que los eliminará del mapa.
+
+\subsection{Recomendaciones}
+
+Estas funcionalidades puede ser accedidas desde la pantalla de mapas una vez hayamos escogido unas ubicaciones. Para ello también es necesario haber iniciado sesión en la página, de lo contrario no podremos acceder.
+
+En la página de mapas podremos ver los distintos botones para acceder a las páginas de recomendaciones.
+\imagen{USMTbtnrec}{Botones de recomendación}
+
+Estas páginas ofrecen 2 tipos de recomendaciones.
+
+\begin{enumerate}
+	\item \textbf{Recomendaciones de ubicaciones}: Estas recomendaciones consisten en encontrar la ubicación más adecuada dada una determinada categoría entre las localizaciones seleccionadas.
+	\item \textbf{Recomendaciones de categorías} (Tops): Estas recomendaciones consisten en ofrecer las categorías más adecuadas para las ubicaciones que hayamos seleccionado.
+\end{enumerate}
+
+Además, para cada una de estas se encuentra su versión su versión con \textit{Transfer}, o lo que es decir, utilizando información de otras ciudades. Estas pueden ser accedidas pulsando en los botones que incluyen en su nombre <<\textit{Transfer}>>.
+
+Al acceder a una de ellas volveremos a ver una visualización del mapa, pero solo con los marcadores que hayamos seleccionado.
+
+\imagen{USMTrecmarker}{Marcadores en las pantallas de recomendación}
+
+Como se puede apreciar en la imagen, a cada marcador se le ha asignado un color distinto, además de un número identificativo precedido por <<\#>> que puede ser consultado al pasar el cursor sobre el marcador. También se muestra las coordenadas, nombre en caso de que lo posea y el ID de Open Street Map.
+
+Las distintas recomendaciones se podrán realizar empleando diversos métodos. Estos podrán ser elegidos desde menús \textit{dropdown} en las distintas pestañas. Contamos con los siguientes métodos elegibles:
+
+\begin{itemize}
+	\item \textbf{Jensen}
+	\item \textbf{Jensen raw}
+	\item \textbf{Permutation}
+	\item \textbf{Permutation raw}
+	\item \textbf{\textit{Random Forest}}
+\end{itemize}
+
+
+
+\subsubsection{Recomendaciones de ubicaciones}
+
+Las recomendaciones de ubicaciones nos proporcionarán un \textit{ranking} ordenado en base a la adecuación de las ubicaciones seleccionadas para una determinada categoría que seleccionemos. Se proveen también los distintos métodos.
+
+Para poder obtener las recomendaciones tendremos que elegir una categoría del menú y luego seleccionar el método.
+
+\imagen{USMTranking}{Tabla de \textit{ranking} en recomendaciones de ubicaciones}
+
+En esta tabla aparecerán representadas las ubicaciones que habíamos seleccionado presentadas en orden de la adecuación según el método elegido. La primera columna se corresponde con la posición que ocupa, la segunda el identificador del marcador junto con su color; y la tercera la categoría real de este.
+
+También existe la variante con transferencia. En estos se escogerá la ciudad de la cual emplearemos sus datos para obtener recomendaciones. Al escoger una ciudad las categorías disponibles serán únicamente las de la ciudad escogida.
+
+\subsubsection{Recomendaciones de categorías}
+
+La otra aproximación de la que dispone la aplicación es obtener las categorías más adecuadas para las ubicaciones seleccionadas. En este caso solo necesitaremos especificar el método a emplear.
+
+\imagen{USMTtops}{Tabla de mejores categorías para las ubicaciones}
+
+En esta se nos mostrará una tabla que vincula cada marcador con su categoría y las 5 categorías más apropiadas para su ubicación según el método escogido.
+
+Se podrá también aplicar transferencia a estas recomendaciones, para ello desde su pantalla propia tendremos que seleccionar la ciudad de la que emplearemos datos para hacer las recomendaciones.

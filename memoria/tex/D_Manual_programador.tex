@@ -135,8 +135,10 @@ Linux tiene un proceso distinto de instalación con respecto al de Windows.
 
 Tendremos que añadir el repositorio usando este comando.
 \begin{verbatim}
-	wget -O - https://debian.neo4j.com/neotechnology.gpg.key | sudo apt-key add -
-	echo 'deb https://debian.neo4j.com stable latest' | sudo tee -a
+	wget -O - https://debian.neo4j.com/neotechnology.gpg.key 
+	| sudo apt-key add 
+	echo 'deb https://debian.neo4j.com stable latest' 
+	| sudo tee -a
 	/etc/apt/sources.list.d/neo4j.list
 	sudo apt-get update
 \end{verbatim}
@@ -232,7 +234,6 @@ Para instalar las dependencias del proyecto tendremos que introducir lo siguient
 \end{verbatim}
 
 Con esto se instalarán en el entorno virtual todas aquellas librerías especificadas por el fichero \texttt{requirements.txt}. Con ello podremos ejecutar código de Python usando las dependecias contenidas por el entorno.
-\subsection{Especificación de la API REST}
 
 \label{sec:compilación}
 \section{Compilación, instalación y ejecución del proyecto}
