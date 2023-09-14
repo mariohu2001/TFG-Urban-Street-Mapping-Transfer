@@ -1,9 +1,353 @@
 \apendice{Plan de Proyecto Software}
 
 \section{Introducción}
-
+En este apartado se detallará el la planificación seguida durante el proyecto, así como el estudio de viabilidad de este, teniendo en consideración los aspectos económicos como legales.
 \section{Planificación temporal}
 
+Para el desarrollo del proyecto se establecieron \textit{sprints} de 2 semanas, utilizando ZenHub y Zube para la gestión de tareas. Dadas las características propias del proyecto se ha mantenido contacto con los tutores a través de \textit{Teams} para informar sobre los resultados obtenidos de ciertas tareas y de esta forma poder actuar en consecuencia.
+
+Las tareas realizadas en cada \textit{sprint} se recogen en las siguientes tablas.
+
+%\begin{table}[h!]
+%	\centering
+%	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}}  verticalmente las columnas
+%		\multicolumn{3}{c}{\textbf{\textit{Sprint} 1}}\\
+%		\midrule
+%		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+%		\midrule
+%		2/2/2023 & 15/2/2023 & \begin{itemize}[left=0pt]
+%			\item cosa 1
+%			\item cosa 2
+%		\end{itemize}\tabularnewline
+%		\bottomrule
+%	\end{tabular}
+%	\caption{Tabla del \textit{sprint} 1}
+%	\label{tabsprint1}
+%\end{table}
+
+
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+			\multicolumn{3}{c}{\textbf{\textit{Sprint} 1}}\\
+			\midrule
+			\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+			\midrule
+			2/2/2023 & 15/2/2023 & \begin{itemize}[left=0pt]
+					\item Aprendizaje de OpenStreetMap.
+					\item Aprendizaje de Neo4j.
+					\item Aprendizaje de OverpassQL.
+					\item Selección de librería para consultas a OpenStreetMap.
+					\item Escoger \textit{drivers} para Neo4j.
+				\end{itemize}\tabularnewline
+			\bottomrule
+		\end{tabular}
+	\caption{Tabla del \textit{sprint} 1}
+	\label{tabsprint1}
+\end{table}
+
+\newpage
+La tarea <<Aplicación de algoritmos de distancia de cadenas para corregir categorías comerciales>> dio mal resultado tras analizar las posibles correcciones, por lo que se acabó desestimando.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 2}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		15/2/2023 & 1/3/2023 & \begin{itemize}[left=0pt]
+			\item Carga de ubicaciones de capitales de Europa.
+			\item Aplicación de algoritmos de distancia de cadenas para corregir categorías comerciales.
+			\item Profundización en el lenguaje de consultas \textit{Cypher}.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 2}
+	\label{tabsprint2}
+\end{table}
+
+
+\newpage
+Durante el siguiente \textit{sprint} se determinó que la cantidad de enlaces era inabarcable una vez realizada la tarea <<Creación de enlaces por proximidad entre los nodos en Neo4j>>, por lo que las otras tareas son consecuencia de esta conclusión.
+
+También se comprobaron el número de localizaciones de algunas ciudades, esto se debe a que el número de estas parecía algo inconsistente tras el análisis de los resultados de la tarea <<Carga de ubicaciones de Valladolid, Valencia y Sevilla>>. Esto llevó a considerar el uso de nuevas APIs para sustituir a OpenStreetMap.
+
+Al final se decidió terminar trabajando sobre 3 ciudades de las cargadas en la tarea <<Carga de ubicaciones de 10 ciudades españolas>>, siendo estas Sevilla, Valencia y Zaragoza.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 3}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		1/3/2023 & 15/3/2023 & \begin{itemize}[left=0pt]
+			\item Creación de enlaces por proximidad entre los nodos en Neo4j
+			\item Carga de ubicaciones de Valladolid, Valencia y Sevilla.
+			\item Carga de ubicaciones de 10 ciudades españolas.
+			\item Búsqueda de APIs alternativas.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 3}
+	\label{tabsprint3}
+\end{table}
+
+\newpage
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 4}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		15/3/2023 & 29/3/2023 & \begin{itemize}[left=0pt]
+			\item Pensar en la aplicación del método \textit{Permutation}
+			\item Pensar en el guardado de datos de las simulaciones.
+			\item Realización de curso de Neo4j GDS (\textit{Graph Data Science}).
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 4}
+	\label{tabsprint4}
+\end{table}
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}}
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 5}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		29/3/2023 & 12/4/2023 & \begin{itemize}[left=0pt]
+			\item Creación de red de categorías.
+			\item Aplicación del método \textit{Permutation}
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 5}
+	\label{tabsprint5}
+\end{table}
+\newpage
+Tras obtener las relaciones marcadas como significativas según los resultados del método \textit{Permutation} en la tarea <<Obtención de relaciones significativas>>, estas eran algo incoherentes. Se consideró apropiado la eliminación de aquellas ubicaciones pertencecientes al mobiliario urbano, puesto que estaban suponiendo un problema.
+
+Tras investigar un poco se descubrió que la etiqueta <<amenity>> de OpenStreetMap no contemplaba todos los posibles comercios, solo algunos de ellos. Por esto se incluyeron también ubicaciones con la etiqueta <<shop>>, con la intención de volver a realizar las simulaciones esperando obtener mejores resultados.
+
+Una vez borrados nodos de mobiliario urbano y habiendo incluido ubicaciones etiquetadas con <<shop>> se procedió a realizar de nuevo las simulaciones del método \textit{permutation}. Cuando se comenzaron a hacerse estas tardaban un tiempo significativamente mayor al anterior, resultado inviable. Esto es debido a que el tiempo de realización es afectado por el número de categorías, habiendo sido aumentado con la inclusión de las tiendas.
+
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 6}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		12/4/2023 & 3/5/2023 & \begin{itemize}[left=0pt]
+			\item Cálculo de Z-Score y percentiles con los resultados de las simulaciones.
+			\item Obtención de relaciones significativas.
+			\item Comienzo de desarrollo web.
+			\item Curso de aplicaciones con Flask y Neo4j ofrecido por Neo4j.
+			\item Documentación de herramientas Web con MDN.
+			\item Carga de ubicaciones con etiqueta <<shop>>.
+
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 6}
+	\label{tabsprint6}
+\end{table}
+
+\newpage
+Dados los resultados del anterior \textit{sprint}, se procedió a utilizar ciudades más pequeñas, de Castilla y León, para volver a aplicar este método. Al final se utilizaron datos pertenecientes a León, Salamanca, Valladolid, 
+Burgos y Palencia. El resto de ciudades de esta comunidad autónoma quedaron descartadas por presentar un número muy bajo de ubicaciones.
+
+También se eliminaron ubicaciones pertenecientes a mobiliario urbano o a etiquetas auxiliares de Open Street Map.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 7}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		17/5/2023 & 31/5/2023 & \begin{itemize}[left=0pt]
+			\item Carga de ubicaciones de ciudades de Castilla y León.
+			\item Rehacer simulaciones método \textit{permutation}.
+			\item Obtener Z-Scores y relaciones significativas.
+			\item Gestión de usuarios en la web.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 7}
+	\label{tabsprint7}
+\end{table}
+
+\newpage
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 8}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		31/5/2023 & 14/6/2023 & \begin{itemize}[left=0pt]
+			\item Buscar librerías para la visualización de la red.
+			\item Obtención de índices de calidad de \textit{permutation}.
+			\item Pensar en el almacenamiento de los índices de calidad.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 8}
+	\label{tabsprint8}
+\end{table}
+
+
+Tanto en este \textit{sprint} como en el anterior el cálculo de índices de calidad supuso un gran problema. Esto es debido a que este se estaba realizando exclusivamente desde Neo4j y conllevaba un tiempo de computo bastante grande.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 9}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		14/6/2023 & 28/6/2023 & \begin{itemize}[left=0pt]
+			\item Obtención de índices de calidad de \textit{permutation}.
+			\item Obtención de índices de calidad de \textit{Jensen}.
+			\item Visualización de redes de interacción en la web.
+			\item Pantalla de recomendación de ubicaciones en la web.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 9}
+	\label{tabsprint9}
+\end{table}
+
+\newpage
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 10}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		28/6/2023 & 12/7/2023 & \begin{itemize}[left=0pt]
+			\item Obtención de índices de calidad de \textit{permutation}.
+			\item Obtención de índices de calidad de \textit{Jensen}.
+			\item Cálculo del \textit{Mean Reciprocal Rank} para los índices de calidad.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 10}
+	\label{tabsprint10}
+\end{table}
+
+
+En este \textit{sprint} se crearon los modelos de \textit{Random Forest} para recomendaciones a nivel local.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 11}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		12/7/2023 & 26/7/2023 & \begin{itemize}[left=0pt]
+			\item Creación de \textit{dataset} para aplicar al modelo.
+			\item Creación de modelos de \textit{Random Forest} para cada ciudad.
+			\item Validación cruzada de \textit{Random Forest}
+			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de \textit{Random Forest}.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 11}
+	\label{tabsprint11}
+\end{table}
+
+\newpage
+
+Durante el desarrollo del \textit{sprint} 
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 12}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		26/7/2023 & 9/8/2023 & \begin{itemize}[left=0pt]
+			\item Creación de \textit{datasets} para modelos de \textit{Random Forest} con transferencia.
+			\item Creación de modelos de \textit{Random Forest} para la transferencia entre ciudades.
+			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de \textit{Random Forest} de transferencia.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 12}
+	\label{tabsprint12}
+\end{table}
+
+
+Durante los previos \textit{sprints} se crearon los modelos de \textit{Random Forest} para realizar las recomendaciones. Una vez serializados estos tenían un peso que rondaba entre los 3GB y 5.5GB cada uno. Dado que estos modelos necesitan estar cargados en memoria para poder predecir, sería imposible emplearlos desde \textit{Heroku} en el despliegue por falta de memoria. Para solventarlo, se redujo el número de árboles de 1000 a 100 y se empleó la librería \texttt{joblib} que permite comprimir estos ficheros para facilitar su almacenamiento.
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 13}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		9/8/2023 & 23/8/2023 & \begin{itemize}[left=0pt]
+			\item Crear los modelos de \textit{Random Forest} locales y con transferencia reduciendo el número de árboles.
+			\item Serializar los modelos.
+			\item Incluir predicciones con \textit{Random Forest} en la página Web.
+			\item Pantalla de recomendaciones con transferencia.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 13}
+	\label{tabsprint13}
+\end{table}
+
+\newpage
+
+Dado los posibles problemas en cuanto a memoria que podrían presentar el uso de modelos se empleó Docker para facilitar el uso de la herramienta en caso de que se presentaran estos problemas.
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 14}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		23/8/2023 & 6/9/2023 & \begin{itemize}[left=0pt]
+			\item \textit{Dockerización} de la aplicación web.
+			\item Despliegue de la base de datos de Neo4j en Aura DB.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 14}
+	\label{tabsprint14}
+\end{table}
+
+\newpage
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}}
+		\multicolumn{3}{c}{\textbf{\textit{Sprint} 15}}\\
+		\midrule
+		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
+		\midrule
+		6/9/2023 & 20/9/2023 & \begin{itemize}[left=0pt]
+			\item Despliegue de la aplicación en Heroku.
+			\item Ajustes en la página web.
+		\end{itemize}\tabularnewline
+		\bottomrule
+	\end{tabular}
+	\caption{Tabla del \textit{sprint} 15}
+	\label{tabsprint15}
+\end{table}
+
+\newpage
 \section{Estudio de viabilidad}
 
 En todo proyecto de \textit{software} de hacerse un estudio de viabilidad. Para ello ha de tenerse en cuenta el coste que conlleva el desarrollo del producto, así como las posibles restricciones legales que el uso de determinadas herramientas pueden imponer sobre la aplicación.
@@ -102,7 +446,7 @@ Y con ello obtener el salario bruto mensual:
 \text{Salario Bruto Mensual} = \frac{\text{10.962,50 €}}{\text{14 pagas}} = \text{783,03 €}
 \]
 
-Una vez obtenido el salario bruto mensual queda deducir impuestos aplicables en territorio español. Entre estos se encuentran las distintas contribuciones a la seguridad social.
+Una vez obtenido el salario bruto mensual queda deducir impuestos aplicables en territorio español. Entre estos se encuentran las distintas contribuciones a la seguridad social ~\cite{segsocialSeguridadSocial}.
 
 
 \begin{table}[h!]
@@ -299,12 +643,13 @@ Leaflet.ExtraMarkers & 1.0.5 & MIT \\
 Las licencias mostradas en la tabla anterior cuentan con las siguientes características:
 
 \begin{itemize}
-	\item \textbf{Licencia MIT}: Esta licencia fue definida por el instituto de tecnología de Massachusetts, permitiendo el uso libre de las obras independientemente de su fin. No proporciona garantías de uso, librando de responsabilidades a los autores. Se trata de una de las licencias menos restrictivas.
-	\item \textbf{Apache License 2.0}: Es una licencia de código abierto que permite el uso gratuito así como la modificación y distribución. Obliga a que se mantenga el aviso de \textit{copyright} y de licencia tanto en los archivos originales como aquellos que se modifiquen, así como cuando se se distribuya el \textit{software}. Tampoco ofrece garantías, librando a los autores toda responsabilidad. Requiere otorgar una licencias a los usuarios.
+	\item \textbf{Licencia MIT}: Esta licencia fue definida por el instituto de tecnología de Massachusetts, permitiendo el uso libre de las obras independientemente de su fin. No proporciona garantías de uso, librando de responsabilidades a los autores. Se trata de una de las licencias menos restrictivas~\cite{MIT}.
 	
-	\item \textbf{BSD-3-Clause License}: También se trata de una licencia de código abierto. Permite realizar modificaciones sobre el código, pero indicando si se han realizado cambios en el trabajo original. Al igual que Apache, permite la distribución y exime de responsabilidades con respecto a garantías a los autores. No requiere de otorgar una licencia a los usuarios del software y no otorga derechos sobre nombre o marcas asociados con el producto. Destaca por su compatibilidad con otras licencias.
+	\item \textbf{Apache License 2.0}: Es una licencia de código abierto que permite el uso gratuito así como la modificación y distribución. Obliga a que se mantenga el aviso de \textit{copyright} y de licencia tanto en los archivos originales como aquellos que se modifiquen, así como cuando se se distribuya el \textit{software}. Tampoco ofrece garantías, librando a los autores toda responsabilidad. Requiere otorgar una licencias a los usuarios ~\cite{apache}.
 	
-	\item \textbf{Licencias GPL}: Las licencias Públicas Generales de GNU son una familia de licencias. Las más comunes son las versiones GPL-2 y GPL-3. Destacan por ser bastante restrictivas en comparación al resto. Tiene lo que se conoce como un \textit{copyleft} fuerte, es decir, obliga que cualquier obra derivada o vinculada con \textit{software} con esta licencia se distribuya también bajo GPL. Obliga que a mantener los avisos de \textit{copyright} y la licencia bajo cualquier distribución del programa. Tienen como objetivo garantizar que los trabajos derivados se mantengan como código abierto.
+	\item \textbf{BSD-3-Clause License}: También se trata de una licencia de código abierto. Permite realizar modificaciones sobre el código, pero indicando si se han realizado cambios en el trabajo original. Al igual que Apache, permite la distribución y exime de responsabilidades con respecto a garantías a los autores. No requiere de otorgar una licencia a los usuarios del software y no otorga derechos sobre nombre o marcas asociados con el producto ~\cite{BSD}. Destaca por su compatibilidad con otras licencias.
+	
+	\item \textbf{Licencias GPL}: Las licencias Públicas Generales de GNU son una familia de licencias. Las más comunes son las versiones GPL-2 y GPL-3. Destacan por ser bastante restrictivas en comparación al resto. Tiene lo que se conoce como un \textit{copyleft} fuerte, es decir, obliga que cualquier obra derivada o vinculada con \textit{software} con esta licencia se distribuya también bajo GPL. Obliga que a mantener los avisos de \textit{copyright} y la licencia bajo cualquier distribución del programa. Tienen como objetivo garantizar que los trabajos derivados se mantengan como código abierto ~\cite{GPL}.
 	
 \end{itemize}
 
