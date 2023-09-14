@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, validators, EmailField
 
-USERNAME_LENGTH = (2, 10)
+USERNAME_LENGTH = (2, 20)
 PASSWORD_LENGTH = (4, 30)
 
 

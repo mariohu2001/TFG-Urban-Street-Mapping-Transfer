@@ -226,6 +226,7 @@ function selectMarker(event) {
             topsButton.disabled = true
             transferButton.disabled = true
             analysisButton.disabled = true
+            transferButtonRec.disabled = true
         }
     } else {
         topsButton.disabled = false
