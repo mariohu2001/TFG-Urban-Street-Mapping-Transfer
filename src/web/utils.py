@@ -41,48 +41,11 @@ def get_transfer_rf_model(source_city: str, target_city: str) -> RandomForestCla
 
 def transform_transfer_dataset(quality_indices, model: RandomForestClassifier) -> pd.DataFrame:
 
-    # final_data = []
 
-    # for data in quality_indices:
-
-    #     data["QualityIndices"] = {
-    #         k: v for k, v in data["QualityIndices"].items() if k in model.classes_}
-        
-    #     final_data.append(data)
-    #     model.
 
     df =  pd.json_normalize({"QualityIndices": quality_indices})
     df_final_data : pd.DataFrame = df[model.feature_names_in_]
 
     return df_final_data
 
-# def get_top_city_random_forest(city:str, quality_indices: dict):
 
-#     model: RandomForestClassifier = current_app.local_models[city]
-
-#     data = pd.json_normalize(quality_indices)
-
-#     probs = model.predict_proba(data)
-
-#     ranking = [ [category, prob] for category, prob in zip(model.classes_, probs)]
-
-#     ranking.sort(key=lambda x: x[1])
-
-
-#     return [rank[0] for rank in ranking ]
-
-
-# def get_top_city_random_forest_transfer(city:str, quality_indices: dict):
-
-#     model: RandomForestClassifier = current_app.transfer_model
-
-#     data = pd.json_normalize(quality_indices)
-
-#     probs = model.predict_proba(data)
-
-#     ranking = [ [category, prob] for category, prob in zip(model.classes_, probs)]
-
-#     ranking.sort(key=lambda x: x[1])
-
-
-#     return [rank[0] for rank in ranking ]
