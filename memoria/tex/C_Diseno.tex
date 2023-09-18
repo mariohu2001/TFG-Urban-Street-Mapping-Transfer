@@ -5,11 +5,11 @@
 En esta sección se explicará la estructura de los datos de la aplicación, así como de su arquitectura y su funcionamiento.
 
 \section{Diseño de datos}
-Un aspecto a tener en consideración en cuanto a la estructura de los datos es que no estamos utilizando una base de datos relacional, y por tanto no contamos con una estructura de tablas. Neo4j es una base de datos NoSQL orientada a grafos, por tanto la 2 entidades con la que estructurar la base de datos son los nodos y enlaces. Ambas entidades cuentan con etiquetas propias para poder identificar su tipo. Explicaré todas aquellas utilizadas en este trabajo.
+Un aspecto a tener en consideración en cuanto a la estructura de los datos es que no estamos utilizando una base de datos relacional, y por tanto no contamos con una estructura de tablas. Neo4j es una base de datos NoSQL orientada a grafos, por tanto la 2 entidades con la que estructurar la base de datos son los nodos y enlaces. Ambas entidades cuentan con etiquetas propias para poder identificar su tipo. A continuación se explicarán todas aquellas utilizadas en este trabajo.
 
 \subsection{Nodos}
 
-En cuanto a nodos de la base de datos contamos con principales etiquetas \texttt{:Place} para los lugares y \texttt{:Category} para las categorías.
+En cuanto a los nodos de la base de datos contamos con dos tipos de nodos diferenciados por sus etiquetas: \texttt{:Place} y \texttt{:Category}.
 
 \subsubsection{\texttt{:Place}}
 
@@ -24,7 +24,7 @@ Los nodos con esta etiqueta son cada una de las ubicaciones obtenidas de OpenStr
 	\item \texttt{Q}: JSON serializado en formato \textit{String} que contiene los índices de calidad para dicha ubicación.
 \end{itemize}
 
-Los campos anteriores son los que están presentes en todos los nodos de este tipo. Algunos nodos contienen atributos adicionales con la información que OpenStreetMap provee para dicha ubicación, estos pueden ser nombre, teléfono, página web, entre otros.
+Los campos anteriores son los que están presentes en todos los nodos de este tipo. Algunos nodos contienen atributos adicionales con la información que OpenStreetMap provee para dicha ubicación. Estos pueden ser nombre, teléfono, página web, entre otros.
 
 \subsubsection{\texttt{:Category}}
 Estos nodos son los constitutivos de la red de categorías de cada ciudad. Cada una estará compuesta por las categorías presentes únicamente en esa ciudad.
@@ -39,7 +39,7 @@ Cada nodo posee los siguientes atributos:
 \end{itemize}
 
 \subsubsection{\texttt{:User}}
-Si bien los usuarios no juegan un papel importante en comparación a las otras entidades estos también deben de contar con una representación en la base de datos.
+Si bien los usuarios no juegan un papel importante en comparación con las dos entidades anteriores, estos también deben de contar con una representación en la base de datos.
 
 Cuentan con los siguientes atributos:
 
@@ -54,10 +54,10 @@ Cuentan con los siguientes atributos:
 \end{itemize}
 
 \subsection{Enlaces}
-La otra entidad con la que contamos en la base de datos son los enlaces. Estos más allá de servir como simple enlace entre nodos, también pueden almacenar atributos además de poder asignarles etiquetas identificativas.
+La otra entidad con la que contamos en la base de datos son los enlaces. Estos, más allá de servir como simple unión entre nodos, también pueden almacenar atributos y se les pueden asignar etiquetas identificativas.
 
 \subsubsection{\texttt{:IS\_NEAR}}
-Este tipo de enlaces son aquellos representativos de la proximidad entre ubicaciones comerciales. Al igual que se indicaba en la memoria, estos se crean únicamente entre nodos con una distancia entre sí menor o igual a 100 metros.
+Este tipo de enlaces son aquellos representativos de la proximidad entre ubicaciones comerciales. Al igual que se indicaba en la memoria, estos se crean únicamente entre nodos con una distancia geodésica entre sí menor o igual a 100 metros.
 
 Cuentan con un único atributo de nombre \texttt{distance} de tipo \textit{Float} con la distancia entre los dos nodos enlazados.
 
@@ -68,23 +68,23 @@ Estos enlaces son representativos de las interacciones entre categorías. Dado q
 
 Cada uno de estos enlaces tiene los siguientes atributos:
 \begin{itemize}
-	\item \texttt{real\_value}: \textit{Integer} con el valor real de interacción entre el par de categorías.
-	\item \texttt{a\_ij}: \textit{Float} con el valor de la matriz de coeficientes del método \textit{Permutation}.
-	\item \texttt{perc\_25}: \textit{Float} con el valor del percentil 0.25 de las simulaciones.
-	\item \texttt{perc\_975}: \textit{Float} con el valor del percentil 0.975 de las simulaciones.
+	\item \texttt{real\_value}: \textit{Integer} con el número de interacciones entre nodos de las categorías enlazadas.
+	\item \texttt{a\_ij}: \textit{Float} con el valor de la matriz de interacción del método \textit{Permutation}.
+	\item \texttt{perc\_25}: \textit{Float} con el valor del percentil 0,25 de las simulaciones del modelo nulo de \textit{Permutation}.
+	\item \texttt{perc\_975}: \textit{Float} con el valor del percentil 0,975 de las simulaciones del modelo nulo de \textit{Permutation}.
 	\item \texttt{std\_dev}: \textit{Float} con el valor de la desviación estandar de las simulaciones.
 	\item \texttt{mean}: \textit{Float} con el valor de la media de las simulaciones.
-	\item \texttt{z-score}: \textit{Float} con el \textit{Z-Score} de las simulaciones.
-	\item \texttt{relevant}: \textit{Bool} indicando si la relación entre categorías se encuentra entre las estadísticamente relevantes
+	\item \texttt{z-score}: \textit{Float} con el Z-score que cuantifica el valor de la interacción según \textit{Permutation}.
+	\item \texttt{relevant}: \textit{Bool} indicando si la relación entre categorías se encuentra entre las estadísticamente significativas a un 0.05 de significación.
 \end{itemize}
 
 \subsubsection{\texttt{:Jensen}}
-Estas relaciones representan la matriz de coeficientes de Jensen. Un característica a tener en cuenta de esto es que la matriz no es simétrica, esto implica que entre cada par de nodos de categorías por ciudad existan 2 enlaces dirigidos entre ellas.
+Estas relaciones representan la matriz de coeficientes de interacción de Jensen. Un característica a tener en cuenta de esto es que la matriz no es simétrica, esto implica que entre cada par de nodos de categorías por ciudad existan 2 enlaces dirigidos entre ellas.
 
 Estos enlaces solo cuentan con un único atributo de nombre \texttt{coeff}, de tipo \textit{Float} con el valor del coeficiente de Jensen para una categoría sobre otra.
 
 \section{Diseño procedimental}
-
+El diseño procedimental de la aplicación se especificará en los siguientes diagramas de secuencia.
 \newpage
 \subsection{Inicio de sesión}
 \begin{figure}[!h]
@@ -147,7 +147,7 @@ Estos enlaces solo cuentan con un único atributo de nombre \texttt{coeff}, de t
 
 \section{Diseño arquitectónico}
 
-Dado que el producto final de este trabajo es una aplicación web conviene mencionar unas estructuras propias de este tipo de aplicaciones.
+Dado que el producto final de este trabajo es una aplicación web, conviene mencionar las estructuras propias de este tipo de aplicaciones.
 
 \subsection{Arquitectura Cliente-Servidor}
 La arquitectura cliente servidor es un modelo ampliamente utilizado en el entorno web. Esta está compuesta por dos entidades distintas con diferentes responsabilidades.
@@ -167,12 +167,12 @@ La arquitectura cliente servidor es un modelo ampliamente utilizado en el entorn
 	\end{itemize}
 \end{itemize}
 
-\imagen{ClienteServidor}{Esquema Cliente-Servidor}
+\imagen{ClienteServidor.drawio}{Esquema Cliente-Servidor}
 
 En el contexto web y de nuestro proyecto el cliente es el dispositivo desde el que el usuario accede a la aplicación, haciendo peticiones al servidor web mediante el protocolo HTTP. En cuanto al servidor este será el equipo que alojará la aplicación web.
 \subsection{Modelo-Vista-Controlador}
 
-El patrón Modelo-Vista-Controlador o MVC se trata de una arquitectura utilizada ampliamente para estructurar proyectos \textit{software}. Esta define 3 distintos componentes con responsabilidades distintas del funcionamiento del programa. Esto permite tener separada la lógica de la aplicación en componentes en base a la responsabilidad que toma, facilitando la organización y futuro mantenimiento.
+El patrón Modelo-Vista-Controlador o MVC se trata de una arquitectura utilizada ampliamente para estructurar proyectos \textit{software} y es la que hemos elegido nosotros para este proyecto. Esta define 3 distintos componentes con responsabilidades distintas del funcionamiento del programa. Esto permite tener separada la lógica de la aplicación en componentes en base a la responsabilidad que toma, facilitando la organización y futuro mantenimiento.
 
 \imagen{MVC}{Esquema de arquitectura Modelo-Vista-Controlador}
 
@@ -183,7 +183,7 @@ Las partes que componen MVC son las siguientes:
 	\item Controlador: Es el componente intermedio entre en el Modelo y la Vista. Se encarga de dar una respuesta adecuada a las entradas del usuario en la Vista e interactuar con el Modelo para modificar la información de la aplicación según la lógica de esta. 
 \end{itemize}
 
-Aplicado a nuestro proyecto el componente Modelo se correspondería a los distintos DAOs contenidos en \texttt{/src/web/dao}.
+Aplicado a nuestro proyecto el componente Modelo se correspondería a los distintos DAOs (\textit{Data Access Object}) contenidos en \texttt{/src/web/dao}.
 
 El controlador está compuesto por las distintas rutas definidas en la aplicación Flask en el directorio \texttt{/src/web/routes} junto con la lógica definida en cada uno de ellos para el tratamiento de las peticiones del usuario.
 

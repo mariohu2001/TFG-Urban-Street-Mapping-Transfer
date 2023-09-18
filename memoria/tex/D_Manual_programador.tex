@@ -10,7 +10,7 @@ El código fuente que compone el proyecto está completamente contenido dentro d
 Esta carpeta contiene todo el código necesario para el funcionamiento de la aplicación web.
 
 \subsubsection{\texttt{/web/dao}}
-Este directorio contiene los conocidos como DAOs (\textit{Data Access Object}). Los ficheros contenidos dentro definen clases que permiten acceder y modificar de una forma cómoda los datos contenidos dentro de Neo4j. En los métodos de cada DAO se utilizan sentencias de Cypher, el lenguaje de consultas de Neo4j para realizar la información que deseamos.
+Este directorio contiene los conocidos como DAOs. Los ficheros contenidos dentro definen clases que permiten acceder y modificar de una forma cómoda los datos contenidos dentro de Neo4j. En los métodos de cada DAO se utilizan sentencias de Cypher, el lenguaje de consultas de Neo4j para realizar la información que deseamos.
 
 Tiene los siguientes ficheros:
 \begin{itemize}
@@ -23,14 +23,14 @@ Tiene los siguientes ficheros:
 \end{itemize}
 
 \subsubsection{\texttt{/web/models}}
-Este directorio contiene los distintos modelos de \textit{Random Forest} serializados y comprimidos en ficheros individuales para cada uno. Posee dos subdirectorios, \texttt{/local} y \texttt{/transfer}, siendo el primero para los modelos a nivel local y el segundo para los modelos usados para hacer transferencia.
+Este directorio contiene los distintos modelos de Random Forest serializados y comprimidos en ficheros individuales para cada uno. Posee dos subdirectorios, \texttt{/local} y \texttt{/transfer}, siendo el primero para los modelos a nivel local y el segundo para los modelos usados para hacer transferencia.
 
-En el caso de \texttt{/local}, los modelos están almacenados siguiente la convención de nombres \texttt{/\textit{Ciudad}.gz}. Esta debe respetarse para poder cargar adecuadamente los ficheros.
+En el caso de \texttt{/local}, los modelos están almacenados siguiendo la convención de nombres \texttt{Ciudad.gz}. Esta debe respetarse para poder cargar adecuadamente los ficheros.
 
-En cuanto a \texttt{/transfer}, sigue una convención similar al anterior, siendo esta \texttt{/\textit{CiudadOrigen}-\textit{CiudadDestino}.gz}. Esto debe tenerse en cuenta para cargar los modelos adecuadamente.
+En cuanto a \texttt{/transfer}, sigue una convención similar al anterior, siendo esta \texttt{/CiudadOrigen-CiudadDestino.gz}. Esto debe tenerse en cuenta para cargar los modelos adecuadamente.
 
 \subsubsection{\texttt{/web/routes}}
-Este directorio contiene las distintas rutas de la API definidas con \textit{Blueprints} de Flask, estos permiten definir rutas más allá del fichero donde se define la aplicación de Flask. Aquí las rutas están agrupadas en módulos en base al ámbito al que pertenezcan.
+Este directorio contiene las distintas rutas de la API definidas con \textit{blueprints} de Flask, estos permiten definir rutas más allá del fichero donde se define la aplicación de Flask. Aquí las rutas están agrupadas en módulos en base al ámbito al que pertenezcan.
 
 Existe un subdirectorio de nombre \texttt{views} que contiene todas aquellas rutas que como respuesta devuelven una plantilla HTML. A su vez estas están agrupadas en los siguientes módulos:
 
@@ -40,7 +40,7 @@ Existe un subdirectorio de nombre \texttt{views} que contiene todas aquellas rut
 	\item \texttt{/maps.py}: Este fichero contiene todos aquellos \textit{endpoints} que contengan una visualización de un mapa en la plantilla devuelta como respuesta.
 \end{itemize}
 
-Los siguientes módulos definen \textit{endpoints} que no tienen una plantilla como respuesta. Estos suelen usar los métodos HTTP \textit{GET} y \textit{POST} ; tienen la función de obtener determinados datos del lado del servidor o procesar algunos incluidos en el cuerpo de la petición.
+Los siguientes módulos definen \textit{endpoints} que no tienen una plantilla como respuesta. Estos suelen usar los métodos HTTP GET y POST; tienen la función de obtener determinados datos del lado del servidor o procesar algunos incluidos en el cuerpo de la petición.
 
 Los \textit{endpoints} están agrupados en 2 módulos:
 \begin{itemize}
@@ -49,7 +49,7 @@ Los \textit{endpoints} están agrupados en 2 módulos:
 \end{itemize}
 
 \subsubsection{\texttt{/web/static}}
-Este directorio contiene todo lo relacionado con el procesamiento por parte del navegador, o es decir, del cliente. El nombre es debido a que se trata de una convención para este el directorio que contiene este tipo de ficheros.
+Este directorio contiene todo lo relacionado con el procesamiento por parte del navegador, o es decir, del cliente. El nombre es debido a que se trata de una convención para este directorio que contiene este tipo de ficheros.
 
 Este contiene 4 subdirectorios:
 \begin{itemize}
@@ -73,13 +73,13 @@ Además de los ficheros contenidos en directorios existen algunos que cuelgan di
 
 
 \subsection{\texttt{/models}}
-En este directorio se encuentran unos ficheros en formato \textit{Jupyter Notebook} utilizados para la creación de los modelos de \textit{Random Forest}. Además se cuenta con el \textit{dataset} requerido para el entrenamiento de los modelos en el subdirectorio \texttt{/models/dataset}. Los ficheros de este están en formato JSON, puesto que es el más adecuado para almacenar estos datos. Cada ciudad cuenta con un fichero.
+En este directorio se encuentran unos ficheros en formato Jupyter Notebook utilizados para la creación de los modelos de Random Forest. Además se cuenta con el \textit{dataset} requerido para el entrenamiento de los modelos en el subdirectorio \texttt{/models/dataset}. Los ficheros de este están en formato JSON, puesto que es el más adecuado para almacenar estos datos. Cada ciudad cuenta con un fichero.
 
 \subsection{\texttt{/operaciones\_bbdd}}
 En este directorio se encuentran todos los \textit{scripts} utilizados para la carga de ubicaciones en la base de datos, así como distintas operaciones de uso más general que no son utilizadas en la aplicación web.
 
 \subsubsection{/\texttt{docker}}
-En este directorio se encuentran los \textit{Dockerfile} necesarios para usar Docker en este proyecto.
+En este directorio se encuentran los \textit{dockerfile} necesarios para usar Docker en este proyecto.
 
 Contamos con los siguientes ficheros:
 
@@ -103,11 +103,13 @@ Para descargar la copia de la base de datos, ya que debido a su peso no se encue
 \subsubsection{Windows}
 
 Antes de pasar a descargar Neo4j, tendremos que asegurarnos de que disponemos de Java en nuestro sistema. En caso de no contar con ello podemos descargarlo de su 
-\href{https://www.java.com/es/download/}{página oficial}
+\href{https://www.java.com/es/download/}{página oficial}.
 
 Para descargar Neo4j en Windows, tendremos que dirigirnos a la \href{https://neo4j.com/download/}{página oficial}. Tras esto se nos indicará que introduzcamos nuestros datos para que se nos provea con una clave con la que instalar Neo4j.
 
 \imagen{Neo4jPage}{Página de descarga de Neo4j.}
+
+
 
 Tras la instalación contaremos con Neo4j Desktop, una aplicación de escritorio con la que podremos administrar Neo4j. 
 
@@ -258,7 +260,7 @@ Hecho lo anterior podemos dirigirnos a \url{http://localhost:5000} y utilizar la
 
 \subsection{Despliegue en AuraDB}
 
-AuraDB se trata de una plataforma de Neo4j que permite alojar una base de datos en la nube ~\cite{neo4jNeo4jAura}. Para este proyecto se ha utilizado el plan gratuito, puesto que no suponía ninguna restricción para el alcance de este proyecto. Cabe mencionar que tiene una restricción de 200.000 nodos y 400.000 relaciones como máximo que no se puede superar en su plan gratuito.
+AuraDB se trata de una plataforma de Neo4j que permite alojar una base de datos en la nube~\cite{neo4jNeo4jAura}. Para este proyecto se ha utilizado el plan gratuito, puesto que no suponía ninguna restricción para el alcance de este proyecto. Cabe mencionar que tiene una restricción de 200.000 nodos y 400.000 relaciones como máximo que no se puede superar en su plan gratuito.
 
 Para poder desplegar simplemente tendremos que acceder a este \href{https://neo4j.com/cloud/platform/aura-graph-database/?ref=neo4j-home-hero}{enlace} y registrarnos en caso de que no contemos ya con una cuenta de Neo4j. Tras esto se nos proveerá de una instancia de AuraDB, siendo esta la única que tendremos disponible al ser el plan gratuito. Se nos proveerá un fichero de texto que contendrá la URI para conectarnos a la base de datos, así como la contraseña. Este fichero no lo podemos perder bajo ningún concepto, por lo que tendremos que guardarlo para no olvidarlo.
 
@@ -272,7 +274,7 @@ Aura DB provee bastantes funcionalidades que la versión local tiene por lo que 
 
 \subsection{Despliegue en Heroku}
 
-Para poder desplegar la aplicación se ha hecho uso de Heroku. Esta es una plataforma gratuita que permite desplegar aplicaciones web en distintos idiomas~\cite{herokuCloudApplication}.
+Para poder desplegar la aplicación se ha hecho uso de Heroku. Esta es una plataforma gratuita que permite desplegar aplicaciones web en distintos lenguajes de programación~\cite{herokuCloudApplication}. Dado que el servicio que ofrecen es gratuito, este tiene algunas limitaciones, por lo que se deberá tener en cuenta en futuros desarrollos.
 
 Para poder desplegar en Heroku primero será necesario contar con una cuenta en \href{https://signup.heroku.com/}{Heroku}. Se nos pedirá tomar algunas medidas para la doble autenticación que utilizaremos cada vez que iniciemos sesión.
 

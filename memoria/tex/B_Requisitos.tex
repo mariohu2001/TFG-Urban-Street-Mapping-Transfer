@@ -2,7 +2,7 @@
 
 \section{Introducción}
 
-Una parte imprescindible para llevar a cabo cualquier proyecto de software son los requisitos, que definirán el comportamiento esperado por el producto final. Una vez especificados estos se podrá proceder al desarrollo del proyecto, utilizando como guía la definición de requisitos realizada.
+Una parte imprescindible para llevar a cabo cualquier proyecto de \textit{software} son los requisitos, que definirán el comportamiento esperado por el producto final. Una vez especificados estos se podrá proceder al desarrollo del proyecto, utilizando como guía la definición de requisitos realizada.
 
 La especificación de requisitos abarcan tanto las funciones de las que debe de ser capaz el producto, los conocidos como requisitos funcionales; como de comportamiento de este y otras características no relacionadas a sus funciones, los requisitos no funcionales.
 %Una muestra de cómo podría ser una tabla de casos de uso:
@@ -40,11 +40,18 @@ Los objetivos que se buscan alcanzar con este proyecto son los siguientes:
 
 \begin{enumerate}
 	\item Obtención de ubicaciones comerciales de distintas ciudades mediante el uso de peticiones a la API de geolocalización de \textit{OpenStreetMap}.
+	
 	\item Almacenamiento de dichas ubicaciones en una base de datos no relacional orientada a grafos de Neo4j.
-	\item Obtención de las relaciones de interacción entre las distintas categorías comerciales, así como de los coeficientes que nos proporcionan la aplicación de distintos métodos.
-	\item Obtención de índices de calidad en base a los anteriores coeficientes que nos permitan estimar la adecuación de un establecimiento comercial a su ubicación con respecto a su categoría como a otras.
-	\item Uso combinado de distintos índices de calidad mediante el entrenamiento de modelos de clasificación con los índices de calidad obtenidos con objetivo de realizar recomendaciones de ubicaciones a nivel local.
-	\item Integración de datos de distintas ciudades, realizando así transferencia de conocimiento usando modelos de inteligencia artificial.
+	
+	\item Obtención de las relaciones de interacción entre las distintas categorías comerciales, así como de los coeficientes de atracción y repulsión que nos proporcionan la aplicación de distintos métodos.
+	
+	\item Obtención de índices de calidad en base a los anteriores coeficientes de interacción que nos permitan estimar la adecuación de un establecimiento comercial a
+	su ubicación, tanto a su categoría como a otras.
+	
+	\item Uso tanto individual como combinado (mediante modelos de \textit{machine learning}) de los distintos índices de calidad para hacer recomendaciones de ubicaciones comerciales
+	
+	\item Integración de datos de distintas ciudades, realizando así transferencia de conocimiento de unas ciudades a otras usando modelos de \textit{machine learning}.
+	
 	\item Creación de una aplicación web que permita a los usuarios de la herramienta obtener recomendaciones fácilmente mediante los índices de calidad y modelos obtenidos.
 	
 	El producto final constituirá un sistema de recomendación de categorías comerciales y ubicaciones de forma que se maximicen los beneficios y el rendimiento de hipotéticos negocios en las ubicaciones dadas.
@@ -76,7 +83,7 @@ Los requisitos funcionales son aquellos que definen el comportamiento esperado p
 		\begin{itemize}
 			\item \textbf{RF3.1}: La aplicación contará con un mapa donde se mostrarán las ubicaciones registradas.
 			\item \textbf{RF3.2}: El usuario puede seleccionar ubicaciones registradas.
-			\item \textbf{RF3.3}: El usuario puede seleccionar ubicaciones no registradas previamente por coordenadas.
+			\item \textbf{RF3.3}: El usuario puede seleccionar ubicaciones no registradas previamente mediante la introducción de coordenadas.
 			\item \textbf{RF3.4}: Los marcadores seleccionados se mantendrán en el mapa entre búsquedas de categorías.
 			\item \textbf{RF3.5}: La aplicación debe de contar con un botón para borrar todas las ubicaciones seleccionadas en el mapa.
 			\item \textbf{RF3.6}: Los marcadores deben mostrar detalles al pasar el cursor sobre ellos.
@@ -86,14 +93,14 @@ Los requisitos funcionales son aquellos que definen el comportamiento esperado p
 	\item \textbf{RF4 - Recomendaciones de Categorías Comerciales}
 	\begin{itemize}
 		\item \textbf{RF4.1}: El usuario registrado puede obtener recomendaciones de categorías a nivel local.
-		\item \textbf{RF4.2}: El usuario registrado puede obtener recomendaciones de categorías utilizando transferencia de información con otras ciudades.
+		\item \textbf{RF4.2}: El usuario registrado puede obtener recomendaciones de categorías utilizando transferencia de información de otras ciudades.
 		\item \textbf{RF4.3}: El usuario podrá elegir el método para recibir estas recomendaciones.
 		\item \textbf{RF4.4}: Las recomendaciones se mostrarán como una selección de las categorías más adecuadas para cada ubicación seleccionada.
 	\end{itemize}
 	\item \textbf{RF5 - Recomendaciones de Ubicaciones}
 	\begin{itemize}
 		\item \textbf{RF5.1}: El usuario registrado puede obtener recomendaciones de ubicaciones a nivel local.
-		\item \textbf{RF5.2}: El usuario registrado puede obtener recomendaciones de ubicaciones utilizando transferencia de información con otras ciudades.
+		\item \textbf{RF5.2}: El usuario registrado puede obtener recomendaciones de ubicaciones utilizando transferencia de información de otras ciudades.
 		\item \textbf{RF5.3}: El usuario podrá elegir para qué categoría comercial obtener las recomendaciones.
 		\item \textbf{RF5.4}: El usuario podrá elegir qué método emplear para recibir estas recomendaciones.
 		\item  \textbf{RF5.5}: Las recomendaciones se mostrarán como un \textit{ranking} de las ubicaciones ordenadas en orden descendente en función de la adecuación de cada ubicación para la categoría seleccionada.

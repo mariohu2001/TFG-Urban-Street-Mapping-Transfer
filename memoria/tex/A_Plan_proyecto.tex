@@ -1,12 +1,12 @@
 \apendice{Plan de Proyecto Software}
 
 \section{Introducción}
-En este apartado se detallará el la planificación seguida durante el proyecto, así como el estudio de viabilidad de este, teniendo en consideración los aspectos económicos como legales.
+En este apartado se detallará la planificación seguida durante el proyecto, así como el estudio de viabilidad de este, teniendo en consideración tanto los aspectos económicos como los legales.
 \section{Planificación temporal}
 
-Para el desarrollo del proyecto se establecieron \textit{sprints} de 2 semanas, utilizando ZenHub y Zube para la gestión de tareas. Dadas las características propias del proyecto se ha mantenido contacto con los tutores a través de \textit{Teams} para informar sobre los resultados obtenidos de ciertas tareas y de esta forma poder actuar en consecuencia.
+Para el desarrollo del proyecto se establecieron \textit{sprints} de 2 semanas, utilizando ZenHub y Zube para la gestión de tareas. Dadas las características propias del proyecto se ha mantenido contacto con los tutores a través de Microsoft Teams para informar sobre los resultados obtenidos de ciertas tareas y, de esta forma, poder actuar en consecuencia.
 
-Las tareas realizadas en cada \textit{sprint} se recogen en las siguientes tablas.
+Las tareas realizadas en cada \textit{sprint} se recogen en las siguientes tablas:
 
 %\begin{table}[h!]
 %	\centering
@@ -72,7 +72,7 @@ La tarea <<Aplicación de algoritmos de distancia de cadenas para corregir categ
 \newpage
 Durante el siguiente \textit{sprint} se determinó que la cantidad de enlaces era inabarcable una vez realizada la tarea <<Creación de enlaces por proximidad entre los nodos en Neo4j>>, por lo que las otras tareas son consecuencia de esta conclusión.
 
-También se comprobaron el número de localizaciones de algunas ciudades, esto se debe a que el número de estas parecía algo inconsistente tras el análisis de los resultados de la tarea <<Carga de ubicaciones de Valladolid, Valencia y Sevilla>>. Esto llevó a considerar el uso de nuevas APIs para sustituir a OpenStreetMap.
+También se comprobó el número de ubicaciones comerciales de algunas ciudades, esto se debe a que el número de estas parecía algo inconsistente tras el análisis de los resultados de la tarea <<Carga de ubicaciones de Valladolid, Valencia y Sevilla>>. Esto llevó a considerar el uso de nuevas APIs para sustituir a OpenStreetMap.
 
 Al final se decidió terminar trabajando sobre 3 ciudades de las cargadas en la tarea <<Carga de ubicaciones de 10 ciudades españolas>>, siendo estas Sevilla, Valencia y Zaragoza.
 \begin{table}[h!]
@@ -132,9 +132,9 @@ Al final se decidió terminar trabajando sobre 3 ciudades de las cargadas en la 
 \newpage
 Tras obtener las relaciones marcadas como significativas según los resultados del método \textit{Permutation} en la tarea <<Obtención de relaciones significativas>>, estas eran algo incoherentes. Se consideró apropiado la eliminación de aquellas ubicaciones pertencecientes al mobiliario urbano, puesto que estaban suponiendo un problema.
 
-Tras investigar un poco se descubrió que la etiqueta <<amenity>> de OpenStreetMap no contemplaba todos los posibles comercios, solo algunos de ellos. Por esto se incluyeron también ubicaciones con la etiqueta <<shop>>, con la intención de volver a realizar las simulaciones esperando obtener mejores resultados.
+Tras investigar un poco, se descubrió que la etiqueta <<amenity>> de OpenStreetMap no contemplaba todos los posibles comercios; solo algunos de ellos. Por esto se incluyeron también ubicaciones con la etiqueta <<shop>>, con la intención de volver a realizar las simulaciones esperando obtener mejores resultados.
 
-Una vez borrados nodos de mobiliario urbano y habiendo incluido ubicaciones etiquetadas con <<shop>> se procedió a realizar de nuevo las simulaciones del método \textit{permutation}. Cuando se comenzaron a hacerse estas tardaban un tiempo significativamente mayor al anterior, resultado inviable. Esto es debido a que el tiempo de realización es afectado por el número de categorías, habiendo sido aumentado con la inclusión de las tiendas.
+Una vez borrados los nodos de mobiliario urbano y habiendo incluido ubicaciones etiquetadas con <<shop>> se procedió a realizar de nuevo las simulaciones del método \textit{permutation}. Cuando comenzaron a hacerse estas tardaban un tiempo significativamente mayor al anterior, resultando inviable. Esto es debido a que el tiempo de realización es afectado por el número de categorías, habiendo sido aumentado con la inclusión de las tiendas.
 
 
 \begin{table}[h!]
@@ -246,7 +246,7 @@ Tanto en este \textit{sprint} como en el anterior el cálculo de índices de cal
 \end{table}
 
 
-En este \textit{sprint} se crearon los modelos de \textit{Random Forest} para recomendaciones a nivel local.
+En este \textit{sprint} se crearon los modelos de Random Forest para recomendaciones a nivel local.
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
@@ -256,9 +256,9 @@ En este \textit{sprint} se crearon los modelos de \textit{Random Forest} para re
 		\midrule
 		12/7/2023 & 26/7/2023 & \begin{itemize}[left=0pt]
 			\item Creación de \textit{dataset} para aplicar al modelo.
-			\item Creación de modelos de \textit{Random Forest} para cada ciudad.
-			\item Validación cruzada de \textit{Random Forest}
-			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de \textit{Random Forest}.
+			\item Creación de modelos de Random Forest para cada ciudad.
+			\item Validación cruzada de Random Forest
+			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de Random Forest.
 		\end{itemize}\tabularnewline
 		\bottomrule
 	\end{tabular}
@@ -268,7 +268,7 @@ En este \textit{sprint} se crearon los modelos de \textit{Random Forest} para re
 
 \newpage
 
-Durante el desarrollo del \textit{sprint} 
+
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{C{3cm}|C{3cm}|C{6cm}} 
@@ -277,9 +277,9 @@ Durante el desarrollo del \textit{sprint}
 		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
 		\midrule
 		26/7/2023 & 9/8/2023 & \begin{itemize}[left=0pt]
-			\item Creación de \textit{datasets} para modelos de \textit{Random Forest} con transferencia.
-			\item Creación de modelos de \textit{Random Forest} para la transferencia entre ciudades.
-			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de \textit{Random Forest} de transferencia.
+			\item Creación de \textit{datasets} para modelos de Random Forest con transferencia.
+			\item Creación de modelos de Random Forest para la transferencia entre ciudades.
+			\item Cálculo de \textit{Mean Reciprocal Rank} para los modelos de Random Forest de transferencia.
 		\end{itemize}\tabularnewline
 		\bottomrule
 	\end{tabular}
@@ -288,7 +288,7 @@ Durante el desarrollo del \textit{sprint}
 \end{table}
 
 
-Durante los previos \textit{sprints} se crearon los modelos de \textit{Random Forest} para realizar las recomendaciones. Una vez serializados estos tenían un peso que rondaba entre los 3GB y 5.5GB cada uno. Dado que estos modelos necesitan estar cargados en memoria para poder predecir, sería imposible emplearlos desde \textit{Heroku} en el despliegue por falta de memoria. Para solventarlo, se redujo el número de árboles de 1000 a 100 y se empleó la librería \texttt{joblib} que permite comprimir estos ficheros para facilitar su almacenamiento.
+Durante los previos \textit{sprints} se crearon los modelos de Random Forest para realizar las recomendaciones. Una vez serializados estos tenían un peso que rondaba entre los 3GB y 5.5GB cada uno. Dado que estos modelos necesitan estar cargados en memoria para poder predecir, sería imposible emplearlos desde \textit{Heroku} en el despliegue por falta de memoria. Para solventarlo, se redujo el número de árboles de 1000 a 100 y se empleó la librería \texttt{joblib} que permite comprimir estos ficheros para facilitar su almacenamiento.
 
 \begin{table}[h!]
 	\centering
@@ -298,9 +298,9 @@ Durante los previos \textit{sprints} se crearon los modelos de \textit{Random Fo
 		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
 		\midrule
 		9/8/2023 & 23/8/2023 & \begin{itemize}[left=0pt]
-			\item Crear los modelos de \textit{Random Forest} locales y con transferencia reduciendo el número de árboles.
+			\item Crear los modelos de Random Forest locales y con transferencia reduciendo el número de árboles.
 			\item Serializar los modelos.
-			\item Incluir predicciones con \textit{Random Forest} en la página Web.
+			\item Incluir predicciones con Random Forest en la página Web.
 			\item Pantalla de recomendaciones con transferencia.
 		\end{itemize}\tabularnewline
 		\bottomrule
@@ -320,7 +320,7 @@ Dado los posibles problemas en cuanto a memoria que podrían presentar el uso de
 		\textbf{Fecha de inicio} & \textbf{Fecha de fin} & \textbf{Tareas realizadas}\\
 		\midrule
 		23/8/2023 & 6/9/2023 & \begin{itemize}[left=0pt]
-			\item \textit{Dockerización} de la aplicación web.
+			\item Despliegue con Docker de la aplicación web.
 			\item Despliegue de la base de datos de Neo4j en Aura DB.
 		\end{itemize}\tabularnewline
 		\bottomrule
@@ -369,7 +369,7 @@ La duración del proyecto ha sido del 2 de febrero hasta el 21 de septiembre, al
 	\text{Coste anual de amortización} = \frac{\text{1999,00 €}}{\text{4 años}} \approx \text{299,75 €/año}
 	\]
 	
-	 El segundo equipo se utilizó para realizar aquellas operaciones con una duración bastante larga; se trata de un ordenador de sobremesa que cuenta con un procesador i3-8100 8th Gen Intel(R) Core(TM), 16GB de memoria RAM y una GPU NVIDIA GeForce GTX 1050Ti de 4GB. En su momento se obtuvo este ordenador con un precio de alrededor a 800€, esperando amortizarlo en 6 años.
+	 El segundo equipo se utilizó para realizar aquellas operaciones con una duración bastante larga; se trata de un ordenador de sobremesa que cuenta con un procesador i3-8100 8th Gen Intel(R) Core(TM), 16GB de memoria RAM y una GPU NVIDIA GeForce GTX 1050Ti de 4GB. En su momento se obtuvo este ordenador por un precio cercano a 800€, esperando amortizarlo en 6 años.
 	
 	Para calcular el coste de amortización de este equipo hay que tener en consideración que se compró hace 5 años y se espera amortizar en 6 años:
 	
@@ -384,23 +384,24 @@ La duración del proyecto ha sido del 2 de febrero hasta el 21 de septiembre, al
 \text{Valor no amortizado} = 800 \text{ €} - \left(\frac{5}{6} \times 800 \text{ €}\right) = 800 \text{ €} - 666.67 \text{ €} = 133.33 \text{ €}
 \]
 \[
-\text{Costo anual de amortización} = \frac{\text{Valor no amortizado}}{\text{Años por amortizar}} = \frac{133.33 \text{ €}}{1 \text{ año}} \approx 133.33 \text{ €}
+\text{Costo anual de amortización} = \frac{\text{Valor no amortizado}}{\text{Años por amortizar}} = \frac{133,33 \text{ €}}{1 \text{ año}} \approx 133.33 \text{ €}
 \]
 
-El costo anual de amortización, teniendo en cuenta lo que ya ha sido amortizado, es de 133.33 €.
+El costo anual de amortización, teniendo en cuenta lo que ya ha sido amortizado, es de 133,33 €.
 
-\item \textbf{\textit{Software}}:
-En cuanto a \textit{software} se utilizó una licencia del sistema operativo Windows 10 Pro. Este tiene un valor aproximado de 200 € mediante medios oficiales. Dado que la fecha de fin de soporte es cercano a 2026 se espera amortizar en 3 años.
+\item \textbf{\textit{Software}}:\\
+
+En cuanto a \textit{software} se utilizó una licencia del sistema operativo Windows 10 Pro. Este tiene un valor aproximado de 200 € mediante medios oficiales. Dado que la fecha de fin de soporte es cercano a 2026, se espera amortizar en 3 años.
 
 \[
-\textit{Coste anual de amortización} = \frac{\text{200 €}}{\text{3 años}} \approx \text{66.6 €/año}
+Coste anual de amortización = \frac{\text{200 €}}{\text{3 años}} \approx \text{66,6 €/año}
 \]
 
 Sobre Neo4j, la base de datos, se ha utilizado la licencia \textit{Community}, que es gratuita. 
 
 
 \item \textbf{Otros}:
-Para el despliegue de la aplicación se ha hecho uso de dos plataformas, Heroku para alojar la aplicación web, y Neo4j AuraDB para alojar la base de datos en la nube. Para estos ha bastado con los planes gratuitos, pero cabe esperar que en futuros desarrollos se sobrepase lo ofertado por estos planes. Especial mención para Neo4j AuraDB, que tiene un límite sobre el número de nodos y enlaces en su plan gratuito que actualmente está cerca de sobrepasar.
+Para el despliegue de la aplicación se ha hecho uso de dos plataformas: Heroku para alojar la aplicación web, y Neo4j AuraDB para alojar la base de datos en la nube. Para estos ha bastado con los planes gratuitos, pero cabe esperar que en futuros desarrollos se sobrepase lo ofertado por estos planes. Especial mención para Neo4j AuraDB, que tiene un límite sobre el número de nodos y enlaces en su plan gratuito que actualmente está cerca de sobrepasar.
 
 
 	
@@ -432,49 +433,49 @@ Todo esto nos deja con el siguiente coste anual derivado de recursos:
 \subsubsection{Costes de personal}
 Para estimar los costes de personal se considerará como una empresa de un único empleado, el alumno. Tendrá gran importancia la duración del desarrollo del proyecto, siendo de alrededor de 8 meses.
 
-Se considerará al desarrollador bajo la categoría de <<programador Junior>>, estos ganan en promedio en España alrededor 21.925 € brutos con una jornada completa. Para formalizar sus condiciones de trabajo se considerará que es un contrato a jornada parcial de 20 horas semanales con 14 pagas anuales.
+Se considerará al desarrollador bajo la categoría de <<programador Junior>>, estos ganan en promedio en España alrededor 25.000 € brutos con una jornada completa. Para formalizar sus condiciones de trabajo se considerará que es un contrato a jornada parcial de 20 horas semanales con 14 pagas anuales.
 
-Deberemos recalcular el salario bruto para ajustarse a la jornada parcial:
+Deberemos recalcular el salario bruto para que se ajuste a la jornada parcial:
 
 \[
-\text{Salario Bruto Anual Jornada Parcial} = \text{21.925 €}  \frac{\text{20 horas}}{\text{40 horas}} = \text{10.962,50 €}
+\text{Salario Bruto Anual Jornada Parcial} = \text{25.000 €}  \cdot \frac{\text{20 horas}}{\text{40 horas}} = \text{12.500 €}
 \]
 
 Y con ello obtener el salario bruto mensual:
 
 \[
-\text{Salario Bruto Mensual} = \frac{\text{10.962,50 €}}{\text{14 pagas}} = \text{783,03 €}
+\text{Salario Bruto Mensual} = \frac{\text{12.500 €}}{\text{14 pagas}} = \text{892,85 €}
 \]
 
-Una vez obtenido el salario bruto mensual queda deducir impuestos aplicables en territorio español. Entre estos se encuentran las distintas contribuciones a la seguridad social ~\cite{segsocialSeguridadSocial}.
+Una vez obtenido el salario bruto mensual queda deducir impuestos aplicables en territorio español. Entre estos se encuentran las distintas contribuciones a la seguridad social~\cite{segsocialSeguridadSocial}.
 
 
-\begin{table}[h!]
-	\centering
-	\begin{tabular}{| l | c |}
-		\toprule
-		\textbf{Concepto} & \textbf{Porcentaje} \\ \midrule
-		Contingencias Comunes & 4,70 \%\\
-		Desempleo & 1,60 \% \\
-		Formación Profesional & 0,10 \% \\
-		\midrule
-		\textbf{Total:} & 6,4 \% \\
-		\bottomrule
-	\end{tabular}
-	\caption{Conceptos de Seguridad Social empleado}
-	\label{SSemp}
-\end{table}
+%\begin{table}[h!]
+%	\centering
+%	\begin{tabular}{| l | c |}
+%		\toprule
+%		\textbf{Concepto} & \textbf{Porcentaje} \\ \midrule
+%		Contingencias Comunes & 4,70 \%\\
+%		Desempleo & 1,60 \% \\
+%		Formación Profesional & 0,10 \% \\
+%		\midrule
+%		\textbf{Total:} & 6,4 \% \\
+%		\bottomrule
+%	\end{tabular}
+%	\caption{Conceptos de Seguridad Social empleado}
+%	\label{SSemp}
+%\end{table}
+%
+%Calculadas las contribuciones del empleado, se obtendría con el siguiente salario neto:
+%
+%\[
+%\text{Salario mensual neto} = \text{Salario mensual bruto} - \text{\% de contribución}
+%\]
+%\[
+%\text{Salario mensual neto} = \text{783,03 €} - \text{6,4 \%} = \text{732,92 €}
+%\]
 
-Calculadas las contribuciones del empleado, esto se saldaría con el siguiente salario neto:
-
-\[
-\text{Salario mensual neto} = \text{Salario mensual bruto} - \text{\% de contribución}
-\]
-\[
-\text{Salario mensual neto} = \text{783,03 €} - \text{6,4 \%} = \text{732,92 €}
-\]
-
-En cuanto a la contribución por parte de la empresa, esta sería la siguiente:
+Sobre la contribución por parte de la empresa, esta sería la siguiente:
 
 \begin{table}[h!]
 	\centering
@@ -483,34 +484,65 @@ En cuanto a la contribución por parte de la empresa, esta sería la siguiente:
 		\textbf{Concepto} & \textbf{Porcentaje} \\ \midrule
 		Contingencias Comunes & 23,60 \%\\
 		Accidentes de trabajo & 1,5 \%\\
+		MEI & 0,5 \%\\
 		Desempleo & 6,70 \% \\
 		FOGASA & 0,20 \%\\
 		Formación Profesional & 0,60 \% \\
 		\midrule
-		\textbf{Total:} & 32,60 \% \\
+		\textbf{Total:} & 33,10 \% \\
 		\bottomrule
 	\end{tabular}
-	\caption{Conceptos de Seguridad Social empresa}
+	\caption{Conceptos de Seguridad Social de la empresa}
 	\label{SSempresa}
 \end{table}
 
-Las contribuciones a la seguridad social por parte de la empresa son:
+Las contribuciones a la seguridad social supondrían los siguientes gastos:
+
+\begin{table}[h!]
+	\centering
+	\begin{tabular}{| l | c |}
+		\toprule
+		\textbf{Concepto} & \textbf{Cuota} \\ \midrule
+		Contingencias Comunes & 210,71 € \\
+		Accidentes de trabajo & 13,39 € \\
+		MEI & 4,46 € \\
+		Desempleo & 59,82 € \\
+		FOGASA & 1,79 € \\
+		Formación Profesional & 5,36 € \\
+		\midrule
+		\textbf{Total:} & 295,53 € \\
+		\bottomrule
+	\end{tabular}
+	\caption{Gastos en Seguridad Social de la empresa}
+	\label{SSempresagastos}
+\end{table}
+
+
+El coste total de la empresa en personal sería el siguiente:
 
 \[
-\text{Contribución empresa} = \text{Salario Bruto empleado} - \text{\% de contribución}
-\]
-\[
-\text{Contribución empresa} = \text{783,03 €} - \text{32,60 \%} \approx \text{527,76 €}
+\text{Coste en personal} = \text{Salario bruto del empleado} + \text{Contribución a la seguridad social}
 \]
 
-Por tanto, el gasto mensual de personal de la empresa son:
+\[
+\text{Coste en personal} = \text{892,85 €} + \text{295,53 €} = \text{1.188,38 €}
+\]
 
-\[
-\text{Gasto mensual en personal} = \text{Salario Bruto empleado} + \text{Contribuciones}
-\]
-\[
-\text{Gasto mensual en personal} = \text{783,03 €} + \text{527,76 €} \approx \text{1.310,79 €}
-\]
+%\[
+%\text{Contribución empresa} = \text{Salario Bruto empleado} - \text{\% de contribución}
+%\]
+%\[
+%\text{Contribución empresa} = \text{783,03 €} - \text{32,60 \%} \approx \text{527,76 €}
+%\]
+%
+%Por tanto, el gasto mensual de personal de la empresa son:
+%
+%\[
+%\text{Gasto mensual en personal} = \text{Salario Bruto empleado} + \text{Contribuciones}
+%\]
+%\[
+%\text{Gasto mensual en personal} = \text{783,03 €} + \text{527,76 €} \approx \text{1.310,79 €}
+%\]
 
 \subsubsection{Costes totales}
 Al considerar todos los gastos anteriores cerramos con los siguientes gastos durante el periodo de 8 meses de desarrollo:
@@ -518,21 +550,22 @@ Al considerar todos los gastos anteriores cerramos con los siguientes gastos dur
 \begin{table}[h!]
 	\centering
 	\begin{tabular}{| l | c |}
-		\toprule
-		\textbf{Concepto} & \textbf{Coste} \\ \midrule
-		Personal & 10.486,32 €\\
+		\hline
+		\textbf{Concepto} & \textbf{Coste} \\ \hline
+		Personal & 9.507,04 €\\
 		\textit{Hardware} & 288,72  € \\
 		\textit{Software} & 44,40 €\\
 		Otros & 0,00 €\\
 		
-		\midrule
-		\textbf{Coste Total del Proyecto:} & 10.819,44  € \\
-		\bottomrule
+		\hline
+		\textbf{Coste Total del Proyecto:} & 9.840,16 € \\
+		\hline
 	\end{tabular}
-	\caption{Coste del proyecto}
+	\caption{Coste total del proyecto}
 	\label{Costproject}
 \end{table}
 
+\newpage
 \subsection{Viabilidad legal}
 
 Dado que para el desarrollo del proyecto se ha utilizado librerías ajenas, así como datos provenientes de OpenStreetMap, será necesario analizar sus términos de uso y distribución antes de poder asignar una licencia a la aplicación, de esta forma cumpliendo todos los requisitos legales relacionados.
@@ -640,24 +673,23 @@ Leaflet.ExtraMarkers & 1.0.5 & MIT \\
 \label{tab:librerias-licencias}
 \end{table}
 
-Las licencias mostradas en la tabla anterior cuentan con las siguientes características:
 
 \begin{itemize}
-	\item \textbf{Licencia MIT}: Esta licencia fue definida por el instituto de tecnología de Massachusetts, permitiendo el uso libre de las obras independientemente de su fin. No proporciona garantías de uso, librando de responsabilidades a los autores. Se trata de una de las licencias menos restrictivas~\cite{MIT}.
+	\item \textbf{Licencia MIT}: Esta licencia fue definida por el Instituto de Tecnología de Massachusetts, permitiendo el uso libre de las obras independientemente de su fin. No proporciona garantías de uso, librando de responsabilidades a los autores. Se trata de una de las licencias menos restrictivas~\cite{MIT}.
 	
 	\item \textbf{Apache License 2.0}: Es una licencia de código abierto que permite el uso gratuito así como la modificación y distribución. Obliga a que se mantenga el aviso de \textit{copyright} y de licencia tanto en los archivos originales como aquellos que se modifiquen, así como cuando se se distribuya el \textit{software}. Tampoco ofrece garantías, librando a los autores toda responsabilidad. Requiere otorgar una licencias a los usuarios ~\cite{apache}.
 	
-	\item \textbf{BSD-3-Clause License}: También se trata de una licencia de código abierto. Permite realizar modificaciones sobre el código, pero indicando si se han realizado cambios en el trabajo original. Al igual que Apache, permite la distribución y exime de responsabilidades con respecto a garantías a los autores. No requiere de otorgar una licencia a los usuarios del software y no otorga derechos sobre nombre o marcas asociados con el producto ~\cite{BSD}. Destaca por su compatibilidad con otras licencias.
+	\item \textbf{BSD-3-Clause License}: También se trata de una licencia de código abierto. Permite realizar modificaciones sobre el código, pero indicando si se han realizado cambios en el trabajo original. Al igual que Apache, permite la distribución y exime de responsabilidades con respecto a garantías a los autores. No requiere de otorgar una licencia a los usuarios del \textit{software} y no otorga derechos sobre nombre o marcas asociados con el producto~\cite{BSD}. Destaca por su compatibilidad con otras licencias.
 	
-	\item \textbf{Licencias GPL}: Las licencias Públicas Generales de GNU son una familia de licencias. Las más comunes son las versiones GPL-2 y GPL-3. Destacan por ser bastante restrictivas en comparación al resto. Tiene lo que se conoce como un \textit{copyleft} fuerte, es decir, obliga que cualquier obra derivada o vinculada con \textit{software} con esta licencia se distribuya también bajo GPL. Obliga que a mantener los avisos de \textit{copyright} y la licencia bajo cualquier distribución del programa. Tienen como objetivo garantizar que los trabajos derivados se mantengan como código abierto ~\cite{GPL}.
+	\item \textbf{Licencias GPL}: Las licencias Públicas Generales de GNU son una familia de licencias. Las más comunes son las versiones GPL-2 y GPL-3. Destacan por ser bastante restrictivas en comparación al resto. Tiene lo que se conoce como un \textit{copyleft} fuerte, es decir, obliga que cualquier obra derivada o vinculada con \textit{software} con esta licencia se distribuya también bajo GPL. Obliga que a mantener los avisos de \textit{copyright} y la licencia bajo cualquier distribución del programa. Tienen como objetivo garantizar que los trabajos derivados se mantengan como código abierto~\cite{GPL}.
 	
 \end{itemize}
 
-Dadas la licencias de las distintas librerías empleadas en el proyecto parece que la más apropiada resulta ser GPL-3. Esta garantiza que el \textit{software} desarrollado permanezca siendo libre, imposibilitando añadir restricciones que puedan limitar las libertades que aporta esta licencia.
+Dadas la licencias de las distintas librerías empleadas en el proyecto parece que la más apropiada para licenciar nuestra aplicación resulta ser \textbf{GPL-3}. Esta garantiza que el \textit{software} desarrollado continúe siendo libre, imposibilitando añadir restricciones que puedan limitar las libertades que aporta esta licencia.
 
 \subsubsection{Uso de datos de OpenStreetMap}
 
-En este proyecto más allá de librerías también se emplea datos extraidos del proyecto OpenStreetMap que también cuenta con una licencia propia. Su uso se encuentra bajo los términos definidos por ODbL (Licencia de bases de datos abiertas de Open Data Common) por la fundación OpenStreetMap.
+En este proyecto más allá de librerías también se emplea datos extraidos del proyecto OpenStreetMap que también cuenta con una licencia propia. Su uso se encuentra bajo los términos definidos por ODbL (Licencia de bases de datos abiertas de Open Data Common) por la fundación OpenStreetMap~\cite{licenseOpenStreetMap}.
 
-Esta licencia hace que tengamos que atribuir los datos utilizados a OpenStreetMap y sus contribuidores. Además descarga de responsabilidad del posible uso que se pueda hacer de ellos, desentendiendose de posibles errores de precisión o integridad de los datos.
+Esta licencia hace que tengamos que atribuir los datos utilizados a OpenStreetMap y sus contribuidores. Además descarga de responsabilidad del posible uso que se pueda hacer de ellos, desentendiéndose de posibles errores de precisión o integridad de los datos.
 
